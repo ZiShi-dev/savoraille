@@ -1,9 +1,10 @@
 import {
-  ArrowRight, Bike, CalendarDays, Clock3, Instagram, Leaf, MapPin,
+  ArrowRight, Bike, CalendarDays, Clock3, Instagram, MapPin,
   Phone, ShoppingBag, Utensils,
 } from 'lucide-react';
 
 import { BrandSeal } from '@/components/brand-seal';
+import { HeroContent } from '@/components/hero-content';
 import { SiteHeader } from '@/components/site-header';
 
 const services = [
@@ -32,25 +33,7 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_75%_35%,#C6A15B_0,transparent_34%)]" />
 
           <div className="relative z-10 mx-auto flex min-h-[calc(100svh-18rem)] max-w-[1200px] items-center">
-            <div className="max-w-3xl">
-              <p className="font-script text-3xl text-[#C6A15B] sm:text-4xl">La merveille des saveurs</p>
-              <h1 className="font-display mt-5 text-[clamp(3.6rem,7vw,6.8rem)] leading-[0.88] font-semibold tracking-[-0.045em] text-[#FAF6EC]">
-                Le terroir,<span className="block italic text-[#C6A15B]">dans l’air du temps.</span>
-              </h1>
-              <p className="mt-7 max-w-xl text-base leading-7 text-[#FAF6EC]/82 sm:text-lg">Bienvenue chez Savoraille. Une cuisine française de saison, généreuse et précise, à savourer à table ou chez vous.</p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <a href="#reservation" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-semibold text-[#1E3A5F] shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none">
-                  <CalendarDays aria-hidden="true" className="size-5" strokeWidth={1.8} />Réserver une table
-                </a>
-                <a href="#commander" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-6 py-4 font-semibold text-[#FAF6EC] shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none">
-                  <ShoppingBag aria-hidden="true" className="size-5" strokeWidth={1.8} />Commander
-                </a>
-              </div>
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-[#FAF6EC]/78">
-                <span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />Mar–Dim · 12 h–23 h</span>
-                <span className="flex items-center gap-2"><Leaf className="size-4 text-[#C6A15B]" />Produits de saison</span>
-              </div>
-            </div>
+            <HeroContent />
           </div>
 
           <div className="absolute inset-x-0 bottom-0 z-20 border-y border-[#C6A15B]/45 bg-[#102B4D]/88 px-6 py-5 backdrop-blur-md">
