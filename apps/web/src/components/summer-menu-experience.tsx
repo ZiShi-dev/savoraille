@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight, ChefHat, ScanLine, Sparkles, X } from 'lucide-react';
+import { ArrowUpRight, ChefHat, ChevronLeft, ChevronRight, ScanLine, Sparkles, X } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -41,14 +41,38 @@ const menuItems = [
   },
 ] as const;
 
+const ITEMS_PER_PAGE = 2;
+
+const pageTurnVariants = {
+  enter: (direction: number) => ({ opacity: 0, rotateY: direction > 0 ? 70 : -70, x: direction > 0 ? 26 : -26 }),
+  center: { opacity: 1, rotateY: 0, x: 0 },
+  exit: (direction: number) => ({ opacity: 0, rotateY: direction > 0 ? -70 : 70, x: direction > 0 ? -20 : 20 }),
+};
+
 export function SummerMenuExperience() {
   const [selectedId, setSelectedId] = useState<(typeof menuItems)[number]['id']>(menuItems[0].id);
   const [screenOpen, setScreenOpen] = useState(true);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageDirection, setPageDirection] = useState(1);
   const reduceMotion = useReducedMotion();
   const selected = menuItems.find((item) => item.id === selectedId) ?? menuItems[0];
+  const pageCount = Math.ceil(menuItems.length / ITEMS_PER_PAGE);
+  const visibleItems = menuItems.slice(pageIndex * ITEMS_PER_PAGE, (pageIndex + 1) * ITEMS_PER_PAGE);
 
   function selectItem(id: (typeof menuItems)[number]['id']) {
     setSelectedId(id);
+    setScreenOpen(true);
+  }
+
+  function changePage(nextPage: number) {
+    if (nextPage < 0 || nextPage >= pageCount || nextPage === pageIndex) return;
+
+    const firstItem = menuItems[nextPage * ITEMS_PER_PAGE];
+    if (!firstItem) return;
+
+    setPageDirection(nextPage > pageIndex ? 1 : -1);
+    setPageIndex(nextPage);
+    setSelectedId(firstItem.id);
     setScreenOpen(true);
   }
 
@@ -80,31 +104,52 @@ export function SummerMenuExperience() {
                   <div className="grid size-9 place-items-center rounded-full border border-[#C6A15B]/60 text-[#1E3A5F]"><ChefHat className="size-4" strokeWidth={1.5} /></div>
                 </div>
 
-                <div className="mt-4 space-y-2" role="tablist" aria-label="Choisir une assiette">
-                  {menuItems.map((item, index) => {
-                    const active = selected.id === item.id && screenOpen;
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        role="tab"
-                        aria-selected={active}
-                        aria-controls="dish-screen"
-                        onClick={() => selectItem(item.id)}
-                        className={`group relative w-full overflow-hidden rounded-lg border px-3 py-3 text-left outline-none transition-all focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'border-[#C6A15B]/80 bg-[#1E3A5F] text-[#FAF6EC] shadow-[0_8px_20px_rgba(30,58,95,0.18)]' : 'border-[#1E3A5F]/10 bg-white/45 hover:border-[#C6A15B]/55 hover:bg-white/80'}`}
-                      >
-                        {active ? <motion.span layoutId="menu-active" className="absolute inset-y-0 left-0 w-1 bg-[#C6A15B]" /> : null}
-                        <span className="flex items-center gap-4">
-                          <span className={`font-display text-base tabular-nums ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>0{index + 1}</span>
-                          <span className="min-w-0 flex-1"><span className="block text-[0.55rem] font-bold tracking-[0.14em] uppercase opacity-60">{item.eyebrow}</span><span className="font-display mt-0.5 block text-lg font-semibold sm:text-xl">{item.name}</span></span>
-                          <span className={`text-sm font-bold ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{item.price}</span>
-                        </span>
-                      </button>
-                    );
-                  })}
+                <div className="mt-4 overflow-hidden" role="tablist" aria-label={`Choisir une assiette, page ${pageIndex + 1} sur ${pageCount}`}>
+                  <AnimatePresence mode="wait" custom={pageDirection}>
+                    <motion.div
+                      key={pageIndex}
+                      custom={pageDirection}
+                      className="space-y-2"
+                      variants={pageTurnVariants}
+                      initial={reduceMotion ? { opacity: 0 } : 'enter'}
+                      animate="center"
+                      exit={reduceMotion ? { opacity: 0 } : 'exit'}
+                      transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                      style={{ transformOrigin: pageDirection > 0 ? 'left center' : 'right center' }}
+                    >
+                      {visibleItems.map((item, index) => {
+                        const active = selected.id === item.id && screenOpen;
+                        const itemNumber = pageIndex * ITEMS_PER_PAGE + index + 1;
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            role="tab"
+                            aria-selected={active}
+                            aria-controls="dish-screen"
+                            onClick={() => selectItem(item.id)}
+                            className={`group relative w-full overflow-hidden rounded-lg border px-3 py-3 text-left outline-none transition-all focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'border-[#C6A15B]/80 bg-[#1E3A5F] text-[#FAF6EC] shadow-[0_8px_20px_rgba(30,58,95,0.18)]' : 'border-[#1E3A5F]/10 bg-white/45 hover:border-[#C6A15B]/55 hover:bg-white/80'}`}
+                          >
+                            {active ? <motion.span layoutId="menu-active" className="absolute inset-y-0 left-0 w-1 bg-[#C6A15B]" /> : null}
+                            <span className="flex items-center gap-4">
+                              <span className={`font-display text-base tabular-nums ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{String(itemNumber).padStart(2, '0')}</span>
+                              <span className="min-w-0 flex-1"><span className="block text-[0.55rem] font-bold tracking-[0.14em] uppercase opacity-60">{item.eyebrow}</span><span className="font-display mt-0.5 block text-lg font-semibold sm:text-xl">{item.name}</span></span>
+                              <span className={`text-sm font-bold ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{item.price}</span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between border-t border-[#C6A15B]/45 pt-3 text-[0.58rem] font-semibold tracking-[0.1em] text-[#1E3A5F]/55 uppercase"><span>Cuisine de saison</span><span>Fait maison</span></div>
+                <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#C6A15B]/45 pt-3">
+                  <button type="button" onClick={() => changePage(pageIndex - 1)} disabled={pageIndex === 0} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:cursor-not-allowed disabled:opacity-30" aria-label="Page précédente du menu"><ChevronLeft className="size-4" />Précédent</button>
+                  <span className="font-display text-sm font-semibold tabular-nums text-[#7C2438]" aria-live="polite">{String(pageIndex + 1).padStart(2, '0')} / {String(pageCount).padStart(2, '0')}</span>
+                  <button type="button" onClick={() => changePage(pageIndex + 1)} disabled={pageIndex === pageCount - 1} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:cursor-not-allowed disabled:opacity-30" aria-label="Page suivante du menu">Suivant<ChevronRight className="size-4" /></button>
+                </div>
+
+                <div className="mt-3 flex items-center justify-between text-[0.58rem] font-semibold tracking-[0.1em] text-[#1E3A5F]/55 uppercase"><span>Cuisine de saison</span><span>Fait maison</span></div>
               </div>
             </motion.div>
           </div>
