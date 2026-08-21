@@ -1,22 +1,17 @@
 import {
   ArrowRight, Bike, CalendarDays, Clock3, Instagram, MapPin,
-  Phone, ShoppingBag, Utensils,
+  Phone, ShoppingBag,
 } from 'lucide-react';
 
 import { BrandSeal } from '@/components/brand-seal';
 import { HeroContent } from '@/components/hero-content';
 import { SiteHeader } from '@/components/site-header';
+import { SummerMenuExperience } from '@/components/summer-menu-experience';
 
 const services = [
   { icon: CalendarDays, eyebrow: 'Sur place', title: 'Votre table vous attend.', description: 'Choisissez votre heure, nous préparons le reste.', action: 'Réserver une table', href: '#reservation' },
   { icon: ShoppingBag, eyebrow: 'À emporter', title: 'Votre panier sent déjà bon.', description: 'Commandez la carte du moment et passez la chercher.', action: 'Commander', href: '#commander' },
   { icon: Bike, eyebrow: 'Livraison', title: 'La cloche sonne bientôt.', description: 'Nos assiettes voyagent jusque chez vous.', action: 'Se faire livrer', href: '#commander' },
-];
-
-const dishes = [
-  { name: 'Volaille fermière', description: 'Jus au thym, mousseline fumée, carotte rôtie.', price: '26 €', tone: 'from-[#C4703F] via-[#a84e30] to-[#7C2438]', label: 'Signature' },
-  { name: 'Lieu jaune nacré', description: 'Beurre citronné, poireau braisé, œufs de truite.', price: '29 €', tone: 'from-[#C6A15B] via-[#9d813f] to-[#1E3A5F]', label: 'De saison' },
-  { name: 'Potimarron confit', description: 'Crème de châtaigne, noisette torréfiée, sauge.', price: '21 €', tone: 'from-[#d58b55] via-[#C4703F] to-[#7b3828]', label: 'Végétal' },
 ];
 
 export default function HomePage() {
@@ -75,32 +70,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="carte" className="scroll-mt-28 bg-[#1E3A5F] px-6 py-24 text-[#FAF6EC] sm:py-28">
-          <div className="mx-auto max-w-[1200px]">
-            <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-              <div>
-                <p className="font-script text-3xl text-[#C6A15B]">Carte de saison</p>
-                <h2 className="font-display mt-3 max-w-2xl text-5xl leading-none font-semibold sm:text-6xl">Des assiettes qui racontent la France.</h2>
-              </div>
-              <a href="#commander" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#C6A15B]/60 px-5 py-3 font-semibold text-[#FAF6EC] transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none">Voir toute la carte<ArrowRight className="size-4" /></a>
-            </div>
-            <div className="mt-12 grid gap-5 lg:grid-cols-3">
-              {dishes.map((dish) => (
-                <article key={dish.name} className="group overflow-hidden rounded-2xl border border-[#FAF6EC]/10 bg-[#FAF6EC] text-[#241F19] shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition-all hover:-translate-y-1 hover:border-[#C6A15B]/70">
-                  <div className={`relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${dish.tone}`}>
-                    <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_center,rgba(250,246,236,0.9)_0_2%,transparent_3%),radial-gradient(circle_at_30%_60%,rgba(250,246,236,0.25)_0_8%,transparent_9%)] [background-size:64px_64px,100%_100%]" />
-                    <div className="absolute inset-0 grid place-items-center"><div className="grid size-32 place-items-center rounded-full border border-[#FAF6EC]/50 bg-[#241F19]/15 shadow-2xl backdrop-blur-sm"><Utensils className="size-9 text-[#FAF6EC]" strokeWidth={1.35} /></div></div>
-                    <span className="absolute left-4 top-4 rounded-full bg-[#C6A15B] px-3 py-1.5 text-xs font-bold text-[#241F19]">{dish.label}</span>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-start justify-between gap-4"><h3 className="font-display text-3xl font-semibold text-[#1E3A5F]">{dish.name}</h3><span className="shrink-0 text-lg font-bold text-[#7C2438]">{dish.price}</span></div>
-                    <p className="mt-3 text-sm leading-6 text-[#241F19]/65">{dish.description}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <SummerMenuExperience />
 
         <div className="gold-divider gold-divider-dark" aria-hidden="true" />
 
