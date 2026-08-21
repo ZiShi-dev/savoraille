@@ -1,6 +1,6 @@
 import {
   ArrowRight, Bike, CalendarDays, Clock3, Instagram, Leaf, MapPin,
-  Phone, ShoppingBag, Star, Utensils,
+  Phone, ShoppingBag, Utensils,
 } from 'lucide-react';
 
 import { BrandSeal } from '@/components/brand-seal';
@@ -23,55 +23,46 @@ export default function HomePage() {
     <>
       <SiteHeader />
       <main>
-        <section id="accueil" className="relative min-h-[100svh] overflow-hidden bg-[#FAF6EC] px-6 pb-20 pt-36 sm:pt-40">
-          <div className="pointer-events-none absolute -left-48 top-24 size-96 rounded-full bg-[#C6A15B]/12 blur-3xl" />
-          <div className="pointer-events-none absolute -right-40 bottom-0 size-[30rem] rounded-full bg-[#C4703F]/10 blur-3xl" />
-          <div className="relative mx-auto grid max-w-[1200px] items-center gap-16 lg:grid-cols-[1.05fr_0.95fr]">
-            <div>
-              <p className="font-script text-3xl text-[#7C2438] sm:text-4xl">La merveille des saveurs</p>
-              <h1 className="font-display mt-5 max-w-3xl text-[clamp(3.6rem,7vw,6.8rem)] leading-[0.88] font-semibold tracking-[-0.045em] text-[#1E3A5F]">
-                Le terroir,<span className="block italic text-[#7C2438]">dans l’air du temps.</span>
+        <section id="accueil" className="relative min-h-[100svh] overflow-hidden bg-[#1E3A5F] px-6 pb-64 pt-36 sm:pb-48 sm:pt-40">
+          <video className="absolute inset-0 size-full object-cover motion-reduce:hidden" autoPlay muted loop playsInline preload="metadata" aria-hidden="true">
+            <source src="/videos/savoraille-hero.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,36,64,0.96)_0%,rgba(30,58,95,0.82)_48%,rgba(30,58,95,0.42)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(15,36,64,0.72)_0%,transparent_55%)]" />
+          <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_75%_35%,#C6A15B_0,transparent_34%)]" />
+
+          <div className="relative z-10 mx-auto flex min-h-[calc(100svh-18rem)] max-w-[1200px] items-center">
+            <div className="max-w-3xl">
+              <p className="font-script text-3xl text-[#C6A15B] sm:text-4xl">La merveille des saveurs</p>
+              <h1 className="font-display mt-5 text-[clamp(3.6rem,7vw,6.8rem)] leading-[0.88] font-semibold tracking-[-0.045em] text-[#FAF6EC]">
+                Le terroir,<span className="block italic text-[#C6A15B]">dans l’air du temps.</span>
               </h1>
-              <p className="mt-7 max-w-xl text-base leading-7 text-[#241F19]/72 sm:text-lg">Bienvenue chez Savoraille. Une cuisine française de saison, généreuse et précise, à savourer à table ou chez vous.</p>
+              <p className="mt-7 max-w-xl text-base leading-7 text-[#FAF6EC]/82 sm:text-lg">Bienvenue chez Savoraille. Une cuisine française de saison, généreuse et précise, à savourer à table ou chez vous.</p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <a href="#reservation" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1E3A5F] px-6 py-4 font-semibold text-[#FAF6EC] shadow-[0_8px_24px_rgba(30,58,95,0.18)] transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:outline-none">
+                <a href="#reservation" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-semibold text-[#1E3A5F] shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none">
                   <CalendarDays aria-hidden="true" className="size-5" strokeWidth={1.8} />Réserver une table
                 </a>
-                <a href="#commander" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-6 py-4 font-semibold text-[#FAF6EC] shadow-[0_8px_24px_rgba(124,36,56,0.16)] transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:outline-none">
+                <a href="#commander" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-6 py-4 font-semibold text-[#FAF6EC] shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none">
                   <ShoppingBag aria-hidden="true" className="size-5" strokeWidth={1.8} />Commander
                 </a>
               </div>
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-[#1E3A5F]/75">
-                <span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C4703F]" />Mar–Dim · 12 h–23 h</span>
-                <span className="flex items-center gap-2"><Leaf className="size-4 text-[#C4703F]" />Produits de saison</span>
+              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-[#FAF6EC]/78">
+                <span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />Mar–Dim · 12 h–23 h</span>
+                <span className="flex items-center gap-2"><Leaf className="size-4 text-[#C6A15B]" />Produits de saison</span>
               </div>
             </div>
+          </div>
 
-            <div className="relative mx-auto w-full max-w-[520px]">
-              <div className="absolute -left-5 top-10 z-10 rounded-full bg-[#C6A15B] px-4 py-2 text-xs font-bold tracking-[0.12em] text-[#241F19] uppercase shadow-lg sm:-left-10">Carte d’été</div>
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#1E3A5F] p-6 shadow-[0_20px_60px_rgba(30,58,95,0.2)] sm:p-9">
-                <div className="absolute inset-0 opacity-15 [background-image:radial-gradient(circle_at_20%_20%,#C6A15B_0,transparent_30%),radial-gradient(circle_at_80%_70%,#C4703F_0,transparent_35%)]" />
-                <div className="relative flex h-full flex-col justify-between rounded-xl border border-[#C6A15B]/35 p-6 sm:p-8">
-                  <div className="flex items-start justify-between">
-                    <BrandSeal inverse className="size-24" />
-                    <span className="font-script text-2xl text-[#C6A15B]">Fait maison</span>
-                  </div>
-                  <div className="relative mx-auto grid size-56 place-items-center rounded-full border border-[#C6A15B]/50 sm:size-64">
-                    <div className="absolute inset-3 rounded-full border border-[#FAF6EC]/15" />
-                    <div className="size-40 rounded-full bg-[radial-gradient(circle_at_35%_30%,#e9bd70_0_8%,#C4703F_28%,#7C2438_58%,#241F19_100%)] shadow-[inset_0_0_30px_rgba(250,246,236,0.18),0_16px_40px_rgba(0,0,0,0.25)] sm:size-44" />
-                    <Leaf className="absolute size-11 rotate-[-22deg] text-[#C6A15B]" strokeWidth={1.25} />
-                  </div>
-                  <div>
-                    <div className="mb-4 h-px bg-[#C6A15B]/60" />
-                    <p className="font-display text-3xl font-semibold text-[#FAF6EC]">L’assiette du moment</p>
-                    <p className="mt-2 text-sm leading-6 text-[#FAF6EC]/70">Volaille dorée, jus corsé, légumes de nos producteurs.</p>
-                  </div>
+          <div className="absolute inset-x-0 bottom-0 z-20 border-y border-[#C6A15B]/45 bg-[#102B4D]/88 px-6 py-5 backdrop-blur-md">
+            <div className="mx-auto flex max-w-[1200px] flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-4">
+                <span className="shrink-0 rounded-full bg-[#C6A15B] px-3 py-1.5 text-[0.65rem] font-bold tracking-[0.14em] text-[#241F19] uppercase">Carte d’été</span>
+                <div>
+                  <p className="font-display text-xl font-semibold text-[#FAF6EC] sm:text-2xl">L’assiette du moment</p>
+                  <p className="text-xs text-[#FAF6EC]/65 sm:text-sm">Volaille dorée, jus corsé, légumes de nos producteurs.</p>
                 </div>
               </div>
-              <div className="absolute -bottom-5 -right-3 rounded-lg bg-[#FAF6EC] px-5 py-4 shadow-[0_8px_24px_rgba(30,58,95,0.12)] sm:-right-8">
-                <div className="flex gap-1 text-[#C6A15B]" aria-label="Note de cinq sur cinq">{[0, 1, 2, 3, 4].map((star) => <Star key={star} className="size-4 fill-current" />)}</div>
-                <p className="mt-1 text-xs font-semibold text-[#1E3A5F]">Une cuisine qui rassemble</p>
-              </div>
+              <a href="#carte" className="inline-flex items-center gap-2 self-start text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:self-auto">Découvrir la carte<ArrowRight className="size-4" /></a>
             </div>
           </div>
         </section>
