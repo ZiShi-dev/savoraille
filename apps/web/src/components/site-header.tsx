@@ -23,9 +23,9 @@ export function SiteHeader() {
       <div className="mx-auto flex h-20 max-w-[1200px] items-center justify-between rounded-2xl border border-[#1E3A5F]/12 bg-[#FAF6EC]/92 px-3 shadow-[0_8px_24px_rgba(30,58,95,0.12)] backdrop-blur-xl sm:px-4">
         <a href="#accueil" className="group flex items-center gap-3 rounded-lg pr-2 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Savoraille, retour à l'accueil">
           <BrandSeal className="size-14 shrink-0 transition-transform duration-300 group-hover:scale-[1.04]" />
-          <span className="hidden sm:block">
-            <span className="font-display block text-[1.4rem] leading-none font-semibold text-[#1E3A5F]">Savoraille</span>
-            <span className="font-script mt-0.5 block text-sm leading-none text-[#7C2438]">La merveille des saveurs</span>
+          <span className="block min-w-0">
+            <span className="font-display block text-[1.15rem] leading-none font-semibold text-[#1E3A5F] sm:text-[1.4rem]">Savoraille</span>
+            <span className="font-script mt-0.5 block whitespace-nowrap text-xs leading-none text-[#7C2438] sm:text-sm">La merveille des saveurs</span>
           </span>
         </a>
 
