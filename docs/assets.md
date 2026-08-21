@@ -7,9 +7,11 @@
 - Créateur : Andi Farruku
 - Licence : Pexels, utilisation gratuite
 
-## Photographies de la carte interactive
+## Photographies distantes de la carte interactive
 
-- Fichiers : `apps/web/public/images/menu/*.png`
-- Sujets : volaille fermière, lieu jaune et potimarron confit
-- Génération : OpenAI ImageGen, 21 août 2026
-- Direction artistique : photographie culinaire naturelle, lumière dorée, palette Savoraille, sans texte ni logo
+Les images sont chargées directement depuis `images.unsplash.com` et ne sont pas stockées dans le dépôt.
+
+- Volaille : [Annie Spratt — Unsplash](https://unsplash.com/photos/hV4_DinnR_0)
+- Poisson : [Paolo Bici — Unsplash](https://unsplash.com/photos/orcFq_bhzQA)
+- Assiette végétale : [Adam Jaime — Unsplash](https://unsplash.com/photos/oFljzK61O1s)
+- Licence : Unsplash, utilisation gratuite
