@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs><path id="top" d="M 30 83 A 50 50 0 0 1 130 83"/><path id="bottom" d="M 27 88 A 55 55 0 0 0 133 88"/></defs>
+  <circle cx="80" cy="80" r="74" fill="none" stroke="#1E3A5F" stroke-width="3"/>
+  <circle cx="80" cy="80" r="66" fill="none" stroke="#C6A15B" stroke-width="1.5"/>
+  <circle cx="80" cy="80" r="42" fill="none" stroke="#1E3A5F" stroke-width="1" opacity=".4"/>
+  <text fill="#1E3A5F" font-family="Arial,sans-serif" font-size="9" font-weight="700" letter-spacing="3"><textPath href="#top" startOffset="50%" text-anchor="middle">SAVORAILLE</textPath></text>
+  <text fill="#1E3A5F" font-family="Arial,sans-serif" font-size="7" font-weight="600" letter-spacing="2"><textPath href="#bottom" startOffset="50%" text-anchor="middle">MAISON FRANÇAISE</textPath></text>
+  <text x="80" y="99" text-anchor="middle" fill="#1E3A5F" font-family="Georgia,serif" font-size="66" font-weight="600">S</text>
+  <circle cx="22" cy="80" r="3" fill="#C6A15B"/><circle cx="138" cy="80" r="3" fill="#C6A15B"/>
+</svg>

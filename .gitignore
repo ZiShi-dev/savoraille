@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds and caches
+.next/
+dist/
+coverage/
+.turbo/
+*.tsbuildinfo
+apps/api/src/generated/prisma/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local data
+.data/
+uploads/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+:root {
+  --c-sevres: #1e3a5f;
+  --c-ivoire: #faf6ec;
+  --c-bordeaux: #7c2438;
+  --c-or: #c6a15b;
+  --c-terre: #c4703f;
+  --c-encre: #241f19;
+  --f-display: "Cormorant Garamond", Georgia, serif;
+  --f-body: "Manrope", system-ui, sans-serif;
+  --f-script: "Parisienne", cursive;
+  --r-card: 16px;
+  --r-btn: 8px;
+  --shadow: 0 8px 24px rgba(30, 58, 95, 0.12);
+  --border: 1px solid rgba(30, 58, 95, 0.12);
+  --s-1: 8px;
+  --s-2: 16px;
+  --s-3: 24px;
+  --s-4: 32px;
+  --s-5: 48px;
+  --s-6: 64px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 7rem;
+}
+
+body {
+  margin: 0;
+  background: var(--c-ivoire);
+  color: var(--c-encre);
+  font-family: var(--f-body);
+  font-weight: 400;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+.font-display { font-family: var(--f-display); }
+.font-script { font-family: var(--f-script); font-weight: 400; }
+
+.gold-divider {
+  position: relative;
+  height: 8px;
+  background: var(--c-ivoire);
+}
+
+.gold-divider::before,
+.gold-divider::after {
+  position: absolute;
+  inset-inline: 0;
+  height: 1px;
+  content: '';
+  background: rgb(198 161 91 / 60%);
+}
+
+.gold-divider::before { top: 2px; }
+.gold-divider::after { bottom: 2px; }
+.gold-divider-dark { background: var(--c-sevres); }
+
+button,
+a { -webkit-tap-highlight-color: transparent; }
+a { text-decoration: none; }
+
+::selection {
+  background: var(--c-bordeaux);
+  color: var(--c-ivoire);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

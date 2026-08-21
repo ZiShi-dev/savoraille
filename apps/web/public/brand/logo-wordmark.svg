@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150">
+  <text x="250" y="78" text-anchor="middle" fill="#1E3A5F" font-family="Georgia,serif" font-size="72" font-weight="600">Savoraille</text>
+  <line x1="80" y1="101" x2="190" y2="101" stroke="#C6A15B"/><line x1="310" y1="101" x2="420" y2="101" stroke="#C6A15B"/>
+  <text x="250" y="112" text-anchor="middle" fill="#7C2438" font-family="cursive" font-size="21">La merveille des saveurs</text>
+</svg>
