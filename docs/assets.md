@@ -14,4 +14,6 @@ Les images sont chargées directement depuis `images.unsplash.com` et ne sont pa
 - Volaille : [Annie Spratt — Unsplash](https://unsplash.com/photos/hV4_DinnR_0)
 - Poisson : [Paolo Bici — Unsplash](https://unsplash.com/photos/orcFq_bhzQA)
 - Assiette végétale : [Adam Jaime — Unsplash](https://unsplash.com/photos/oFljzK61O1s)
+- Apéritifs : [Toa Heftiba — Unsplash](https://unsplash.com/photos/2V7Z8dk3POM)
+- Boissons : [Say S. — Unsplash](https://unsplash.com/photos/SiAUzNsc9EQ)
 - Licence : Unsplash, utilisation gratuite
