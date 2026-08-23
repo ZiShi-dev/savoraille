@@ -1,9 +1,9 @@
 'use client';
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight, ChefHat, ChevronLeft, ChevronRight, ScanLine, Sparkles, X } from 'lucide-react';
+import { ArrowUpRight, ChefHat, ChevronLeft, ChevronRight, ScanLine, Shuffle, Sparkles, X } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const images = {
   aperitif: 'https://images.unsplash.com/photo-1576006144029-e42bb7166c76?auto=format&fit=crop&w=1600&q=82',
@@ -117,6 +117,23 @@ const bookPages = menuSections.flatMap((section, sectionIndex) => {
   }));
 });
 
+const discoveryMenuItems = menuSections.flatMap((section) =>
+  section.items.map((item) => ({ ...item, sectionLabel: section.shortLabel })),
+);
+
+function createDiscoverySelection(seed: number) {
+  const shuffledItems = [...discoveryMenuItems];
+  let randomState = seed;
+
+  for (let index = shuffledItems.length - 1; index > 0; index -= 1) {
+    randomState = (Math.imul(randomState, 1664525) + 1013904223) >>> 0;
+    const swapIndex = randomState % (index + 1);
+    [shuffledItems[index], shuffledItems[swapIndex]] = [shuffledItems[swapIndex]!, shuffledItems[index]!];
+  }
+
+  return shuffledItems.slice(0, 3);
+}
+
 const pageTurnVariants = {
   enter: (direction: number) => ({ opacity: 0, rotateY: direction > 0 ? 70 : -70, x: direction > 0 ? 26 : -26 }),
   center: { opacity: 1, rotateY: 0, x: 0 },
@@ -129,6 +146,7 @@ export function SummerMenuExperience() {
   const [mobileScreenOpen, setMobileScreenOpen] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageDirection, setPageDirection] = useState(1);
+  const [discoverySeed, setDiscoverySeed] = useState(1729);
   const previousBodyOverflow = useRef('');
   const bodyLockActive = useRef(false);
   const reduceMotion = useReducedMotion();
@@ -136,6 +154,7 @@ export function SummerMenuExperience() {
   const pageCount = bookPages.length;
   const currentPage = bookPages[pageIndex] ?? bookPages[0]!;
   const visibleItems = currentPage.items;
+  const discoveryItems = useMemo(() => createDiscoverySelection(discoverySeed), [discoverySeed]);
 
   useEffect(() => {
     if (!mobileScreenOpen) return;
@@ -341,6 +360,37 @@ export function SummerMenuExperience() {
         </div>
 
         <p className="mt-5 text-center text-xs font-semibold tracking-[0.08em] text-[#FAF6EC]/55 uppercase lg:hidden">Touchez une assiette pour ouvrir son écran</p>
+
+        <div className="relative mt-16 overflow-hidden rounded-3xl border border-[#C6A15B]/45 bg-[#FAF6EC] p-5 text-[#241F19] shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:p-8 lg:p-10">
+          <div className="pointer-events-none absolute right-[-5rem] top-[-6rem] size-72 rounded-full border border-[#C6A15B]/25" />
+          <div className="pointer-events-none absolute right-[-3rem] top-[-4rem] size-56 rounded-full border border-[#C6A15B]/25" />
+
+          <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 text-[#7C2438]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.18em] uppercase">Sélection surprise · Carte d’été</p></div>
+              <h3 className="font-display mt-3 text-3xl leading-none font-semibold text-[#1E3A5F] sm:text-4xl">Trois envies, une seule carte.</h3>
+              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.</p>
+            </div>
+            <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Afficher trois nouvelles suggestions de la Carte d’été"><Shuffle className="size-4" />Nouvelle sélection</button>
+          </div>
+
+          <div className="relative mt-8 grid gap-5 md:grid-cols-3" aria-live="polite">
+            {discoveryItems.map((item, index) => (
+              <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.07 }} className="group flex overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white/60 shadow-[0_8px_24px_rgba(30,58,95,0.1)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B]/60 hover:shadow-[0_16px_32px_rgba(30,58,95,0.16)] md:flex-col">
+                <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">
+                  <Image src={item.image} alt={item.name} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/45 via-transparent to-transparent" />
+                  <span className="absolute left-3 top-3 rounded-full border border-[#FAF6EC]/35 bg-[#071C33]/72 px-3 py-1.5 text-[0.58rem] font-bold tracking-[0.12em] text-[#FAF6EC] uppercase backdrop-blur-md">{item.sectionLabel}</span>
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
+                  <div className="flex items-start justify-between gap-3"><div><p className="text-[0.58rem] font-bold tracking-[0.14em] text-[#C4703F] uppercase">{item.eyebrow}</p><h4 className="font-display mt-1 text-xl leading-tight font-semibold text-[#1E3A5F] sm:text-2xl">{item.name}</h4></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
+                  <p className="mt-3 text-xs leading-5 text-[#241F19]/65 sm:text-sm sm:leading-6">{item.detail}</p>
+                  <a href="#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#7C2438] outline-none transition-colors hover:text-[#1E3A5F] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander ce plat<ArrowUpRight className="size-4" /></a>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
       </div>
 
       <AnimatePresence>
