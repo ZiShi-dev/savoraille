@@ -57,20 +57,23 @@ export function FullMenuCatalog() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.98 }}
                 transition={{ duration: 0.28, delay: reduceMotion ? 0 : Math.min(index, 5) * 0.035 }}
-                className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white/65 shadow-[0_8px_24px_rgba(30,58,95,0.09)] transition-[border-color,box-shadow] hover:border-[#C6A15B]/65 hover:shadow-[0_16px_36px_rgba(30,58,95,0.15)]"
+                className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_14px_34px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)]"
               >
+                <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <Image src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/72 via-transparent to-transparent" />
-                  <span className="absolute start-4 top-4 rounded-full border border-[#C6A15B]/55 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.08em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(item.sectionLabel)}</span>
-                  <span className="absolute bottom-4 end-4 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC] shadow-lg">{item.price}</span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/8 to-transparent" />
+                  <span className="absolute start-4 top-4 z-30 rounded-full border border-[#C6A15B]/55 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.08em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(item.sectionLabel)}</span>
+                  <span className="absolute bottom-4 end-4 z-30 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC] shadow-lg">{item.price}</span>
                 </div>
-                <div className="flex flex-1 flex-col p-5 sm:p-6">
-                  <p className="text-[0.625rem] font-bold tracking-[0.14em] text-[#C4703F] uppercase">{tr(item.eyebrow)}</p>
-                  <h3 className="font-display mt-1.5 text-2xl leading-tight font-semibold text-[#1E3A5F]">{tr(item.name)}</h3>
-                  <p className="mt-3 text-sm leading-6 text-[#241F19]/65">{tr(item.detail)}</p>
-                  <Link href="/#commander" className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-bold text-[#7C2438] outline-none transition-colors hover:text-[#1E3A5F] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander ce plat')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
+                <div className="relative z-30 flex flex-1 flex-col p-5 sm:p-6">
+                  <p className="text-[0.625rem] font-bold tracking-[0.14em] text-[#C6A15B] uppercase">{tr(item.eyebrow)}</p>
+                  <h3 className="font-display mt-1.5 text-2xl leading-tight font-semibold text-[#FAF6EC]">{tr(item.name)}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#FAF6EC]/65">{tr(item.detail)}</p>
+                  <Link href="/#commander" className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander ce plat')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
                 </div>
+                <div className="pointer-events-none absolute bottom-2 start-2 z-40 size-6 border-b border-s border-[#C6A15B]" />
+                <div className="pointer-events-none absolute end-2 top-2 z-40 size-6 border-e border-t border-[#C6A15B]" />
               </motion.article>
             ))}
           </AnimatePresence>
