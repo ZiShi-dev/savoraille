@@ -176,6 +176,11 @@ Object.assign(ar, {
 
 Object.assign(en, {
   'Près de chez vous': 'Near you',
+  'Où souhaitez-vous nous retrouver ?': 'Where would you like to visit us?',
+  'Sélectionnez une ville ou trouvez automatiquement l’adresse la plus proche.': 'Select a city or automatically find the nearest location.',
+  'Choisir une ville': 'Choose a city',
+  'Faites glisser pour découvrir nos adresses': 'Swipe to discover our locations',
+  'Adresse sélectionnée': 'Selected location',
   'Trouver le restaurant le plus proche': 'Find the nearest restaurant',
   'Trouvez votre Savoraille.': 'Find your nearest Savoraille.',
   'Choisissez l’adresse la plus pratique pour réserver, commander ou venir nous retrouver.': 'Choose the most convenient location to book, order or come and visit us.',
@@ -218,6 +223,11 @@ Object.assign(en, {
 
 Object.assign(ar, {
   'Près de chez vous': 'بالقرب منكم',
+  'Où souhaitez-vous nous retrouver ?': 'أين تودون زيارتنا؟',
+  'Sélectionnez une ville ou trouvez automatiquement l’adresse la plus proche.': 'اختاروا مدينة أو اعثروا تلقائيًا على أقرب فرع.',
+  'Choisir une ville': 'اختيار مدينة',
+  'Faites glisser pour découvrir nos adresses': 'اسحبوا لاكتشاف فروعنا',
+  'Adresse sélectionnée': 'الفرع المحدد',
   'Trouver le restaurant le plus proche': 'اعثروا على أقرب مطعم',
   'Trouvez votre Savoraille.': 'اعثروا على أقرب سافوراي.',
   'Choisissez l’adresse la plus pratique pour réserver, commander ou venir nous retrouver.': 'اختاروا الفرع الأنسب للحجز أو الطلب أو زيارتنا.',
