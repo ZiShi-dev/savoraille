@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { useCart } from './cart-provider';
+import { CheckoutFlow } from './checkout-flow';
 import { useI18n } from './i18n-provider';
 import { menuItems, menuSections } from './summer-menu-experience';
 
@@ -99,8 +100,8 @@ export function OrdersPageContent() {
               <div className="pointer-events-none absolute -end-14 -top-14 size-36 rounded-full border border-[#C6A15B]/25" />
               <h2 id="summary-title" className="font-display text-3xl font-semibold">{tr('Récapitulatif')}</h2>
               <dl className="mt-6 grid gap-4 text-sm"><div className="flex justify-between gap-4 text-[#FAF6EC]/65"><dt>{tr('Sous-total')}</dt><dd>{money(total)}</dd></div><div className="flex justify-between gap-4 text-[#FAF6EC]/65"><dt>{tr('Frais de service')}</dt><dd>{money(0)}</dd></div><div className="gold-divider gold-divider-dark" /><div className="flex items-end justify-between gap-4"><dt className="font-bold">{tr('Total')}</dt><dd className="font-display text-4xl font-bold text-[#C6A15B]">{money(total)}</dd></div></dl>
-              <button type="button" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-5 py-4 font-bold text-[#FAF6EC] outline-none hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Continuer la commande')}<ArrowRight className="size-4 rtl:-scale-x-100" /></button>
-              <p className="mt-4 text-center text-xs leading-5 text-[#FAF6EC]/48">{tr('Vous pourrez choisir le retrait ou la livraison à l’étape suivante.')}</p>
+              <CheckoutFlow itemCount={itemCount} total={total} />
+              <p className="mt-4 text-center text-xs leading-5 text-[#FAF6EC]/48">{tr('Choisissez sur place ou à emporter à l’étape suivante.')}</p>
             </aside>
           </div>
           </>
