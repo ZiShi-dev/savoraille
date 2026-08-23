@@ -46,6 +46,11 @@ html[lang='ar'] .font-script {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 7rem;
+  scrollbar-gutter: stable;
+}
+
+body[data-scroll-locked] {
+  margin-right: 0 !important;
 }
 
 body {
