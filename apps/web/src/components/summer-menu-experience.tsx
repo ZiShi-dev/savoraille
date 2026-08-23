@@ -44,6 +44,9 @@ const menuSections: readonly MenuSection[] = [
       { id: 'tomate-fumee', eyebrow: 'Fraîcheur', name: 'Tartare de tomate fumée', detail: 'Tomates de saison, huile de basilic et pain de campagne croustillant.', price: '11 €', image: images.entree },
       { id: 'rillettes-truite', eyebrow: 'Bord de mer', name: 'Rillettes de truite', detail: 'Truite délicatement fumée, crème citronnée et pickles de fenouil.', price: '13 €', image: images.poisson },
       { id: 'croquette-volaille', eyebrow: 'Croustillant', name: 'Croquette de volaille', detail: 'Volaille confite, cœur fondant et moutarde douce à l’ancienne.', price: '12 €', image: images.volaille },
+      { id: 'pissaladiere', eyebrow: 'Du Sud', name: 'Mini pissaladière', detail: 'Oignons doucement confits, anchois, olives noires et pâte croustillante.', price: '10 €', image: images.aperitif },
+      { id: 'huitre', eyebrow: 'Iodé', name: 'Huître & granité citron', detail: 'Huître fraîche, granité citronné et huile délicate aux herbes.', price: '15 €', image: images.poisson },
+      { id: 'jambon-persille', eyebrow: 'Terroir', name: 'Jambon persillé', detail: 'Jambon fondant, gelée au persil et moutarde de Bourgogne.', price: '12 €', image: images.volaille },
     ],
   },
   {
@@ -98,6 +101,21 @@ const menuSections: readonly MenuSection[] = [
 
 const menuItems = menuSections.flatMap((section) => section.items);
 const defaultItem = menuSections[0]!.items[0]!;
+const CHOICES_PER_PAGE = 4;
+
+const bookPages = menuSections.flatMap((section, sectionIndex) => {
+  const sectionPageCount = Math.ceil(section.items.length / CHOICES_PER_PAGE);
+
+  return Array.from({ length: sectionPageCount }, (_, sectionPageIndex) => ({
+    sectionId: section.id,
+    sectionIndex,
+    sectionPageIndex,
+    sectionPageCount,
+    label: section.label,
+    subtitle: section.subtitle,
+    items: section.items.slice(sectionPageIndex * CHOICES_PER_PAGE, (sectionPageIndex + 1) * CHOICES_PER_PAGE),
+  }));
+});
 
 const pageTurnVariants = {
   enter: (direction: number) => ({ opacity: 0, rotateY: direction > 0 ? 70 : -70, x: direction > 0 ? 26 : -26 }),
@@ -113,9 +131,9 @@ export function SummerMenuExperience() {
   const [pageDirection, setPageDirection] = useState(1);
   const reduceMotion = useReducedMotion();
   const selected = menuItems.find((item) => item.id === selectedId) ?? defaultItem;
-  const pageCount = menuSections.length;
-  const currentSection = menuSections[pageIndex] ?? menuSections[0]!;
-  const visibleItems = currentSection.items;
+  const pageCount = bookPages.length;
+  const currentPage = bookPages[pageIndex] ?? bookPages[0]!;
+  const visibleItems = currentPage.items;
 
   useEffect(() => {
     if (!mobileScreenOpen) return;
@@ -143,7 +161,7 @@ export function SummerMenuExperience() {
   function changePage(nextPage: number) {
     if (nextPage < 0 || nextPage >= pageCount || nextPage === pageIndex) return;
 
-    const firstItem = menuSections[nextPage]?.items[0];
+    const firstItem = bookPages[nextPage]?.items[0];
     if (!firstItem) return;
 
     setPageDirection(nextPage > pageIndex ? 1 : -1);
@@ -151,6 +169,11 @@ export function SummerMenuExperience() {
     setSelectedId(firstItem.id);
     setScreenOpen(true);
     setMobileScreenOpen(false);
+  }
+
+  function changeSection(sectionId: string) {
+    const firstPageIndex = bookPages.findIndex((page) => page.sectionId === sectionId);
+    if (firstPageIndex >= 0) changePage(firstPageIndex);
   }
 
   return (
@@ -165,10 +188,10 @@ export function SummerMenuExperience() {
         </div>
 
         <nav className="mt-8 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Sections de la carte d’été">
-          {menuSections.map((section, index) => {
-            const active = index === pageIndex;
+          {menuSections.map((section) => {
+            const active = section.id === currentPage.sectionId;
             return (
-              <button key={section.id} type="button" onClick={() => changePage(index)} aria-current={active ? 'page' : undefined} className={`shrink-0 rounded-full border px-4 py-2 text-xs font-bold tracking-[0.06em] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'border-[#C6A15B] bg-[#C6A15B] text-[#241F19]' : 'border-[#FAF6EC]/18 bg-[#FAF6EC]/5 text-[#FAF6EC]/68 hover:border-[#C6A15B]/60 hover:text-[#FAF6EC]'}`}>
+              <button key={section.id} type="button" onClick={() => changeSection(section.id)} aria-current={active ? 'page' : undefined} className={`shrink-0 rounded-full border px-4 py-2 text-xs font-bold tracking-[0.06em] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'border-[#C6A15B] bg-[#C6A15B] text-[#241F19]' : 'border-[#FAF6EC]/18 bg-[#FAF6EC]/5 text-[#FAF6EC]/68 hover:border-[#C6A15B]/60 hover:text-[#FAF6EC]'}`}>
                 {section.shortLabel}
               </button>
             );
@@ -188,11 +211,11 @@ export function SummerMenuExperience() {
               <div className="pointer-events-none absolute -left-3 inset-y-4 w-3 rounded-l-md bg-[linear-gradient(90deg,#7C2438,#C6A15B)] shadow-[-6px_8px_18px_rgba(0,0,0,0.25)]" />
               <div className="rounded-r-xl rounded-l-sm border border-[#C6A15B]/55 p-4 sm:p-5">
                 <div className="flex items-start justify-between border-b border-[#C6A15B]/45 pb-4">
-                  <div><p className="font-script text-xl text-[#7C2438]">{currentSection.label}</p><p className="mt-1 text-[0.58rem] font-bold tracking-[0.18em] text-[#1E3A5F]/65 uppercase">{currentSection.subtitle} · 2026</p></div>
+                  <div><p className="font-script text-xl text-[#7C2438]">{currentPage.label}</p><p className="mt-1 text-[0.58rem] font-bold tracking-[0.16em] text-[#1E3A5F]/65 uppercase">{currentPage.subtitle} · Page {currentPage.sectionPageIndex + 1}/{currentPage.sectionPageCount}</p></div>
                   <div className="grid size-9 place-items-center rounded-full border border-[#C6A15B]/60 text-[#1E3A5F]"><ChefHat className="size-4" strokeWidth={1.5} /></div>
                 </div>
 
-                <div className="mt-4 overflow-hidden" role="tablist" aria-label={`${currentSection.label}, page ${pageIndex + 1} sur ${pageCount}`}>
+                <div className="mt-4 overflow-hidden" role="tablist" aria-label={`${currentPage.label}, page ${currentPage.sectionPageIndex + 1} sur ${currentPage.sectionPageCount}`}>
                   <AnimatePresence mode="wait" custom={pageDirection}>
                     <motion.div
                       key={pageIndex}
@@ -207,7 +230,7 @@ export function SummerMenuExperience() {
                     >
                       {visibleItems.map((item, index) => {
                         const active = selected.id === item.id && screenOpen;
-                        const itemNumber = index + 1;
+                        const itemNumber = currentPage.sectionPageIndex * CHOICES_PER_PAGE + index + 1;
                         return (
                           <button
                             key={item.id}
