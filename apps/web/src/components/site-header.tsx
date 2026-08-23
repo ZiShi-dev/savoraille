@@ -4,7 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpRight, CalendarDays, Menu, ShoppingBag, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { BrandSeal } from './brand-seal';
 
@@ -17,6 +17,32 @@ const navigation = [
 
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState('#accueil');
+
+  useEffect(() => {
+    const sections = navigation
+      .map((item) => document.querySelector<HTMLElement>(item.href))
+      .filter((section): section is HTMLElement => Boolean(section));
+    const syncHash = () => {
+      if (navigation.some((item) => item.href === window.location.hash)) setActiveHref(window.location.hash);
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSection = entries.find((entry) => entry.isIntersecting);
+        if (visibleSection) setActiveHref(`#${visibleSection.target.id}`);
+      },
+      { rootMargin: '-28% 0px -62% 0px', threshold: 0 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    window.addEventListener('hashchange', syncHash);
+    syncHash();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('hashchange', syncHash);
+    };
+  }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
@@ -31,15 +57,16 @@ export function SiteHeader() {
 
         <NavigationMenu.Root className="hidden lg:block" aria-label="Navigation principale">
           <NavigationMenu.List className="flex items-center gap-1 rounded-xl border border-[#1E3A5F]/8 bg-white/55 p-1">
-            {navigation.map((item, index) => (
-              <NavigationMenu.Item key={item.href}>
+            {navigation.map((item) => {
+              const active = activeHref === item.href;
+              return <NavigationMenu.Item key={item.href}>
                 <NavigationMenu.Link asChild>
-                  <a href={item.href} className={`relative block rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${index === 0 ? 'bg-[#1E3A5F] text-[#FAF6EC] shadow-sm' : 'text-[#1E3A5F]/75 hover:bg-white hover:text-[#1E3A5F]'}`}>
+                  <a href={item.href} aria-current={active ? 'page' : undefined} className={`relative block rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'bg-[#1E3A5F] text-[#FAF6EC] shadow-sm' : 'text-[#1E3A5F]/75 hover:bg-white hover:text-[#1E3A5F]'}`}>
                     {item.label}
                   </a>
                 </NavigationMenu.Link>
-              </NavigationMenu.Item>
-            ))}
+              </NavigationMenu.Item>;
+            })}
           </NavigationMenu.List>
         </NavigationMenu.Root>
 
@@ -83,16 +110,17 @@ export function SiteHeader() {
 
                       <nav className="mt-8" aria-label="Navigation mobile">
                         <ul className="grid gap-1">
-                          {navigation.map((item, index) => (
-                            <li key={item.href}>
+                          {navigation.map((item, index) => {
+                            const active = activeHref === item.href;
+                            return <li key={item.href}>
                               <Dialog.Close asChild>
-                                <a href={item.href} className="group flex items-center justify-between rounded-lg px-3 py-3.5 text-lg font-medium text-[#FAF6EC] outline-none transition-colors hover:bg-white/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+                                <a href={item.href} aria-current={active ? 'page' : undefined} className={`group flex items-center justify-between rounded-lg px-3 py-3.5 text-lg font-medium text-[#FAF6EC] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'bg-white/10' : 'hover:bg-white/8'}`}>
                                   <span className="flex items-center gap-3"><span className="text-xs tabular-nums text-[#C6A15B]">0{index + 1}</span>{item.label}</span>
                                   <ArrowUpRight aria-hidden="true" className="size-4 text-[#C6A15B] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                                 </a>
                               </Dialog.Close>
-                            </li>
-                          ))}
+                            </li>;
+                          })}
                         </ul>
                       </nav>
 

@@ -47,17 +47,18 @@ export default function HomePage() {
 
         <div className="gold-divider" aria-hidden="true" />
 
-        <section className="bg-[#FAF6EC] px-6 py-20 sm:py-24" aria-labelledby="services-title">
+        <section className="bg-[#FAF6EC] px-6 py-16 sm:py-20 lg:py-24" aria-labelledby="services-title">
           <div className="mx-auto max-w-[1200px]">
             <div className="mx-auto max-w-2xl text-center">
               <p className="font-script text-3xl text-[#7C2438]">À chacun son moment</p>
               <h2 id="services-title" className="font-display mt-3 text-4xl font-semibold text-[#1E3A5F] sm:text-5xl">Savourez comme vous aimez.</h2>
             </div>
-            <div className="mt-12 grid gap-4 lg:grid-cols-3">
+            <p className="mt-5 text-center text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase lg:hidden">Faites glisser pour découvrir les trois services</p>
+            <div className="-mx-6 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mx-0 lg:mt-12 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0 lg:pb-0" aria-label="Nos services">
               {services.map((service) => {
                 const Icon = service.icon;
                 return (
-                  <article key={service.title} className="group rounded-2xl border border-[#1E3A5F]/12 bg-white/55 p-6 shadow-[0_8px_24px_rgba(30,58,95,0.08)] transition-all hover:-translate-y-1 hover:border-[#C6A15B]/45 hover:shadow-[0_14px_34px_rgba(30,58,95,0.14)] sm:p-8">
+                  <article key={service.title} className="group min-w-[82vw] snap-center rounded-2xl border border-[#1E3A5F]/12 bg-white/55 p-6 shadow-[0_8px_24px_rgba(30,58,95,0.08)] transition-all hover:-translate-y-1 hover:border-[#C6A15B]/45 hover:shadow-[0_14px_34px_rgba(30,58,95,0.14)] sm:min-w-[55vw] sm:p-8 lg:min-w-0">
                     <div className="grid size-12 place-items-center rounded-full border border-[#C6A15B]/45 text-[#1E3A5F]"><Icon className="size-6" strokeWidth={1.6} /></div>
                     <p className="mt-7 text-xs font-bold tracking-[0.17em] text-[#C4703F] uppercase">{service.eyebrow}</p>
                     <h3 className="font-display mt-2 text-3xl font-semibold text-[#1E3A5F]">{service.title}</h3>
@@ -74,13 +75,13 @@ export default function HomePage() {
 
         <div className="gold-divider gold-divider-dark" aria-hidden="true" />
 
-        <section id="histoire" className="scroll-mt-28 bg-[#FAF6EC] px-6 py-24 sm:py-28">
-          <div className="mx-auto grid max-w-[1200px] gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
-            <div className="mx-auto grid aspect-square w-full max-w-sm place-items-center rounded-full border border-[#C6A15B]/50 bg-white/40 p-8"><BrandSeal className="size-full" /></div>
+        <section id="histoire" className="scroll-mt-28 bg-[#FAF6EC] px-6 py-16 sm:py-24 lg:py-28">
+          <div className="mx-auto grid max-w-[1200px] gap-8 sm:gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
+            <div className="mx-auto grid aspect-square w-full max-w-56 place-items-center rounded-full border border-[#C6A15B]/50 bg-white/40 p-6 sm:max-w-sm sm:p-8"><BrandSeal className="size-full" /></div>
             <div>
               <p className="font-script text-3xl text-[#7C2438]">Notre maison</p>
-              <h2 className="font-display mt-3 text-5xl leading-[0.98] font-semibold text-[#1E3A5F] sm:text-6xl">Le cachet du terroir, la fraîcheur d’aujourd’hui.</h2>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-[#241F19]/70">Savoraille cuisine la saison avec respect et liberté. Des produits choisis près de chez nous, des gestes français et une salle où chaque détail invite à rester.</p>
+              <h2 className="font-display mt-3 text-4xl leading-[0.98] font-semibold text-[#1E3A5F] sm:text-6xl">Le cachet du terroir, la fraîcheur d’aujourd’hui.</h2>
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[#241F19]/70 sm:mt-7 sm:text-lg sm:leading-8">Savoraille cuisine la saison avec respect et liberté. Des produits choisis près de chez nous, des gestes français et une salle où chaque détail invite à rester.</p>
               <p className="font-script mt-6 text-3xl text-[#C4703F]">Bienvenue à notre table.</p>
             </div>
           </div>

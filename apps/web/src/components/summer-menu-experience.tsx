@@ -258,7 +258,7 @@ export function SummerMenuExperience() {
               <div className="pointer-events-none absolute -left-3 inset-y-4 w-3 rounded-l-md bg-[linear-gradient(90deg,#7C2438,#C6A15B)] shadow-[-6px_8px_18px_rgba(0,0,0,0.25)]" />
               <div className="rounded-r-xl rounded-l-sm border border-[#C6A15B]/55 p-4 sm:p-5">
                 <div className="flex items-start justify-between border-b border-[#C6A15B]/45 pb-4">
-                  <div><p className="font-script text-xl text-[#7C2438]">{currentPage.label}</p><p className="mt-1 text-[0.58rem] font-bold tracking-[0.16em] text-[#1E3A5F]/65 uppercase">{currentPage.subtitle} · Page {currentPage.sectionPageIndex + 1}/{currentPage.sectionPageCount}</p></div>
+                  <div><p className="font-script text-xl text-[#7C2438]">{currentPage.label}</p><p className="mt-1 text-[0.65rem] font-bold tracking-[0.14em] text-[#1E3A5F]/65 uppercase">{currentPage.subtitle} · Page {currentPage.sectionPageIndex + 1}/{currentPage.sectionPageCount}</p></div>
                   <div className="grid size-9 place-items-center rounded-full border border-[#C6A15B]/60 text-[#1E3A5F]"><ChefHat className="size-4" strokeWidth={1.5} /></div>
                 </div>
 
@@ -293,7 +293,7 @@ export function SummerMenuExperience() {
                                 <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/70 via-transparent to-transparent" />
                                 <span className="font-display absolute bottom-1 left-1.5 text-xs font-semibold tabular-nums text-[#FAF6EC]">{String(itemNumber).padStart(2, '0')}</span>
                               </span>
-                              <span className="min-w-0 flex-1"><span className="block text-[0.55rem] font-bold tracking-[0.14em] uppercase opacity-60">{item.eyebrow}</span><span className="font-display mt-0.5 block text-lg font-semibold sm:text-xl">{item.name}</span></span>
+                              <span className="min-w-0 flex-1"><span className="block text-[0.625rem] font-bold tracking-[0.12em] uppercase opacity-65">{item.eyebrow}</span><span className="font-display mt-0.5 block text-lg font-semibold sm:text-xl">{item.name}</span></span>
                               <span className={`text-sm font-bold ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{item.price}</span>
                             </span>
                           </button>
@@ -308,7 +308,7 @@ export function SummerMenuExperience() {
                   <button type="button" onClick={() => changePage(pageIndex + 1)} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Page suivante du menu">Suivant<ChevronRight className="size-4" /></button>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between text-[0.58rem] font-semibold tracking-[0.1em] text-[#1E3A5F]/55 uppercase"><span>Cuisine de saison</span><span>Fait maison</span></div>
+                <div className="mt-3 flex items-center justify-between text-[0.625rem] font-semibold tracking-[0.08em] text-[#1E3A5F]/60 uppercase"><span>Cuisine de saison</span><span>Fait maison</span></div>
               </div>
             </motion.div>
           </div>
@@ -417,17 +417,18 @@ export function SummerMenuExperience() {
             <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Afficher trois nouvelles suggestions de la Carte d’été"><Shuffle className="size-4" />Nouvelle sélection</button>
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-3" aria-live="polite">
+          <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase md:hidden">Faites glisser pour voir les trois suggestions</p>
+          <div className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-8 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0" aria-live="polite" aria-label="Suggestions de la Carte d’été">
             {discoveryItems.map((item, index) => (
-              <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.07 }} className="group relative flex overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_16px_36px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)] md:flex-col">
+              <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.07 }} className="group relative flex min-w-[84vw] snap-center overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_16px_36px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)] sm:min-w-[58vw] md:min-w-0 md:flex-col">
                 <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
                 <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">
                   <Image src={item.image} alt={item.name} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/5 to-transparent" />
-                  <span className="absolute left-3 top-3 rounded-full border border-[#C6A15B]/50 bg-[#071C33]/78 px-3 py-1.5 text-[0.58rem] font-bold tracking-[0.12em] text-[#C6A15B] uppercase backdrop-blur-md">{item.sectionLabel}</span>
+                  <span className="absolute left-3 top-3 rounded-full border border-[#C6A15B]/50 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase backdrop-blur-md">{item.sectionLabel}</span>
                 </div>
                 <div className="relative z-30 flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-                  <div className="flex items-start justify-between gap-3"><div><p className="text-[0.58rem] font-bold tracking-[0.14em] text-[#C6A15B] uppercase">{item.eyebrow}</p><h3 className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{item.name}</h3></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
+                  <div className="flex items-start justify-between gap-3"><div><p className="text-[0.625rem] font-bold tracking-[0.12em] text-[#C6A15B] uppercase">{item.eyebrow}</p><h3 className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{item.name}</h3></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
                   <p className="mt-3 text-xs leading-5 text-[#FAF6EC]/65 sm:text-sm sm:leading-6">{item.detail}</p>
                   <a href="#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander ce plat<ArrowUpRight className="size-4" /></a>
                 </div>
