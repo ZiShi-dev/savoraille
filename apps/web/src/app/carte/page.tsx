@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { FullMenuCatalog } from '@/components/full-menu-catalog';
+import { MealBuilder } from '@/components/meal-builder';
 import { ScrollToTop } from '@/components/scroll-to-top';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
@@ -18,6 +19,7 @@ export default function MenuPage() {
       <SiteHeader />
       <main className="bg-[#102B4D] pt-24">
         <SummerMenuExperience showDiscovery={false} standalone />
+        <MealBuilder />
         <FullMenuCatalog />
       </main>
       <SiteFooter />
