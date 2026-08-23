@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ChefHat, ChevronLeft, ChevronRight, ScanLine, Sparkles, X } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const images = {
   aperitif: 'https://images.unsplash.com/photo-1576006144029-e42bb7166c76?auto=format&fit=crop&w=1600&q=82',
@@ -129,6 +129,8 @@ export function SummerMenuExperience() {
   const [mobileScreenOpen, setMobileScreenOpen] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageDirection, setPageDirection] = useState(1);
+  const previousBodyOverflow = useRef('');
+  const bodyLockActive = useRef(false);
   const reduceMotion = useReducedMotion();
   const selected = menuItems.find((item) => item.id === selectedId) ?? defaultItem;
   const pageCount = bookPages.length;
@@ -138,19 +140,42 @@ export function SummerMenuExperience() {
   useEffect(() => {
     if (!mobileScreenOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
+    previousBodyOverflow.current = document.body.style.overflow;
+    bodyLockActive.current = true;
+    const unlockPage = () => {
+      if (!bodyLockActive.current) return;
+      document.body.style.overflow = previousBodyOverflow.current;
+      bodyLockActive.current = false;
+    };
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setMobileScreenOpen(false);
+      if (event.key === 'Escape') {
+        unlockPage();
+        setMobileScreenOpen(false);
+      }
+    };
+    const closeOnNavigation = () => {
+      unlockPage();
+      setMobileScreenOpen(false);
     };
 
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', closeOnEscape);
+    window.addEventListener('hashchange', closeOnNavigation);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      unlockPage();
       window.removeEventListener('keydown', closeOnEscape);
+      window.removeEventListener('hashchange', closeOnNavigation);
     };
   }, [mobileScreenOpen]);
+
+  function closeMobileScreen() {
+    if (bodyLockActive.current) {
+      document.body.style.overflow = previousBodyOverflow.current;
+      bodyLockActive.current = false;
+    }
+    setMobileScreenOpen(false);
+  }
 
   function selectItem(id: string) {
     setSelectedId(id);
@@ -159,6 +184,7 @@ export function SummerMenuExperience() {
   }
 
   function changePage(nextPage: number) {
+    closeMobileScreen();
     if (nextPage < 0 || nextPage >= pageCount || nextPage === pageIndex) return;
 
     const firstItem = bookPages[nextPage]?.items[0];
@@ -168,10 +194,10 @@ export function SummerMenuExperience() {
     setPageIndex(nextPage);
     setSelectedId(firstItem.id);
     setScreenOpen(true);
-    setMobileScreenOpen(false);
   }
 
   function changeSection(sectionId: string) {
+    closeMobileScreen();
     const firstPageIndex = bookPages.findIndex((page) => page.sectionId === sectionId);
     if (firstPageIndex >= 0) changePage(firstPageIndex);
   }
@@ -216,18 +242,16 @@ export function SummerMenuExperience() {
                 </div>
 
                 <div className="mt-4 overflow-hidden" role="tablist" aria-label={`${currentPage.label}, page ${currentPage.sectionPageIndex + 1} sur ${currentPage.sectionPageCount}`}>
-                  <AnimatePresence mode="wait" custom={pageDirection}>
-                    <motion.div
-                      key={pageIndex}
-                      custom={pageDirection}
-                      className="space-y-2"
-                      variants={pageTurnVariants}
-                      initial={reduceMotion ? { opacity: 0 } : 'enter'}
-                      animate="center"
-                      exit={reduceMotion ? { opacity: 0 } : 'exit'}
-                      transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                      style={{ transformOrigin: pageDirection > 0 ? 'left center' : 'right center' }}
-                    >
+                  <motion.div
+                    key={pageIndex}
+                    custom={pageDirection}
+                    className="space-y-2"
+                    variants={pageTurnVariants}
+                    initial={reduceMotion ? { opacity: 0 } : 'enter'}
+                    animate="center"
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ transformOrigin: pageDirection > 0 ? 'left center' : 'right center' }}
+                  >
                       {visibleItems.map((item, index) => {
                         const active = selected.id === item.id && screenOpen;
                         const itemNumber = currentPage.sectionPageIndex * CHOICES_PER_PAGE + index + 1;
@@ -250,8 +274,7 @@ export function SummerMenuExperience() {
                           </button>
                         );
                       })}
-                    </motion.div>
-                  </AnimatePresence>
+                  </motion.div>
                 </div>
 
                 <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#C6A15B]/45 pt-3">
@@ -320,7 +343,7 @@ export function SummerMenuExperience() {
           <motion.div
             className="fixed inset-0 z-[70] grid place-items-center bg-[#071C33]/78 p-3 backdrop-blur-md lg:hidden"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={() => setMobileScreenOpen(false)}
+            onClick={closeMobileScreen}
           >
             <motion.article
               role="dialog"
@@ -339,13 +362,13 @@ export function SummerMenuExperience() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-transparent to-[#071C33]/15" />
                 <motion.div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(198,161,91,.16),transparent)]" animate={reduceMotion ? undefined : { x: ['-100%', '100%'] }} transition={{ duration: 2.8, repeat: Infinity, ease: 'linear' }} />
                 <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/76 px-3 py-2 text-[0.58rem] font-bold tracking-[0.15em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />Écran du menu</div>
-                <button type="button" autoFocus onClick={() => setMobileScreenOpen(false)} className="absolute right-5 top-5 z-30 grid size-11 place-items-center rounded-full border border-[#FAF6EC]/30 bg-[#071C33]/78 text-[#FAF6EC] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Fermer l’écran mobile du plat"><X className="size-5" /></button>
+                <button type="button" autoFocus onClick={closeMobileScreen} className="absolute right-5 top-5 z-30 grid size-11 place-items-center rounded-full border border-[#FAF6EC]/30 bg-[#071C33]/78 text-[#FAF6EC] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Fermer l’écran mobile du plat"><X className="size-5" /></button>
               </div>
               <div className="relative z-10 px-6 pb-8 pt-1">
                 <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.6rem] font-bold tracking-[0.16em] uppercase">{selected.eyebrow}</p></div>
                 <div className="mt-2 flex items-start justify-between gap-4"><h3 id="mobile-dish-title" className="font-display text-3xl leading-none font-semibold text-[#FAF6EC]">{selected.name}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
                 <p className="mt-4 text-sm leading-6 text-[#FAF6EC]/68">{selected.detail}</p>
-                <a href="#commander" onClick={() => setMobileScreenOpen(false)} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander cette assiette<ArrowUpRight className="size-4" /></a>
+                <a href="#commander" onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander cette assiette<ArrowUpRight className="size-4" /></a>
               </div>
               <div className="pointer-events-none absolute bottom-2 left-2 size-7 border-b border-l border-[#C6A15B]" /><div className="pointer-events-none absolute right-2 top-2 size-7 border-r border-t border-[#C6A15B]" />
             </motion.article>
