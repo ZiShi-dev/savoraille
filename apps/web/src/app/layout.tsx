@@ -8,6 +8,12 @@ import '@fontsource/manrope/400.css';
 import '@fontsource/manrope/500.css';
 import '@fontsource/manrope/600.css';
 import '@fontsource/manrope/700.css';
+import '@fontsource/noto-naskh-arabic/arabic-600.css';
+import '@fontsource/noto-naskh-arabic/arabic-700.css';
+import '@fontsource/noto-sans-arabic/arabic-400.css';
+import '@fontsource/noto-sans-arabic/arabic-500.css';
+import '@fontsource/noto-sans-arabic/arabic-600.css';
+import '@fontsource/noto-sans-arabic/arabic-700.css';
 import '@fontsource/parisienne/400.css';
 
 import './globals.css';

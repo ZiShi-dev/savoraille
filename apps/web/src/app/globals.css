@@ -23,14 +23,22 @@
   color-scheme: light;
 }
 
-html[lang='ar'] body,
-html[lang='ar'] .font-display,
-html[lang='ar'] .font-script {
-  font-family: Tahoma, Arial, sans-serif;
+html[lang='ar'] body {
+  font-family: "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+  letter-spacing: 0;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
 
-html[lang='ar'] body {
+html[lang='ar'] .font-display,
+html[lang='ar'] .font-script {
+  font-family: "Noto Naskh Arabic", "Noto Sans Arabic", serif;
+  font-weight: 600;
   letter-spacing: 0;
+  line-height: 1.15;
+}
+
+html[lang='ar'] .font-script {
+  font-weight: 600;
 }
 
 * { box-sizing: border-box; }
