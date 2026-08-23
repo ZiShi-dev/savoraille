@@ -15,8 +15,8 @@ import { LanguageSwitcher } from './language-switcher';
 const navigation = [
   { label: 'Accueil', href: '/#accueil', sectionId: 'accueil' },
   { label: 'La carte', href: '/carte', sectionId: null },
-  { label: 'Notre histoire', href: '/#histoire', sectionId: 'histoire' },
-  { label: 'Contact', href: '/#contact', sectionId: 'contact' },
+  { label: 'Notre histoire', href: '/histoire', sectionId: null },
+  { label: 'Contact', href: '/contact', sectionId: null },
 ];
 
 export function SiteHeader() {
@@ -28,7 +28,7 @@ export function SiteHeader() {
 
   useEffect(() => {
     if (pathname !== '/') {
-      setActiveHref(pathname === '/carte' ? '/carte' : '');
+      setActiveHref(navigation.find((item) => item.href === pathname)?.href ?? '');
       return;
     }
 

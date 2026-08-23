@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { FullMenuCatalog } from '@/components/full-menu-catalog';
+import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SummerMenuExperience } from '@/components/summer-menu-experience';
 
@@ -17,6 +18,7 @@ export default function MenuPage() {
         <SummerMenuExperience showDiscovery={false} standalone />
         <FullMenuCatalog />
       </main>
+      <SiteFooter />
     </>
   );
 }
