@@ -11,6 +11,7 @@ import { HeroContent } from '@/components/hero-content';
 import { useI18n } from '@/components/i18n-provider';
 import { RestaurantExperience } from '@/components/restaurant-experience';
 import { SiteHeader } from '@/components/site-header';
+import { SummerMenuExperience } from '@/components/summer-menu-experience';
 
 const services = [
   { icon: CalendarDays, eyebrow: 'Sur place', title: 'Votre table vous attend.', description: 'Choisissez votre heure, nous préparons le reste.', action: 'Réserver une table', href: '#reservation' },
@@ -48,7 +49,7 @@ export default function HomePage() {
               </div>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2 self-start sm:self-auto">
                 <Link href="/carte" className="inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Découvrir la carte')}<ArrowRight className="size-4 rtl:rotate-180" /></Link>
-                <Link href="/carte#selection-surprise" className="inline-flex items-center gap-2 text-sm font-semibold text-[#FAF6EC]/75 outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir les choix surprises')}<ArrowRight className="size-4 rtl:rotate-180" /></Link>
+                <a href="#selection-surprise" className="inline-flex items-center gap-2 text-sm font-semibold text-[#FAF6EC]/75 outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir les choix surprises')}<ArrowRight className="size-4 rtl:rotate-180" /></a>
               </div>
             </div>
           </div>
@@ -79,6 +80,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        <SummerMenuExperience />
 
         <RestaurantExperience />
 

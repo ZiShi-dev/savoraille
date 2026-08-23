@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { FullMenuCatalog } from '@/components/full-menu-catalog';
 import { SiteHeader } from '@/components/site-header';
 import { SummerMenuExperience } from '@/components/summer-menu-experience';
 
@@ -13,7 +14,8 @@ export default function MenuPage() {
     <>
       <SiteHeader />
       <main className="bg-[#102B4D] pt-24">
-        <SummerMenuExperience />
+        <SummerMenuExperience showDiscovery={false} standalone />
+        <FullMenuCatalog />
       </main>
     </>
   );

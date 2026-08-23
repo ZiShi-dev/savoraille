@@ -19,7 +19,7 @@ const images = {
   vin: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1600&q=82',
 } as const;
 
-type MenuItem = {
+export type MenuItem = {
   id: string;
   eyebrow: string;
   name: string;
@@ -28,7 +28,7 @@ type MenuItem = {
   image: string;
 };
 
-type MenuSection = {
+export type MenuSection = {
   id: string;
   label: string;
   shortLabel: string;
@@ -36,7 +36,7 @@ type MenuSection = {
   items: readonly MenuItem[];
 };
 
-const menuSections: readonly MenuSection[] = [
+export const menuSections: readonly MenuSection[] = [
   {
     id: 'aperitifs',
     label: 'Apéritifs & amuse-bouches',
@@ -143,7 +143,12 @@ const pageTurnVariants = {
   exit: (direction: number) => ({ opacity: 0, rotateY: direction > 0 ? -70 : 70, x: direction > 0 ? -20 : 20 }),
 };
 
-export function SummerMenuExperience() {
+type SummerMenuExperienceProps = {
+  showDiscovery?: boolean;
+  standalone?: boolean;
+};
+
+export function SummerMenuExperience({ showDiscovery = true, standalone = false }: SummerMenuExperienceProps) {
   const { tr, locale } = useI18n();
   const [selectedId, setSelectedId] = useState(defaultItem.id);
   const [screenOpen, setScreenOpen] = useState(true);
@@ -165,6 +170,7 @@ export function SummerMenuExperience() {
   const mobileClipPath = rtl
     ? 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)'
     : 'polygon(0 5%, 5% 0, 100% 0, 100% 95%, 95% 100%, 0 100%)';
+  const HeadingTag = standalone ? 'h1' : 'h2';
   const selected = menuItems.find((item) => item.id === selectedId) ?? defaultItem;
   const pageCount = bookPages.length;
   const currentPage = bookPages[pageIndex] ?? bookPages[0]!;
@@ -246,10 +252,10 @@ export function SummerMenuExperience() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 text-[#C6A15B]"><span className="h-px w-10 bg-current" /><p className="text-xs font-bold tracking-[0.2em] uppercase">{tr('Carte d’été')}</p></div>
-            <h1 id="summer-menu-title" className="font-display mt-3 text-4xl leading-none font-semibold sm:text-5xl lg:text-6xl">{tr('L’assiette du moment')}</h1>
+            <HeadingTag id="summer-menu-title" className="font-display mt-3 text-4xl leading-none font-semibold sm:text-5xl lg:text-6xl">{tr('L’assiette du moment')}</HeadingTag>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-[#FAF6EC]/68 sm:text-base">{tr('Volaille dorée, jus corsé, légumes de nos producteurs. Ouvrez la carte et laissez chaque assiette prendre vie.')}</p>
           </div>
-          <a href="#selection-surprise" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#C6A15B]/45 bg-[#FAF6EC]/5 px-5 py-3 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir les choix surprises')}<ArrowUpRight className="size-4" /></a>
+          <a href={showDiscovery ? '#selection-surprise' : '#menu-complet'} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#C6A15B]/45 bg-[#FAF6EC]/5 px-5 py-3 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(showDiscovery ? 'Voir les choix surprises' : 'Voir toute la carte')}<ArrowUpRight className="size-4" /></a>
         </div>
 
         <nav className="mt-8 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label={tr('Sections de la carte d’été')}>
@@ -421,7 +427,7 @@ export function SummerMenuExperience() {
       </AnimatePresence>
       </section>
 
-      <section id="selection-surprise" className="relative overflow-hidden bg-[#FAF6EC] px-6 py-16 text-[#241F19] sm:py-20" aria-labelledby="discovery-title">
+      {showDiscovery ? <section id="selection-surprise" className="relative overflow-hidden bg-[#FAF6EC] px-6 py-16 text-[#241F19] sm:py-20" aria-labelledby="discovery-title">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-2 border-y border-[#C6A15B]/55" />
         <div className="pointer-events-none absolute -right-28 top-20 size-80 rounded-full border border-[#C6A15B]/20" />
         <div className="pointer-events-none absolute -right-14 top-28 size-64 rounded-full border border-[#C6A15B]/20" />
@@ -434,7 +440,7 @@ export function SummerMenuExperience() {
               <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.')}</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="#carte" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></a>
+              <Link href="/carte#menu-complet" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></Link>
               <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher trois nouvelles suggestions de la Carte d’été')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
             </div>
           </div>
@@ -459,7 +465,7 @@ export function SummerMenuExperience() {
             ))}
           </div>
         </div>
-      </section>
+      </section> : null}
     </>
   );
 }
