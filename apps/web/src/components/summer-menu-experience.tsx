@@ -178,6 +178,10 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
   const discoveryItems = useMemo(() => createDiscoverySelection(discoverySeed), [discoverySeed]);
 
   useEffect(() => {
+    setDiscoverySeed(Date.now() >>> 0);
+  }, []);
+
+  useEffect(() => {
     if (!mobileScreenOpen) return;
 
     previousBodyOverflow.current = document.body.style.overflow;
@@ -435,18 +439,18 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
         <div className="relative mx-auto max-w-[1200px]">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <div className="flex items-center gap-3 text-[#7C2438]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.18em] uppercase">{tr('Sélection surprise · Carte d’été')}</p></div>
-              <h2 id="discovery-title" className="font-display mt-3 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">{tr('Trois envies, une seule carte.')}</h2>
-              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.')}</p>
+              <div className="flex items-center gap-3 text-[#7C2438]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.18em] uppercase">{tr('Sélection surprise · Toute la carte')}</p></div>
+              <h2 id="discovery-title" className="font-display mt-3 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">{tr('Trois envies, trois surprises.')}</h2>
+              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Vous hésitez encore ? Nous tirons trois assiettes au hasard parmi toute notre carte pour vous faire découvrir des saveurs, des textures et des prix différents.')}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link href="/carte#menu-complet" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></Link>
-              <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher trois nouvelles suggestions de la Carte d’été')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
+              <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher trois nouvelles suggestions aléatoires')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
             </div>
           </div>
 
           <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase md:hidden">{tr('Faites glisser pour voir les trois suggestions')}</p>
-          <div className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-8 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0" aria-live="polite" aria-label={tr('Suggestions de la Carte d’été')}>
+          <div className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-8 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0" aria-live="polite" aria-label={tr('Suggestions aléatoires de la carte')}>
             {discoveryItems.map((item, index) => (
               <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.07 }} className="group relative flex min-w-[84vw] snap-center overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_16px_36px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)] sm:min-w-[58vw] md:min-w-0 md:flex-col">
                 <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
