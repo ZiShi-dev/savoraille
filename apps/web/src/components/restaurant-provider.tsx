@@ -61,6 +61,12 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   return (
     <RestaurantContext.Provider value={value}>
       {children}
+      <button type="button" onClick={() => setOpen(true)} aria-label={`${tr('Changer de restaurant')} · ${selectedRestaurant?.name ?? tr('Aucun restaurant sélectionné')}`} title={selectedRestaurant ? `${selectedRestaurant.name} · ${tr(selectedRestaurant.area)}` : tr('Choisir un restaurant')} className="group fixed bottom-20 end-5 z-[60] grid size-14 place-items-center rounded-full border border-[#C6A15B]/70 bg-[#7C2438] text-[#FAF6EC] shadow-[0_14px_35px_rgba(30,58,95,0.32)] outline-none transition-all hover:-translate-y-1 hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EC] sm:end-6 sm:size-16">
+        <span className="pointer-events-none absolute inset-1 rounded-full border border-[#FAF6EC]/15" />
+        {!selectedRestaurant ? <span className="absolute inset-0 animate-ping rounded-full border border-[#C6A15B]/55 motion-reduce:animate-none" /> : null}
+        <MapPin aria-hidden="true" className="relative size-6 transition-transform group-hover:scale-110 sm:size-7" strokeWidth={1.7} />
+        <span className={`absolute end-1 top-1 size-3 rounded-full border-2 border-[#7C2438] ${selectedRestaurant ? 'bg-[#C4703F]' : 'bg-[#C6A15B]'}`} />
+      </button>
       <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-[80] bg-[#071C33]/80 backdrop-blur-md data-[state=closed]:animate-out data-[state=open]:animate-in" />
