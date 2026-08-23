@@ -180,7 +180,7 @@ export function SummerMenuExperience() {
   function selectItem(id: string) {
     setSelectedId(id);
     setScreenOpen(true);
-    setMobileScreenOpen(true);
+    setMobileScreenOpen(window.matchMedia('(max-width: 1023px)').matches);
   }
 
   function changePage(nextPage: number) {
