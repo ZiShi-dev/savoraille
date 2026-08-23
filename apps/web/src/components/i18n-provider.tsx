@@ -175,6 +175,17 @@ Object.assign(ar, {
 });
 
 Object.assign(en, {
+  'Près de chez vous': 'Near you',
+  'Trouver le restaurant le plus proche': 'Find the nearest restaurant',
+  'Trouvez votre Savoraille.': 'Find your nearest Savoraille.',
+  'Choisissez l’adresse la plus pratique pour réserver, commander ou venir nous retrouver.': 'Choose the most convenient location to book, order or come and visit us.',
+  'Recherche en cours…': 'Finding your location…',
+  'Utiliser ma position': 'Use my location',
+  'Position indisponible. Vous pouvez choisir une adresse ci-dessous.': 'Location unavailable. You can choose a restaurant below.',
+  'Le plus proche': 'Nearest',
+  'Services disponibles': 'Available services',
+  'Itinéraire': 'Directions',
+  'Commander ici': 'Order here',
   'Notre histoire, servie à table.': 'Our story, served at the table.',
   'Savoraille est née d’une envie simple : faire vivre la cuisine française avec les saisons, sans perdre la chaleur du bistrot ni la précision des beaux gestes.': 'Savoraille began with a simple desire: to keep French cooking alive through the seasons, without losing the warmth of the bistro or the precision of fine craft.',
   'Goûter notre histoire': 'Taste our story',
@@ -206,6 +217,17 @@ Object.assign(en, {
 });
 
 Object.assign(ar, {
+  'Près de chez vous': 'بالقرب منكم',
+  'Trouver le restaurant le plus proche': 'اعثروا على أقرب مطعم',
+  'Trouvez votre Savoraille.': 'اعثروا على أقرب سافوراي.',
+  'Choisissez l’adresse la plus pratique pour réserver, commander ou venir nous retrouver.': 'اختاروا الفرع الأنسب للحجز أو الطلب أو زيارتنا.',
+  'Recherche en cours…': 'جارٍ تحديد موقعكم…',
+  'Utiliser ma position': 'استخدموا موقعي',
+  'Position indisponible. Vous pouvez choisir une adresse ci-dessous.': 'تعذّر تحديد الموقع. يمكنكم اختيار أحد الفروع أدناه.',
+  'Le plus proche': 'الأقرب إليكم',
+  'Services disponibles': 'الخدمات المتاحة',
+  'Itinéraire': 'الاتجاهات',
+  'Commander ici': 'اطلبوا من هنا',
   'Notre histoire, servie à table.': 'حكايتنا، تُروى على المائدة.',
   'Savoraille est née d’une envie simple : faire vivre la cuisine française avec les saisons, sans perdre la chaleur du bistrot ni la précision des beaux gestes.': 'وُلدت سافوراي من رغبة بسيطة: أن نحافظ على حيوية المطبخ الفرنسي مع المواسم، من دون أن نفقد دفء البسترو ودقة الحِرفة الرفيعة.',
   'Goûter notre histoire': 'تذوّقوا حكايتنا',
