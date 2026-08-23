@@ -175,6 +175,19 @@ Object.assign(ar, {
 });
 
 Object.assign(en, {
+  'Votre parcours gourmand': 'Your dining journey',
+  'Composez votre menu complet.': 'Build your complete menu.',
+  'Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.': 'See at a glance what you have chosen and what is still waiting to be discovered.',
+  'catégories complétées': 'categories completed',
+  'Progression de votre menu': 'Your menu progress',
+  'ajoutés': 'added',
+  'ajouté': 'added',
+  'À compléter': 'To complete',
+  'Suggestion pour compléter': 'Suggestion to complete',
+  'Voir tout': 'View all',
+  'Ajouter': 'Add',
+  'Votre menu est complet.': 'Your menu is complete.',
+  'Chaque moment du repas est prêt à être savouré.': 'Every course is ready to be enjoyed.',
   'Ma commande': 'My order',
   'Voir et commander': 'View and order',
   'Plat introuvable': 'Dish not found',
@@ -251,6 +264,19 @@ Object.assign(en, {
 });
 
 Object.assign(ar, {
+  'Votre parcours gourmand': 'رحلتكم الشهية',
+  'Composez votre menu complet.': 'كوّنوا قائمتكم المتكاملة.',
+  'Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.': 'شاهدوا بلمحة ما اخترتموه وما بقي أمامكم لاكتشافه.',
+  'catégories complétées': 'فئات مكتملة',
+  'Progression de votre menu': 'تقدّم قائمتكم',
+  'ajoutés': 'مضافة',
+  'ajouté': 'مضاف',
+  'À compléter': 'بحاجة إلى إكمال',
+  'Suggestion pour compléter': 'اقتراح لإكمال القائمة',
+  'Voir tout': 'عرض الكل',
+  'Ajouter': 'إضافة',
+  'Votre menu est complet.': 'قائمتكم مكتملة.',
+  'Chaque moment du repas est prêt à être savouré.': 'كل مرحلة من الوجبة جاهزة للاستمتاع بها.',
   'Ma commande': 'طلبي',
   'Voir et commander': 'عرض وطلب',
   'Plat introuvable': 'الطبق غير موجود',

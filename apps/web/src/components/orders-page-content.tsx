@@ -1,21 +1,31 @@
 'use client';
 
-import { ArrowRight, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+import { ArrowRight, Check, CircleDashed, Minus, Plus, ShoppingBag, Sparkles, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { useCart } from './cart-provider';
 import { useI18n } from './i18n-provider';
-import { menuItems } from './summer-menu-experience';
+import { menuItems, menuSections } from './summer-menu-experience';
 
 export function OrdersPageContent() {
   const { locale, tr } = useI18n();
-  const { lines, itemCount, total, setQuantity, removeItem, clearCart } = useCart();
+  const { lines, itemCount, total, addItem, setQuantity, removeItem, clearCart } = useCart();
+  const [activeSectionId, setActiveSectionId] = useState('aperitifs');
+  const [quickAddedId, setQuickAddedId] = useState<string | null>(null);
   const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value);
   const detailedLines = lines.flatMap((line) => {
     const item = menuItems.find((candidate) => candidate.id === line.itemId);
     return item ? [{ ...line, item }] : [];
   });
+  const sectionStates = menuSections.map((section) => ({
+    section,
+    count: detailedLines.filter(({ item }) => section.items.some((candidate) => candidate.id === item.id)).reduce((sum, line) => sum + line.quantity, 0),
+  }));
+  const completedSections = sectionStates.filter(({ count }) => count > 0).length;
+  const missingSections = sectionStates.filter(({ count }) => count === 0);
+  const activeMissingSection = missingSections.find(({ section }) => section.id === activeSectionId) ?? missingSections[0];
 
   return (
     <main className="min-h-[75svh] bg-[#FAF6EC] px-6 pb-20 pt-32 text-[#241F19] sm:pt-36">
@@ -33,6 +43,38 @@ export function OrdersPageContent() {
             <Link href="/carte" className="mt-7 inline-flex items-center gap-2 rounded-lg bg-[#1E3A5F] px-6 py-4 font-bold text-[#FAF6EC]">{tr('Découvrir la carte')}<ArrowRight className="size-4 rtl:-scale-x-100" /></Link>
           </section>
         ) : (
+          <>
+          <section className="mt-8 overflow-hidden rounded-2xl border border-[#C6A15B]/45 bg-[#102B4D] p-5 text-[#FAF6EC] shadow-[0_16px_42px_rgba(30,58,95,0.16)] sm:p-7" aria-labelledby="meal-progress-title">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+              <div><div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.15em] uppercase">{tr('Votre parcours gourmand')}</p></div><h2 id="meal-progress-title" className="font-display mt-2 text-3xl font-semibold sm:text-4xl">{tr('Composez votre menu complet.')}</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#FAF6EC]/62">{tr('Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.')}</p></div>
+              <div className="shrink-0 text-start sm:text-end"><p className="font-display text-4xl font-bold text-[#C6A15B]">{completedSections}<span className="text-xl text-[#FAF6EC]/42"> / {menuSections.length}</span></p><p className="text-xs font-semibold text-[#FAF6EC]/52">{tr('catégories complétées')}</p></div>
+            </div>
+            <div className="mt-6 h-1.5 overflow-hidden rounded-full bg-white/10" aria-hidden="true"><div className="h-full rounded-full bg-[#C6A15B] transition-[width] duration-500" style={{ width: `${completedSections / menuSections.length * 100}%` }} /></div>
+            <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5" role="group" aria-label={tr('Progression de votre menu')}>
+              {sectionStates.map(({ section, count }) => {
+                const completed = count > 0;
+                const active = !completed && activeMissingSection?.section.id === section.id;
+                return <button key={section.id} type="button" onClick={() => !completed && setActiveSectionId(section.id)} aria-pressed={active} className={`flex min-h-24 flex-col items-start justify-between rounded-xl border p-3 text-start outline-none transition-all focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${completed ? 'border-[#C4703F]/55 bg-[#C4703F]/14' : active ? 'border-[#C6A15B] bg-[#C6A15B]/12' : 'border-dashed border-[#FAF6EC]/18 bg-white/[0.035] hover:bg-white/[0.07]'}`}>
+                  <span className={`grid size-7 place-items-center rounded-full ${completed ? 'bg-[#C4703F] text-[#FAF6EC]' : 'border border-[#C6A15B]/45 text-[#C6A15B]'}`}>{completed ? <Check className="size-4" /> : <CircleDashed className="size-4" />}</span>
+                  <span className="mt-3"><span className="block text-sm font-bold">{tr(section.shortLabel)}</span><span className={`mt-0.5 block text-[0.68rem] ${completed ? 'text-[#DFA17A]' : 'text-[#FAF6EC]/45'}`}>{completed ? `${count} ${tr(count > 1 ? 'ajoutés' : 'ajouté')}` : tr('À compléter')}</span></span>
+                </button>;
+              })}
+            </div>
+
+            {activeMissingSection ? (
+              <div className="mt-6 rounded-xl border border-[#FAF6EC]/10 bg-[#071C33]/55 p-4 sm:p-5">
+                <div className="flex items-center justify-between gap-4"><div><p className="text-xs font-bold tracking-[0.12em] text-[#C6A15B] uppercase">{tr('Suggestion pour compléter')}</p><h3 className="font-display mt-1 text-2xl font-semibold">{tr(activeMissingSection.section.label)}</h3></div><Link href={`/carte?section=${activeMissingSection.section.id}#menu-complet`} className="shrink-0 text-xs font-bold text-[#C6A15B] underline underline-offset-4">{tr('Voir tout')}</Link></div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {activeMissingSection.section.items.slice(0, 3).map((suggestion) => <article key={suggestion.id} className="flex items-center gap-3 rounded-xl border border-[#FAF6EC]/10 bg-white/[0.055] p-2.5">
+                    <div className="relative size-14 shrink-0 overflow-hidden rounded-lg"><Image src={suggestion.image} alt={tr(suggestion.name)} fill sizes="56px" className="object-cover" /></div>
+                    <div className="min-w-0 flex-1"><p className="truncate text-sm font-bold">{tr(suggestion.name)}</p><p className="mt-0.5 text-xs font-bold text-[#C6A15B]">{suggestion.price}</p></div>
+                    <button type="button" onClick={() => { addItem(suggestion.id); setQuickAddedId(suggestion.id); }} aria-label={`${tr('Ajouter')} ${tr(suggestion.name)}`} className={`grid size-9 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${quickAddedId === suggestion.id ? 'bg-[#C4703F] text-[#FAF6EC]' : 'bg-[#FAF6EC] text-[#1E3A5F]'}`}>{quickAddedId === suggestion.id ? <Check className="size-4" /> : <Plus className="size-4" />}</button>
+                  </article>)}
+                </div>
+              </div>
+            ) : <div className="mt-6 flex items-center gap-3 rounded-xl border border-[#C4703F]/45 bg-[#C4703F]/12 p-4 text-[#FAF6EC]"><span className="grid size-10 place-items-center rounded-full bg-[#C4703F]"><Check className="size-5" /></span><div><p className="font-bold">{tr('Votre menu est complet.')}</p><p className="text-sm text-[#FAF6EC]/58">{tr('Chaque moment du repas est prêt à être savouré.')}</p></div></div>}
+          </section>
+
           <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
             <section className="grid gap-4" aria-label={tr('Articles de votre commande')}>
               {detailedLines.map(({ item, quantity }) => {
@@ -61,6 +103,7 @@ export function OrdersPageContent() {
               <p className="mt-4 text-center text-xs leading-5 text-[#FAF6EC]/48">{tr('Vous pourrez choisir le retrait ou la livraison à l’étape suivante.')}</p>
             </aside>
           </div>
+          </>
         )}
       </div>
     </main>

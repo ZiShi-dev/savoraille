@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ListFilter, UtensilsCrossed } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useI18n } from './i18n-provider';
 import { menuSections } from './summer-menu-experience';
@@ -17,6 +17,10 @@ export function FullMenuCatalog() {
   const { tr } = useI18n();
   const reduceMotion = useReducedMotion();
   const [activeSection, setActiveSection] = useState('all');
+  useEffect(() => {
+    const requestedSection = new URLSearchParams(window.location.search).get('section');
+    if (requestedSection && menuSections.some((section) => section.id === requestedSection)) setActiveSection(requestedSection);
+  }, []);
   const visibleItems = useMemo(
     () => activeSection === 'all' ? allMenuItems : allMenuItems.filter((item) => item.sectionId === activeSection),
     [activeSection],
