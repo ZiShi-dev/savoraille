@@ -143,7 +143,7 @@ const pageTurnVariants = {
 };
 
 export function SummerMenuExperience() {
-  const { tr } = useI18n();
+  const { tr, locale } = useI18n();
   const [selectedId, setSelectedId] = useState(defaultItem.id);
   const [screenOpen, setScreenOpen] = useState(true);
   const [mobileScreenOpen, setMobileScreenOpen] = useState(false);
@@ -153,6 +153,17 @@ export function SummerMenuExperience() {
   const previousBodyOverflow = useRef('');
   const bodyLockActive = useRef(false);
   const reduceMotion = useReducedMotion();
+  const rtl = locale === 'ar';
+  const logicalPageDirection = rtl ? -pageDirection : pageDirection;
+  const screenClipPath = rtl
+    ? 'polygon(0 0, 92% 0, 100% 8%, 100% 100%, 8% 100%, 0 92%)'
+    : 'polygon(0 8%, 8% 0, 100% 0, 100% 92%, 92% 100%, 0 100%)';
+  const screenInitialClipPath = rtl
+    ? 'polygon(0 0, 90% 0, 100% 12%, 100% 100%, 10% 100%, 0 88%)'
+    : 'polygon(0 12%, 10% 0, 100% 0, 100% 88%, 90% 100%, 0 100%)';
+  const mobileClipPath = rtl
+    ? 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)'
+    : 'polygon(0 5%, 5% 0, 100% 0, 100% 95%, 95% 100%, 0 100%)';
   const selected = menuItems.find((item) => item.id === selectedId) ?? defaultItem;
   const pageCount = bookPages.length;
   const currentPage = bookPages[pageIndex] ?? bookPages[0]!;
@@ -251,15 +262,15 @@ export function SummerMenuExperience() {
         <div className="mt-8 grid items-center gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:gap-12">
           <div className="[perspective:1400px]">
             <motion.div
-              className="relative mx-auto max-w-[410px] origin-right rounded-r-2xl rounded-l-md border border-[#C6A15B]/55 bg-[#F7F0E2] p-2.5 text-[#241F19] shadow-[18px_28px_70px_rgba(0,0,0,0.35)]"
-              initial={reduceMotion ? false : { opacity: 0, rotateY: -18, x: -30 }}
-              whileInView={{ opacity: 1, rotateY: -7, rotateX: 2, x: 0 }}
-              whileHover={reduceMotion ? undefined : { rotateY: -3, rotateX: 0, y: -4 }}
+              className={`relative mx-auto max-w-[410px] border border-[#C6A15B]/55 bg-[#F7F0E2] p-2.5 text-[#241F19] shadow-[18px_28px_70px_rgba(0,0,0,0.35)] ${rtl ? 'origin-left rounded-l-2xl rounded-r-md' : 'origin-right rounded-r-2xl rounded-l-md'}`}
+              initial={reduceMotion ? false : { opacity: 0, rotateY: rtl ? 18 : -18, x: rtl ? 30 : -30 }}
+              whileInView={{ opacity: 1, rotateY: rtl ? 7 : -7, rotateX: 2, x: 0 }}
+              whileHover={reduceMotion ? undefined : { rotateY: rtl ? 3 : -3, rotateX: 0, y: -4 }}
               viewport={{ once: true, amount: 0.35 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="pointer-events-none absolute -left-3 inset-y-4 w-3 rounded-l-md bg-[linear-gradient(90deg,#7C2438,#C6A15B)] shadow-[-6px_8px_18px_rgba(0,0,0,0.25)]" />
-              <div className="rounded-r-xl rounded-l-sm border border-[#C6A15B]/55 p-4 sm:p-5">
+              <div className={`pointer-events-none absolute inset-y-4 w-3 ${rtl ? '-right-3 rounded-r-md bg-[linear-gradient(270deg,#7C2438,#C6A15B)] shadow-[6px_8px_18px_rgba(0,0,0,0.25)]' : '-left-3 rounded-l-md bg-[linear-gradient(90deg,#7C2438,#C6A15B)] shadow-[-6px_8px_18px_rgba(0,0,0,0.25)]'}`} />
+              <div className={`border border-[#C6A15B]/55 p-4 sm:p-5 ${rtl ? 'rounded-l-xl rounded-r-sm' : 'rounded-r-xl rounded-l-sm'}`}>
                 <div className="flex items-start justify-between border-b border-[#C6A15B]/45 pb-4">
                   <div><p className="font-script text-xl text-[#7C2438]">{tr(currentPage.label)}</p><p className="mt-1 text-[0.65rem] font-bold tracking-[0.14em] text-[#1E3A5F]/65 uppercase">{tr(currentPage.subtitle)} · {tr('Page')} {currentPage.sectionPageIndex + 1}/{currentPage.sectionPageCount}</p></div>
                   <div className="grid size-9 place-items-center rounded-full border border-[#C6A15B]/60 text-[#1E3A5F]"><ChefHat className="size-4" strokeWidth={1.5} /></div>
@@ -268,13 +279,13 @@ export function SummerMenuExperience() {
                 <div className="mt-4 overflow-hidden" role="tablist" aria-label={`${tr(currentPage.label)}, ${tr('Page')} ${currentPage.sectionPageIndex + 1} ${tr('sur')} ${currentPage.sectionPageCount}`}>
                   <motion.div
                     key={pageIndex}
-                    custom={pageDirection}
+                    custom={logicalPageDirection}
                     className="space-y-2"
                     variants={pageTurnVariants}
                     initial={reduceMotion ? { opacity: 0 } : 'enter'}
                     animate="center"
                     transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                    style={{ transformOrigin: pageDirection > 0 ? 'left center' : 'right center' }}
+                    style={{ transformOrigin: logicalPageDirection > 0 ? 'left center' : 'right center' }}
                   >
                       {visibleItems.map((item, index) => {
                         const active = selected.id === item.id && screenOpen;
@@ -287,14 +298,14 @@ export function SummerMenuExperience() {
                             aria-selected={active}
                             aria-controls="dish-screen"
                             onClick={() => selectItem(item.id)}
-                            className={`group relative w-full overflow-hidden rounded-lg border px-3 py-3 text-left outline-none transition-all focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'border-[#C6A15B]/80 bg-[#1E3A5F] text-[#FAF6EC] shadow-[0_8px_20px_rgba(30,58,95,0.18)]' : 'border-[#1E3A5F]/10 bg-white/45 hover:border-[#C6A15B]/55 hover:bg-white/80'}`}
+                            className={`group relative w-full overflow-hidden rounded-lg border px-3 py-3 text-start outline-none transition-all focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'border-[#C6A15B]/80 bg-[#1E3A5F] text-[#FAF6EC] shadow-[0_8px_20px_rgba(30,58,95,0.18)]' : 'border-[#1E3A5F]/10 bg-white/45 hover:border-[#C6A15B]/55 hover:bg-white/80'}`}
                           >
-                            {active ? <motion.span layoutId="menu-active" className="absolute inset-y-0 left-0 w-1 bg-[#C6A15B]" /> : null}
+                            {active ? <motion.span layoutId="menu-active" className="absolute inset-y-0 start-0 w-1 bg-[#C6A15B]" /> : null}
                             <span className="flex items-center gap-4">
                               <span className={`relative size-12 shrink-0 overflow-hidden rounded-md border sm:size-14 ${active ? 'border-[#C6A15B]/65' : 'border-[#1E3A5F]/12'}`}>
                                 <Image src={item.image} alt="" fill loading="lazy" sizes="56px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                                 <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/70 via-transparent to-transparent" />
-                                <span className="font-display absolute bottom-1 left-1.5 text-xs font-semibold tabular-nums text-[#FAF6EC]">{String(itemNumber).padStart(2, '0')}</span>
+                                <span className="font-display absolute bottom-1 start-1.5 text-xs font-semibold tabular-nums text-[#FAF6EC]">{String(itemNumber).padStart(2, '0')}</span>
                               </span>
                               <span className="min-w-0 flex-1"><span className="block text-[0.625rem] font-bold tracking-[0.12em] uppercase opacity-65">{tr(item.eyebrow)}</span><span className="font-display mt-0.5 block text-lg font-semibold sm:text-xl">{tr(item.name)}</span></span>
                               <span className={`text-sm font-bold ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{item.price}</span>
@@ -317,8 +328,8 @@ export function SummerMenuExperience() {
           </div>
 
           <div className="relative hidden min-h-[480px] lg:block" aria-live="polite">
-            <div className="pointer-events-none absolute left-[-3.5rem] top-1/2 hidden h-px w-16 bg-gradient-to-r from-transparent via-[#C6A15B] to-[#C6A15B] lg:block" />
-            <div className="pointer-events-none absolute left-[-0.6rem] top-[calc(50%-0.25rem)] hidden size-2 rotate-45 border border-[#C6A15B] bg-[#102B4D] lg:block" />
+            <div className={`pointer-events-none absolute top-1/2 hidden h-px w-16 lg:block ${rtl ? 'right-[-3.5rem] bg-gradient-to-l from-transparent via-[#C6A15B] to-[#C6A15B]' : 'left-[-3.5rem] bg-gradient-to-r from-transparent via-[#C6A15B] to-[#C6A15B]'}`} />
+            <div className={`pointer-events-none absolute top-[calc(50%-0.25rem)] hidden size-2 rotate-45 border border-[#C6A15B] bg-[#102B4D] lg:block ${rtl ? 'right-[-0.6rem]' : 'left-[-0.6rem]'}`} />
             <AnimatePresence mode="wait">
               {screenOpen ? (
                 <motion.article
@@ -326,19 +337,19 @@ export function SummerMenuExperience() {
                   id="dish-screen"
                   role="tabpanel"
                   className="relative h-full min-h-[430px] overflow-hidden border border-[#C6A15B]/50 bg-[#071C33]/92 shadow-[0_24px_70px_rgba(0,0,0,0.38)] backdrop-blur-xl lg:min-h-[480px]"
-                  initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 72, rotateY: -28, clipPath: 'polygon(0 12%, 10% 0, 100% 0, 100% 88%, 90% 100%, 0 100%)' }}
-                  animate={{ opacity: 1, x: 0, rotateY: 0, clipPath: 'polygon(0 8%, 8% 0, 100% 0, 100% 92%, 92% 100%, 0 100%)' }}
-                  exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 48, scale: 0.97 }}
+                  initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: rtl ? -72 : 72, rotateY: rtl ? 28 : -28, clipPath: screenInitialClipPath }}
+                  animate={{ opacity: 1, x: 0, rotateY: 0, clipPath: screenClipPath }}
+                  exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: rtl ? -48 : 48, scale: 0.97 }}
                   transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ transformOrigin: 'left center' }}
+                  style={{ transformOrigin: rtl ? 'right center' : 'left center' }}
                 >
-                  <div className="pointer-events-none absolute inset-3 z-20 border border-[#C6A15B]/25 [clip-path:polygon(0_8%,8%_0,100%_0,100%_92%,92%_100%,0_100%)]" />
+                  <div className="pointer-events-none absolute inset-3 z-20 border border-[#C6A15B]/25" style={{ clipPath: screenClipPath }} />
                   <div className="relative h-[220px] sm:h-[250px] lg:h-[260px]">
                     <Image src={selected.image} alt={tr(selected.name)} fill loading="eager" sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/12 to-transparent" />
                     <motion.div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(198,161,91,.14),transparent)]" animate={reduceMotion ? undefined : { x: ['-100%', '100%'] }} transition={{ duration: 3.2, repeat: Infinity, ease: 'linear' }} />
-                    <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/72 px-3 py-2 text-[0.62rem] font-bold tracking-[0.16em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />{tr('Sélection active')}</div>
-                    <button type="button" onClick={() => setScreenOpen(false)} className="absolute right-6 top-6 z-30 grid size-10 place-items-center rounded-full border border-[#FAF6EC]/25 bg-[#071C33]/72 text-[#FAF6EC] outline-none backdrop-blur-md hover:border-[#C6A15B] hover:text-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Fermer l’écran du plat')}><X className="size-4" /></button>
+                    <div className="absolute start-6 top-6 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/72 px-3 py-2 text-[0.62rem] font-bold tracking-[0.16em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />{tr('Sélection active')}</div>
+                    <button type="button" onClick={() => setScreenOpen(false)} className="absolute end-6 top-6 z-30 grid size-10 place-items-center rounded-full border border-[#FAF6EC]/25 bg-[#071C33]/72 text-[#FAF6EC] outline-none backdrop-blur-md hover:border-[#C6A15B] hover:text-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Fermer l’écran du plat')}><X className="size-4" /></button>
                   </div>
 
                   <div className="relative z-10 px-6 pb-7 pt-1 sm:px-8">
@@ -347,7 +358,7 @@ export function SummerMenuExperience() {
                     <p className="mt-3 max-w-xl text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
                     <a href="#commander" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></a>
                   </div>
-                  <div className="pointer-events-none absolute bottom-3 left-3 size-8 border-b border-l border-[#C6A15B]" /><div className="pointer-events-none absolute right-3 top-3 size-8 border-r border-t border-[#C6A15B]" />
+                  <div className={`pointer-events-none absolute bottom-3 size-8 border-b border-[#C6A15B] ${rtl ? 'right-3 border-r' : 'left-3 border-l'}`} /><div className={`pointer-events-none absolute top-3 size-8 border-t border-[#C6A15B] ${rtl ? 'left-3 border-l' : 'right-3 border-r'}`} />
                 </motion.article>
               ) : (
                 <motion.button
@@ -377,20 +388,21 @@ export function SummerMenuExperience() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="mobile-dish-title"
-              className="relative max-h-[90dvh] w-full max-w-md overflow-y-auto border border-[#C6A15B]/55 bg-[#071C33] shadow-[0_28px_90px_rgba(0,0,0,0.6)] [clip-path:polygon(0_5%,5%_0,100%_0,100%_95%,95%_100%,0_100%)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="relative max-h-[90dvh] w-full max-w-md overflow-y-auto border border-[#C6A15B]/55 bg-[#071C33] shadow-[0_28px_90px_rgba(0,0,0,0.6)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              style={{ clipPath: mobileClipPath }}
               initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 36, scale: 0.94, rotateX: -10 }}
               animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.96 }}
               transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="pointer-events-none absolute inset-2 z-20 border border-[#C6A15B]/24 [clip-path:polygon(0_5%,5%_0,100%_0,100%_95%,95%_100%,0_100%)]" />
+              <div className="pointer-events-none absolute inset-2 z-20 border border-[#C6A15B]/24" style={{ clipPath: mobileClipPath }} />
               <div className="relative h-[38dvh] min-h-[230px] max-h-[340px]">
                 <Image src={selected.image} alt={tr(selected.name)} fill loading="eager" sizes="100vw" className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-transparent to-[#071C33]/15" />
                 <motion.div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(198,161,91,.16),transparent)]" animate={reduceMotion ? undefined : { x: ['-100%', '100%'] }} transition={{ duration: 2.8, repeat: Infinity, ease: 'linear' }} />
-                <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/76 px-3 py-2 text-[0.58rem] font-bold tracking-[0.15em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />{tr('Écran du menu')}</div>
-                <button type="button" autoFocus onClick={closeMobileScreen} className="absolute right-5 top-5 z-30 grid size-11 place-items-center rounded-full border border-[#FAF6EC]/30 bg-[#071C33]/78 text-[#FAF6EC] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Fermer l’écran mobile du plat')}><X className="size-5" /></button>
+                <div className="absolute start-5 top-5 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/76 px-3 py-2 text-[0.58rem] font-bold tracking-[0.15em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />{tr('Écran du menu')}</div>
+                <button type="button" autoFocus onClick={closeMobileScreen} className="absolute end-5 top-5 z-30 grid size-11 place-items-center rounded-full border border-[#FAF6EC]/30 bg-[#071C33]/78 text-[#FAF6EC] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Fermer l’écran mobile du plat')}><X className="size-5" /></button>
               </div>
               <div className="relative z-10 px-6 pb-8 pt-1">
                 <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.6rem] font-bold tracking-[0.16em] uppercase">{tr(selected.eyebrow)}</p></div>
@@ -398,7 +410,7 @@ export function SummerMenuExperience() {
                 <p className="mt-4 text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
                 <a href="#commander" onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></a>
               </div>
-              <div className="pointer-events-none absolute bottom-2 left-2 size-7 border-b border-l border-[#C6A15B]" /><div className="pointer-events-none absolute right-2 top-2 size-7 border-r border-t border-[#C6A15B]" />
+              <div className={`pointer-events-none absolute bottom-2 size-7 border-b border-[#C6A15B] ${rtl ? 'right-2 border-r' : 'left-2 border-l'}`} /><div className={`pointer-events-none absolute top-2 size-7 border-t border-[#C6A15B] ${rtl ? 'left-2 border-l' : 'right-2 border-r'}`} />
             </motion.article>
           </motion.div>
         ) : null}
@@ -428,14 +440,14 @@ export function SummerMenuExperience() {
                 <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">
                   <Image src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/5 to-transparent" />
-                  <span className="absolute left-3 top-3 rounded-full border border-[#C6A15B]/50 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(item.sectionLabel)}</span>
+                  <span className="absolute start-3 top-3 rounded-full border border-[#C6A15B]/50 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(item.sectionLabel)}</span>
                 </div>
                 <div className="relative z-30 flex min-w-0 flex-1 flex-col p-4 sm:p-5">
                   <div className="flex items-start justify-between gap-3"><div><p className="text-[0.625rem] font-bold tracking-[0.12em] text-[#C6A15B] uppercase">{tr(item.eyebrow)}</p><h3 className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{tr(item.name)}</h3></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
                   <p className="mt-3 text-xs leading-5 text-[#FAF6EC]/65 sm:text-sm sm:leading-6">{tr(item.detail)}</p>
                   <a href="#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander ce plat')}<ArrowUpRight className="size-4" /></a>
                 </div>
-                <div className="pointer-events-none absolute bottom-2 left-2 z-40 size-6 border-b border-l border-[#C6A15B]" /><div className="pointer-events-none absolute right-2 top-2 z-40 size-6 border-r border-t border-[#C6A15B]" />
+                <div className={`pointer-events-none absolute bottom-2 z-40 size-6 border-b border-[#C6A15B] ${rtl ? 'right-2 border-r' : 'left-2 border-l'}`} /><div className={`pointer-events-none absolute top-2 z-40 size-6 border-t border-[#C6A15B] ${rtl ? 'left-2 border-l' : 'right-2 border-r'}`} />
               </motion.article>
             ))}
           </div>
