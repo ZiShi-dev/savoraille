@@ -4,13 +4,13 @@ import {
   ArrowRight, Bike, CalendarDays, Clock3, Instagram, MapPin,
   Phone, ShoppingBag,
 } from 'lucide-react';
+import Link from 'next/link';
 
 import { BrandSeal } from '@/components/brand-seal';
 import { HeroContent } from '@/components/hero-content';
 import { useI18n } from '@/components/i18n-provider';
 import { RestaurantExperience } from '@/components/restaurant-experience';
 import { SiteHeader } from '@/components/site-header';
-import { SummerMenuExperience } from '@/components/summer-menu-experience';
 
 const services = [
   { icon: CalendarDays, eyebrow: 'Sur place', title: 'Votre table vous attend.', description: 'Choisissez votre heure, nous préparons le reste.', action: 'Réserver une table', href: '#reservation' },
@@ -46,7 +46,10 @@ export default function HomePage() {
                   <p className="text-xs text-[#FAF6EC]/65 sm:text-sm">{tr('Volaille dorée, jus corsé, légumes de nos producteurs.')}</p>
                 </div>
               </div>
-              <a href="#carte" className="inline-flex items-center gap-2 self-start text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:self-auto">{tr('Découvrir la carte')}<ArrowRight className="size-4 rtl:rotate-180" /></a>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 self-start sm:self-auto">
+                <Link href="/carte" className="inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Découvrir la carte')}<ArrowRight className="size-4 rtl:rotate-180" /></Link>
+                <Link href="/carte#selection-surprise" className="inline-flex items-center gap-2 text-sm font-semibold text-[#FAF6EC]/75 outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir les choix surprises')}<ArrowRight className="size-4 rtl:rotate-180" /></Link>
+              </div>
             </div>
           </div>
         </section>
@@ -77,13 +80,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        <SummerMenuExperience />
-
         <RestaurantExperience />
 
         <div className="gold-divider gold-divider-dark" aria-hidden="true" />
 
-        <section id="histoire" className="scroll-mt-28 bg-[#FAF6EC] px-6 py-16 sm:py-24 lg:py-28">
+        <section id="histoire" className="bg-[#FAF6EC] px-6 py-16 sm:py-24 lg:py-28">
           <div className="mx-auto grid max-w-[1200px] gap-8 sm:gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
             <div className="mx-auto grid aspect-square w-full max-w-56 place-items-center rounded-full border border-[#C6A15B]/50 bg-white/40 p-6 sm:max-w-sm sm:p-8"><BrandSeal className="size-full" /></div>
             <div>
@@ -95,7 +96,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="commander" className="scroll-mt-28 bg-[#FAF6EC] px-6 pb-24">
+        <section id="commander" className="bg-[#FAF6EC] px-6 pb-24">
           <div id="reservation" className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl bg-[#7C2438] p-8 text-[#FAF6EC] shadow-[0_16px_50px_rgba(124,36,56,0.2)] sm:p-12 lg:p-16">
             <div className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full border border-[#C6A15B]/25" /><div className="pointer-events-none absolute -right-8 -top-12 size-56 rounded-full border border-[#C6A15B]/35" />
             <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
@@ -106,14 +107,14 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
                 <a href="tel:+33000000000" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-bold text-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><Phone className="size-5" strokeWidth={1.8} />{tr('Réserver par téléphone')}</a>
-                <a href="#carte" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#FAF6EC]/40 px-6 py-4 font-bold text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><ShoppingBag className="size-5" strokeWidth={1.8} />{tr('Commander en ligne')}</a>
+                <Link href="/carte" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#FAF6EC]/40 px-6 py-4 font-bold text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><ShoppingBag className="size-5" strokeWidth={1.8} />{tr('Commander en ligne')}</Link>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer id="contact" className="scroll-mt-28 bg-[#1E3A5F] px-6 py-14 text-[#FAF6EC]">
+      <footer id="contact" className="bg-[#1E3A5F] px-6 py-14 text-[#FAF6EC]">
         <div className="mx-auto grid max-w-[1200px] gap-10 border-b border-[#C6A15B]/30 pb-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div className="flex items-center gap-5"><BrandSeal inverse className="size-24 shrink-0" /><div><p className="font-display text-4xl font-semibold">Savoraille</p><p className="font-script mt-1 text-2xl text-[#C6A15B]">La merveille des saveurs</p></div></div>
           <div><p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">{tr('Nous trouver')}</p><p className="mt-4 text-sm leading-7 text-[#FAF6EC]/70">{tr('Votre adresse')}<br />{tr('Votre ville, France')}</p></div>

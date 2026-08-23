@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ChefHat, ChevronLeft, ChevronRight, ScanLine, Shuffle, Sparkles, X } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useI18n } from './i18n-provider';
@@ -238,14 +239,17 @@ export function SummerMenuExperience() {
 
   return (
     <>
-      <section id="carte" className="relative scroll-mt-28 overflow-hidden bg-[#102B4D] px-6 py-16 text-[#FAF6EC] sm:py-20" aria-labelledby="summer-menu-title">
+      <section id="carte" className="relative overflow-hidden bg-[#102B4D] px-6 py-16 text-[#FAF6EC] sm:py-20" aria-labelledby="summer-menu-title">
       <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_85%_18%,#C6A15B_0,transparent_26%),linear-gradient(rgba(198,161,91,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(198,161,91,.08)_1px,transparent_1px)] [background-size:auto,48px_48px,48px_48px]" />
       <div className="pointer-events-none absolute -left-40 top-1/3 size-96 rounded-full border border-[#C6A15B]/15" />
       <div className="relative mx-auto max-w-[1200px]">
-        <div className="max-w-3xl">
-          <div className="flex items-center gap-3 text-[#C6A15B]"><span className="h-px w-10 bg-current" /><p className="text-xs font-bold tracking-[0.2em] uppercase">{tr('Carte d’été')}</p></div>
-          <h2 id="summer-menu-title" className="font-display mt-3 text-4xl leading-none font-semibold sm:text-5xl lg:text-6xl">{tr('L’assiette du moment')}</h2>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#FAF6EC]/68 sm:text-base">{tr('Volaille dorée, jus corsé, légumes de nos producteurs. Ouvrez la carte et laissez chaque assiette prendre vie.')}</p>
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3 text-[#C6A15B]"><span className="h-px w-10 bg-current" /><p className="text-xs font-bold tracking-[0.2em] uppercase">{tr('Carte d’été')}</p></div>
+            <h1 id="summer-menu-title" className="font-display mt-3 text-4xl leading-none font-semibold sm:text-5xl lg:text-6xl">{tr('L’assiette du moment')}</h1>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-[#FAF6EC]/68 sm:text-base">{tr('Volaille dorée, jus corsé, légumes de nos producteurs. Ouvrez la carte et laissez chaque assiette prendre vie.')}</p>
+          </div>
+          <a href="#selection-surprise" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#C6A15B]/45 bg-[#FAF6EC]/5 px-5 py-3 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir les choix surprises')}<ArrowUpRight className="size-4" /></a>
         </div>
 
         <nav className="mt-8 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label={tr('Sections de la carte d’été')}>
@@ -356,7 +360,7 @@ export function SummerMenuExperience() {
                     <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.65rem] font-bold tracking-[0.18em] uppercase">{tr(selected.eyebrow)}</p></div>
                     <div className="mt-2 flex items-start justify-between gap-5"><h3 className="font-display text-3xl leading-none font-semibold sm:text-4xl">{tr(selected.name)}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
                     <p className="mt-3 max-w-xl text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
-                    <a href="#commander" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></a>
+                    <Link href="/#commander" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></Link>
                   </div>
                   <div className={`pointer-events-none absolute bottom-3 size-8 border-b border-[#C6A15B] ${rtl ? 'right-3 border-r' : 'left-3 border-l'}`} /><div className={`pointer-events-none absolute top-3 size-8 border-t border-[#C6A15B] ${rtl ? 'left-3 border-l' : 'right-3 border-r'}`} />
                 </motion.article>
@@ -408,7 +412,7 @@ export function SummerMenuExperience() {
                 <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.6rem] font-bold tracking-[0.16em] uppercase">{tr(selected.eyebrow)}</p></div>
                 <div className="mt-2 flex items-start justify-between gap-4"><h3 id="mobile-dish-title" className="font-display text-3xl leading-none font-semibold text-[#FAF6EC]">{tr(selected.name)}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
                 <p className="mt-4 text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
-                <a href="#commander" onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></a>
+                <Link href="/#commander" onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></Link>
               </div>
               <div className={`pointer-events-none absolute bottom-2 size-7 border-b border-[#C6A15B] ${rtl ? 'right-2 border-r' : 'left-2 border-l'}`} /><div className={`pointer-events-none absolute top-2 size-7 border-t border-[#C6A15B] ${rtl ? 'left-2 border-l' : 'right-2 border-r'}`} />
             </motion.article>
@@ -417,7 +421,7 @@ export function SummerMenuExperience() {
       </AnimatePresence>
       </section>
 
-      <section id="selection-surprise" className="relative scroll-mt-28 overflow-hidden bg-[#FAF6EC] px-6 py-16 text-[#241F19] sm:py-20" aria-labelledby="discovery-title">
+      <section id="selection-surprise" className="relative overflow-hidden bg-[#FAF6EC] px-6 py-16 text-[#241F19] sm:py-20" aria-labelledby="discovery-title">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-2 border-y border-[#C6A15B]/55" />
         <div className="pointer-events-none absolute -right-28 top-20 size-80 rounded-full border border-[#C6A15B]/20" />
         <div className="pointer-events-none absolute -right-14 top-28 size-64 rounded-full border border-[#C6A15B]/20" />
@@ -429,7 +433,10 @@ export function SummerMenuExperience() {
               <h2 id="discovery-title" className="font-display mt-3 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">{tr('Trois envies, une seule carte.')}</h2>
               <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.')}</p>
             </div>
-            <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher trois nouvelles suggestions de la Carte d’été')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
+            <div className="flex flex-wrap gap-3">
+              <a href="#carte" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></a>
+              <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher trois nouvelles suggestions de la Carte d’été')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
+            </div>
           </div>
 
           <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase md:hidden">{tr('Faites glisser pour voir les trois suggestions')}</p>
@@ -445,7 +452,7 @@ export function SummerMenuExperience() {
                 <div className="relative z-30 flex min-w-0 flex-1 flex-col p-4 sm:p-5">
                   <div className="flex items-start justify-between gap-3"><div><p className="text-[0.625rem] font-bold tracking-[0.12em] text-[#C6A15B] uppercase">{tr(item.eyebrow)}</p><h3 className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{tr(item.name)}</h3></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
                   <p className="mt-3 text-xs leading-5 text-[#FAF6EC]/65 sm:text-sm sm:leading-6">{tr(item.detail)}</p>
-                  <a href="#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander ce plat')}<ArrowUpRight className="size-4" /></a>
+                  <Link href="/#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander ce plat')}<ArrowUpRight className="size-4" /></Link>
                 </div>
                 <div className={`pointer-events-none absolute bottom-2 z-40 size-6 border-b border-[#C6A15B] ${rtl ? 'right-2 border-r' : 'left-2 border-l'}`} /><div className={`pointer-events-none absolute top-2 z-40 size-6 border-t border-[#C6A15B] ${rtl ? 'left-2 border-l' : 'right-2 border-r'}`} />
               </motion.article>
