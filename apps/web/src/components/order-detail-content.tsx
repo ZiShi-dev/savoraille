@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, Check, Minus, Plus, ShoppingBag, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, CircleDashed, Minus, Plus, ShoppingBag, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -11,7 +11,7 @@ import { menuItems, menuSections } from './summer-menu-experience';
 
 export function OrderDetailContent({ itemId }: { itemId: string }) {
   const { locale, tr } = useI18n();
-  const { addItem, itemCount, total } = useCart();
+  const { lines, addItem, itemCount, total } = useCart();
   const item = menuItems.find((candidate) => candidate.id === itemId);
   const itemSection = menuSections.find((section) => section.items.some((candidate) => candidate.id === itemId));
   const [quantity, setQuantity] = useState(1);
@@ -26,7 +26,13 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
   }
 
   const unitPrice = Number.parseFloat(item.price);
-  const suggestions = menuSections.find((section) => section.id === activeSection)?.items.filter((candidate) => candidate.id !== item.id).slice(0, 3) ?? [];
+  const sectionStates = menuSections.map((section) => ({
+    section,
+    count: lines.filter((line) => section.items.some((candidate) => candidate.id === line.itemId)).reduce((sum, line) => sum + line.quantity, 0),
+  }));
+  const completedSections = sectionStates.filter(({ count }) => count > 0).length;
+  const activeState = sectionStates.find(({ section }) => section.id === activeSection) ?? sectionStates[0]!;
+  const suggestions = activeState.section.items.filter((candidate) => candidate.id !== item.id).slice(0, 3);
 
   const addCurrentItem = () => {
     addItem(item.id, quantity);
@@ -72,24 +78,33 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
         </div>
       </section>
 
-      <section className="bg-[#102B4D] px-6 py-16 text-[#FAF6EC] sm:py-20" aria-labelledby="suggestions-title">
+      <section className="relative overflow-hidden bg-[#102B4D] px-6 py-12 text-[#FAF6EC] sm:py-16" aria-labelledby="suggestions-title">
+        <div className="pointer-events-none absolute -end-24 -top-28 size-80 rounded-full border border-[#C6A15B]/18" />
+        <div className="pointer-events-none absolute -end-10 -top-16 size-56 rounded-full border border-[#C6A15B]/22" />
         <div className="mx-auto max-w-[1200px]">
-          <div className="flex items-center gap-3 text-[#C6A15B]"><Sparkles className="size-5" /><p className="text-xs font-bold tracking-[0.16em] uppercase">{tr('Pour compléter votre repas')}</p></div>
-          <h2 id="suggestions-title" className="font-display mt-3 text-4xl font-semibold sm:text-5xl">{tr('Ajoutez une envie à votre menu.')}</h2>
-          <div className="mt-7 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label={tr('Catégories de suggestions')}>
-            {menuSections.map((section) => <button key={section.id} type="button" onClick={() => setActiveSection(section.id)} aria-pressed={activeSection === section.id} className={`shrink-0 rounded-full border px-4 py-2.5 text-sm font-bold outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${activeSection === section.id ? 'border-[#C6A15B] bg-[#C6A15B] text-[#241F19]' : 'border-[#FAF6EC]/18 text-[#FAF6EC]/75 hover:bg-white/8'}`}>{tr(section.shortLabel)}</button>)}
+          <div className="relative grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div><div className="flex items-center gap-3 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.16em] uppercase">{tr('Pour compléter votre repas')}</p></div><h2 id="suggestions-title" className="font-display mt-2 text-3xl leading-none font-semibold sm:text-4xl">{tr('Ajoutez une envie à votre menu.')}</h2></div>
+            <div className="flex w-fit items-center gap-3 rounded-xl border border-[#C6A15B]/28 bg-white/[0.055] px-4 py-3"><div className="grid size-12 place-items-center rounded-full p-[3px]" style={{ background: `conic-gradient(#C6A15B ${completedSections / menuSections.length * 360}deg, rgba(250,246,236,0.12) 0deg)` }} role="img" aria-label={`${completedSections} / ${menuSections.length} ${tr('catégories complétées')}`}><div className="grid size-full place-items-center rounded-full bg-[#102B4D]"><p className="font-display text-lg font-bold text-[#C6A15B]">{completedSections}<span className="text-[0.65rem] text-[#FAF6EC]/45">/{menuSections.length}</span></p></div></div><div><p className="text-xs font-bold text-[#C6A15B]">{tr('Progression de votre menu')}</p><p className="mt-0.5 text-xs text-[#FAF6EC]/48">{tr(completedSections === menuSections.length ? 'Votre menu est complet.' : 'À compléter')}</p></div></div>
           </div>
-          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite">
+
+          <div className="-mx-6 mt-6 flex gap-2 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0" role="tablist" aria-label={tr('Catégories de suggestions')}>
+            {sectionStates.map(({ section, count }) => {
+              const selected = activeSection === section.id;
+              return <button key={section.id} type="button" role="tab" aria-selected={selected} onClick={() => setActiveSection(section.id)} className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2.5 text-xs font-bold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${selected ? 'border-[#C6A15B] bg-[#C6A15B] text-[#241F19]' : 'border-[#FAF6EC]/18 text-[#FAF6EC]/72 hover:bg-white/8'}`}>{count > 0 ? <Check className="size-3.5 text-[#C4703F]" /> : <CircleDashed className="size-3.5" />}{tr(section.shortLabel)}</button>;
+            })}
+          </div>
+
+          <div className="-mx-6 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0" aria-live="polite">
             {suggestions.map((suggestion) => (
-              <article key={suggestion.id} className="overflow-hidden rounded-2xl border border-[#FAF6EC]/12 bg-white/[0.055]">
-                <Link href={`/commander/${suggestion.id}`} className="group block outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C6A15B]">
-                  <div className="relative aspect-[16/9] overflow-hidden"><Image src={suggestion.image} alt={tr(suggestion.name)} fill sizes="(min-width:1024px) 33vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[#102B4D]/75 to-transparent" /><span className="absolute bottom-3 end-3 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold">{suggestion.price}</span></div>
-                  <div className="p-5 pb-3"><p className="text-xs font-bold tracking-[0.12em] text-[#C6A15B] uppercase">{tr(suggestion.eyebrow)}</p><h3 className="font-display mt-1 text-2xl font-semibold">{tr(suggestion.name)}</h3></div>
-                </Link>
-                <div className="px-5 pb-5"><button type="button" onClick={() => addSuggestion(suggestion.id)} className="inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{suggestionAdded === suggestion.id ? <Check className="size-4" /> : <Plus className="size-4" />}{tr(suggestionAdded === suggestion.id ? 'Ajouté' : 'Ajouter rapidement')}</button></div>
+              <article key={suggestion.id} className="grid min-w-[86%] snap-center grid-cols-[88px_1fr_auto] items-center gap-3 rounded-xl border border-[#FAF6EC]/14 bg-white/[0.055] p-3 sm:min-w-0">
+                <Link href={`/commander/${suggestion.id}`} className="relative aspect-square overflow-hidden rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Image src={suggestion.image} alt={tr(suggestion.name)} fill sizes="88px" className="object-cover" /></Link>
+                <div className="min-w-0"><p className="truncate text-[0.65rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase">{tr(suggestion.eyebrow)}</p><Link href={`/commander/${suggestion.id}`} className="font-display mt-1 block text-lg leading-tight font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(suggestion.name)}</Link><p className="mt-1 text-sm font-bold text-[#DFA17A]">{suggestion.price}</p></div>
+                <button type="button" onClick={() => addSuggestion(suggestion.id)} aria-label={`${tr('Ajouter')} ${tr(suggestion.name)}`} className={`grid size-10 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${suggestionAdded === suggestion.id ? 'bg-[#C4703F] text-white' : 'bg-[#7C2438] text-white hover:bg-[#681d2f]'}`}>{suggestionAdded === suggestion.id ? <Check className="size-4" /> : <Plus className="size-4" />}</button>
               </article>
             ))}
           </div>
+
+          <div className="relative mt-6 flex flex-col gap-3 border-t border-[#C6A15B]/22 pt-5 sm:flex-row sm:items-center sm:justify-between"><p className="text-sm text-[#FAF6EC]/55">{tr('Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.')}</p><Link href="/carte#composer-menu" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#C6A15B]/55 px-5 py-3 text-sm font-bold text-[#C6A15B] outline-none hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Compléter mon menu')}<ArrowRight className="size-4 rtl:-scale-x-100" /></Link></div>
         </div>
       </section>
     </main>
