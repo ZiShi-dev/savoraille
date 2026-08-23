@@ -3,11 +3,13 @@
 import { CalendarDays, Clock3, Leaf, ShoppingBag } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-const firstLine = ['Le', 'terroir,'];
-const secondLine = ['dans', 'l’air', 'du', 'temps.'];
+import { useI18n } from './i18n-provider';
 
 export function HeroContent() {
   const reduceMotion = useReducedMotion();
+  const { tr } = useI18n();
+  const firstLine = tr('Le terroir,').split(' ');
+  const secondLine = tr('dans l’air du temps.').split(' ');
 
   const reveal = (delay: number) => ({
     initial: reduceMotion ? false : { opacity: 0, y: 28, filter: 'blur(10px)' },
@@ -23,19 +25,19 @@ export function HeroContent() {
           animate={reduceMotion ? undefined : { opacity: [0.82, 1, 0.82], y: [0, -3, 0] }}
           transition={reduceMotion ? undefined : { duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
         >
-          La merveille des saveurs
+          {tr('La merveille des saveurs')}
         </motion.p>
       </motion.div>
 
       <h1 className="font-display mt-5 text-[clamp(3.6rem,7vw,6.8rem)] leading-[0.88] font-semibold tracking-[-0.045em] text-[#FAF6EC]">
-        <span className="block" aria-label="Le terroir,">
+        <span className="block" aria-label={tr('Le terroir,')}>
           {firstLine.map((word, index) => (
             <motion.span key={word} className="mr-[0.2em] inline-block" aria-hidden="true" {...reveal(0.16 + index * 0.1)}>
               {word}
             </motion.span>
           ))}
         </span>
-        <span className="block italic text-[#C6A15B]" aria-label="dans l’air du temps.">
+        <span className="block italic text-[#C6A15B]" aria-label={tr('dans l’air du temps.')}>
           {secondLine.map((word, index) => (
             <motion.span
               key={word}
@@ -56,7 +58,7 @@ export function HeroContent() {
       </h1>
 
       <motion.p className="mt-7 max-w-xl text-base leading-7 text-[#FAF6EC]/82 sm:text-lg" {...reveal(0.72)}>
-        Bienvenue chez Savoraille. Une cuisine française de saison, généreuse et précise, à savourer à table ou chez vous.
+        {tr('Bienvenue chez Savoraille. Une cuisine française de saison, généreuse et précise, à savourer à table ou chez vous.')}
       </motion.p>
 
       <motion.div className="mt-9 flex flex-col gap-3 sm:flex-row" {...reveal(0.84)}>
@@ -66,7 +68,7 @@ export function HeroContent() {
           whileHover={reduceMotion ? undefined : { y: -3, scale: 1.015 }}
           whileTap={reduceMotion ? undefined : { scale: 0.98 }}
         >
-          <CalendarDays aria-hidden="true" className="size-5" strokeWidth={1.8} />Réserver une table
+          <CalendarDays aria-hidden="true" className="size-5" strokeWidth={1.8} />{tr('Réserver une table')}
         </motion.a>
         <motion.a
           href="#commander"
@@ -74,13 +76,13 @@ export function HeroContent() {
           whileHover={reduceMotion ? undefined : { y: -3, scale: 1.015 }}
           whileTap={reduceMotion ? undefined : { scale: 0.98 }}
         >
-          <ShoppingBag aria-hidden="true" className="size-5" strokeWidth={1.8} />Commander
+          <ShoppingBag aria-hidden="true" className="size-5" strokeWidth={1.8} />{tr('Commander')}
         </motion.a>
       </motion.div>
 
       <motion.div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-[#FAF6EC]/78" {...reveal(0.96)}>
-        <span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />Mar–Dim · 12 h–23 h</span>
-        <span className="flex items-center gap-2"><Leaf className="size-4 text-[#C6A15B]" />Produits de saison</span>
+        <span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />{tr('Mar–Dim · 12 h–23 h')}</span>
+        <span className="flex items-center gap-2"><Leaf className="size-4 text-[#C6A15B]" />{tr('Produits de saison')}</span>
       </motion.div>
     </div>
   );

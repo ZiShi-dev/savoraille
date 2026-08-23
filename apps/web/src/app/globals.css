@@ -23,6 +23,16 @@
   color-scheme: light;
 }
 
+html[lang='ar'] body,
+html[lang='ar'] .font-display,
+html[lang='ar'] .font-script {
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+html[lang='ar'] body {
+  letter-spacing: 0;
+}
+
 * { box-sizing: border-box; }
 
 html {

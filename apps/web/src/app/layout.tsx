@@ -12,6 +12,8 @@ import '@fontsource/parisienne/400.css';
 
 import './globals.css';
 
+import { I18nProvider } from '@/components/i18n-provider';
+
 export const metadata: Metadata = {
   title: 'Savoraille — La merveille des saveurs',
   description: 'Restaurant français moderne : réservation, commande à emporter et livraison.',
@@ -19,8 +21,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="fr">
-      <body>{children}</body>
+    <html lang="fr" suppressHydrationWarning>
+      <body><I18nProvider>{children}</I18nProvider></body>
     </html>
   );
 }

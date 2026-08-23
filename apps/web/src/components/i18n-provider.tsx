@@ -1,0 +1,210 @@
+'use client';
+
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+
+export type Locale = 'fr' | 'en' | 'ar';
+
+const en: Record<string, string> = {
+  'Accueil': 'Home', 'La carte': 'Menu', 'Notre histoire': 'Our story', 'Contact': 'Contact',
+  'La merveille des saveurs': 'A world of wonderful flavours', 'Commander': 'Order', 'Réserver': 'Book',
+  'Réserver une table': 'Book a table', 'Ouvrir le menu': 'Open menu', 'Fermer le menu': 'Close menu',
+  'Navigation principale': 'Main navigation', 'Navigation mobile': 'Mobile navigation',
+  'Le terroir,': 'French roots,', 'dans l’air du temps.': 'made for today.',
+  'Bienvenue chez Savoraille. Une cuisine française de saison, généreuse et précise, à savourer à table ou chez vous.': 'Welcome to Savoraille. Generous, precise seasonal French cooking, to enjoy at our table or at home.',
+  'Mar–Dim · 12 h–23 h': 'Tue–Sun · 12 pm–11 pm', 'Produits de saison': 'Seasonal produce',
+  'Carte d’été': 'Summer menu', 'L’assiette du moment': 'Dish of the moment',
+  'Volaille dorée, jus corsé, légumes de nos producteurs.': 'Golden roast chicken, rich jus and vegetables from our growers.',
+  'Découvrir la carte': 'Explore the menu', 'À chacun son moment': 'A moment for everyone',
+  'Savourez comme vous aimez.': 'Enjoy it your way.', 'Faites glisser pour découvrir les trois services': 'Swipe to discover our three services',
+  'Nos services': 'Our services', 'Sur place': 'Dine in', 'À emporter': 'Takeaway', 'Livraison': 'Delivery',
+  'Votre table vous attend.': 'Your table is waiting.', 'Choisissez votre heure, nous préparons le reste.': 'Choose your time, we will prepare the rest.',
+  'Votre panier sent déjà bon.': 'Your basket already smells delicious.', 'Commandez la carte du moment et passez la chercher.': 'Order from today’s menu and collect it when ready.',
+  'La cloche sonne bientôt.': 'Dinner will soon be at your door.', 'Nos assiettes voyagent jusque chez vous.': 'Our dishes travel all the way to your home.',
+  'Se faire livrer': 'Get it delivered', 'Notre maison': 'Our house',
+  'Le cachet du terroir, la fraîcheur d’aujourd’hui.': 'The soul of the terroir, with today’s freshness.',
+  'Savoraille cuisine la saison avec respect et liberté. Des produits choisis près de chez nous, des gestes français et une salle où chaque détail invite à rester.': 'Savoraille cooks with the seasons, respect and freedom. Carefully sourced produce, French technique and a dining room where every detail invites you to stay.',
+  'Bienvenue à notre table.': 'Welcome to our table.', 'Votre table vous attend': 'Your table is waiting',
+  'Quel plaisir vous ferait envie aujourd’hui ?': 'What would you like to enjoy today?', 'Votre adresse ici': 'Your address here',
+  'Réserver par téléphone': 'Book by phone', 'Commander en ligne': 'Order online', 'Nous trouver': 'Find us',
+  'Votre adresse': 'Your address', 'Votre ville, France': 'Your city, France', 'Nous suivre': 'Follow us',
+  'Tous droits réservés.': 'All rights reserved.', 'Restaurant français moderne.': 'Modern French restaurant.',
+  'L’expérience Savoraille': 'The Savoraille experience', 'Plus qu’un repas, un moment qui reste.': 'More than a meal, a moment that stays with you.',
+  'La lumière est douce, les assiettes arrivent au rythme de la saison et chaque geste raconte une cuisine française vivante.': 'Soft light, dishes guided by the seasons and every gesture telling the story of vibrant French cooking.',
+  'Produits choisis': 'Carefully sourced', 'Service attentionné': 'Thoughtful service', 'Vivre l’expérience': 'Live the experience',
+  'Le geste': 'The craft', 'Précis, puis généreux.': 'Precise, then generous.', 'L’assiette': 'The plate',
+  'La saison en lumière.': 'The season in the spotlight.', 'Le moment': 'The moment', 'Un verre, et le temps ralentit.': 'One glass, and time slows down.',
+  'Trois moments de l’expérience Savoraille': 'Three moments from the Savoraille experience',
+  'Volaille dorée, jus corsé, légumes de nos producteurs. Ouvrez la carte et laissez chaque assiette prendre vie.': 'Golden roast chicken, rich jus and vegetables from our growers. Open the menu and watch every dish come to life.',
+  'Sections de la carte d’été': 'Summer menu sections', 'Page': 'Page', 'sur': 'of', 'Précédent': 'Previous', 'Suivant': 'Next',
+  'Page précédente du menu': 'Previous menu page', 'Page suivante du menu': 'Next menu page',
+  'Cuisine de saison': 'Seasonal cooking', 'Fait maison': 'Homemade', 'Sélection active': 'Active selection',
+  'Fermer l’écran du plat': 'Close dish screen', 'Commander cette assiette': 'Order this dish', 'Écran refermé': 'Screen closed',
+  'Cliquez ici ou choisissez une assiette pour l’ouvrir.': 'Click here or choose a dish to open it.',
+  'Touchez une assiette pour ouvrir son écran': 'Tap a dish to open its screen', 'Écran du menu': 'Menu screen',
+  'Fermer l’écran mobile du plat': 'Close mobile dish screen', 'Sélection surprise · Carte d’été': 'Surprise selection · Summer menu',
+  'Trois envies, une seule carte.': 'Three cravings, one menu.',
+  'Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.': 'Still deciding? We select three dishes from our summer menu so you can discover different flavours, textures and prices.',
+  'Afficher trois nouvelles suggestions de la Carte d’été': 'Show three new summer menu suggestions', 'Nouvelle sélection': 'New selection',
+  'Faites glisser pour voir les trois suggestions': 'Swipe to see all three suggestions', 'Suggestions de la Carte d’été': 'Summer menu suggestions',
+  'Commander ce plat': 'Order this dish', 'Apéritifs & amuse-bouches': 'Aperitifs & amuse-bouches', 'Apéritifs': 'Aperitifs',
+  'Pour ouvrir l’appétit': 'To awaken the appetite', 'Entrées': 'Starters', 'Les premiers parfums': 'First aromas',
+  'Plats principaux': 'Main courses', 'Plats': 'Mains', 'Le cœur de la table': 'The heart of the table',
+  'Desserts': 'Desserts', 'La dernière gourmandise': 'One last indulgence', 'Boissons': 'Drinks', 'Avec ou sans alcool': 'With or without alcohol',
+};
+
+const ar: Record<string, string> = {
+  'Accueil': 'الرئيسية', 'La carte': 'قائمة الطعام', 'Notre histoire': 'قصتنا', 'Contact': 'اتصل بنا',
+  'La merveille des saveurs': 'روعة النكهات', 'Commander': 'اطلب', 'Réserver': 'احجز', 'Réserver une table': 'احجز طاولة',
+  'Ouvrir le menu': 'فتح القائمة', 'Fermer le menu': 'إغلاق القائمة', 'Navigation principale': 'التنقل الرئيسي', 'Navigation mobile': 'قائمة الهاتف',
+  'Le terroir,': 'أصالة المذاق،', 'dans l’air du temps.': 'بروح معاصرة.',
+  'Bienvenue chez Savoraille. Une cuisine française de saison, généreuse et précise, à savourer à table ou chez vous.': 'مرحبًا بكم في سافوراي. مطبخ فرنسي موسمي، غني ومتقن، تستمتعون به على طاولتنا أو في منازلكم.',
+  'Mar–Dim · 12 h–23 h': 'الثلاثاء–الأحد · 12 ظهرًا–11 مساءً', 'Produits de saison': 'منتجات موسمية',
+  'Carte d’été': 'قائمة الصيف', 'L’assiette du moment': 'طبق الموسم',
+  'Volaille dorée, jus corsé, légumes de nos producteurs.': 'دجاج ذهبي، صلصة غنية وخضروات من منتجينا.', 'Découvrir la carte': 'اكتشف القائمة',
+  'À chacun son moment': 'لكل شخص لحظته', 'Savourez comme vous aimez.': 'استمتعوا كما تحبون.',
+  'Faites glisser pour découvrir les trois services': 'اسحبوا لاكتشاف خدماتنا الثلاث', 'Nos services': 'خدماتنا',
+  'Sur place': 'داخل المطعم', 'À emporter': 'للاستلام', 'Livraison': 'توصيل',
+  'Votre table vous attend.': 'طاولتكم بانتظاركم.', 'Choisissez votre heure, nous préparons le reste.': 'اختاروا الوقت وسنهتم نحن بالباقي.',
+  'Votre panier sent déjà bon.': 'طلبكم تفوح منه الرائحة الشهية.', 'Commandez la carte du moment et passez la chercher.': 'اطلبوا من قائمة اليوم واستلموه في الموعد.',
+  'La cloche sonne bientôt.': 'وجبتكم ستصل قريبًا.', 'Nos assiettes voyagent jusque chez vous.': 'أطباقنا تصل إليكم أينما كنتم.',
+  'Se faire livrer': 'اطلب التوصيل', 'Notre maison': 'دارنا',
+  'Le cachet du terroir, la fraîcheur d’aujourd’hui.': 'أصالة الأرض بنضارة اليوم.',
+  'Savoraille cuisine la saison avec respect et liberté. Des produits choisis près de chez nous, des gestes français et une salle où chaque détail invite à rester.': 'في سافوراي نطبخ الموسم باحترام وحرية، بمنتجات مختارة بعناية وتقنيات فرنسية وقاعة تدعوكم كل تفاصيلها للبقاء.',
+  'Bienvenue à notre table.': 'أهلًا بكم على طاولتنا.', 'Votre table vous attend': 'طاولتكم بانتظاركم',
+  'Quel plaisir vous ferait envie aujourd’hui ?': 'أي متعة تختارون اليوم؟', 'Votre adresse ici': 'عنوانكم هنا',
+  'Réserver par téléphone': 'الحجز عبر الهاتف', 'Commander en ligne': 'الطلب عبر الإنترنت', 'Nous trouver': 'موقعنا',
+  'Votre adresse': 'عنوانكم', 'Votre ville, France': 'مدينتكم، فرنسا', 'Nous suivre': 'تابعونا', 'Tous droits réservés.': 'جميع الحقوق محفوظة.',
+  'Restaurant français moderne.': 'مطعم فرنسي عصري.', 'L’expérience Savoraille': 'تجربة سافوراي',
+  'Plus qu’un repas, un moment qui reste.': 'أكثر من وجبة، لحظة تبقى في الذاكرة.',
+  'La lumière est douce, les assiettes arrivent au rythme de la saison et chaque geste raconte une cuisine française vivante.': 'إضاءة دافئة، أطباق تتبع إيقاع الموسم، وكل لمسة تحكي قصة مطبخ فرنسي نابض بالحياة.',
+  'Produits choisis': 'منتجات منتقاة', 'Service attentionné': 'خدمة باهتمام', 'Vivre l’expérience': 'عِش التجربة',
+  'Le geste': 'الحِرفة', 'Précis, puis généreux.': 'دقة يتبعها كرم.', 'L’assiette': 'الطبق', 'La saison en lumière.': 'الموسم في أجمل صورة.',
+  'Le moment': 'اللحظة', 'Un verre, et le temps ralentit.': 'كأس واحد، فيتباطأ الزمن.', 'Trois moments de l’expérience Savoraille': 'ثلاث لحظات من تجربة سافوراي',
+  'Volaille dorée, jus corsé, légumes de nos producteurs. Ouvrez la carte et laissez chaque assiette prendre vie.': 'دجاج ذهبي وصلصة غنية وخضروات من منتجينا. افتحوا القائمة ودعوا كل طبق ينبض بالحياة.',
+  'Sections de la carte d’été': 'أقسام قائمة الصيف', 'Page': 'صفحة', 'sur': 'من', 'Précédent': 'السابق', 'Suivant': 'التالي',
+  'Page précédente du menu': 'صفحة القائمة السابقة', 'Page suivante du menu': 'صفحة القائمة التالية', 'Cuisine de saison': 'مطبخ موسمي',
+  'Fait maison': 'محضّر في المطعم', 'Sélection active': 'الاختيار الحالي', 'Fermer l’écran du plat': 'إغلاق شاشة الطبق',
+  'Commander cette assiette': 'اطلب هذا الطبق', 'Écran refermé': 'الشاشة مغلقة', 'Cliquez ici ou choisissez une assiette pour l’ouvrir.': 'اضغط هنا أو اختر طبقًا لفتحه.',
+  'Touchez une assiette pour ouvrir son écran': 'المس طبقًا لفتح شاشته', 'Écran du menu': 'شاشة القائمة', 'Fermer l’écran mobile du plat': 'إغلاق شاشة الطبق',
+  'Sélection surprise · Carte d’été': 'اختيارات مفاجئة · قائمة الصيف', 'Trois envies, une seule carte.': 'ثلاث رغبات، قائمة واحدة.',
+  'Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.': 'ما زلتم مترددين؟ نختار لكم ثلاثة أطباق من قائمة الصيف لاكتشاف نكهات وقوام وأسعار متنوعة.',
+  'Afficher trois nouvelles suggestions de la Carte d’été': 'عرض ثلاثة اقتراحات جديدة', 'Nouvelle sélection': 'اختيارات جديدة',
+  'Faites glisser pour voir les trois suggestions': 'اسحبوا لرؤية الاقتراحات الثلاثة', 'Suggestions de la Carte d’été': 'اقتراحات قائمة الصيف',
+  'Commander ce plat': 'اطلب هذا الطبق', 'Apéritifs & amuse-bouches': 'المقبلات واللقيمات', 'Apéritifs': 'المقبلات',
+  'Pour ouvrir l’appétit': 'لافتتاح الشهية', 'Entrées': 'الأطباق الأولى', 'Les premiers parfums': 'النكهات الأولى',
+  'Plats principaux': 'الأطباق الرئيسية', 'Plats': 'الرئيسية', 'Le cœur de la table': 'قلب المائدة',
+  'Desserts': 'الحلويات', 'La dernière gourmandise': 'لمسة حلوة أخيرة', 'Boissons': 'المشروبات', 'Avec ou sans alcool': 'مع أو بدون كحول',
+};
+
+Object.assign(en, {
+  'Bouchée chaude': 'Warm bite', 'Fraîcheur': 'Fresh', 'Bord de mer': 'From the sea', 'Croustillant': 'Crispy', 'Du Sud': 'From the South',
+  'Iodé': 'Sea-kissed', 'Terroir': 'Terroir', 'De saison': 'Seasonal', 'Signature': 'Signature', 'Végétal': 'Plant-based',
+  'Signature de la maison': 'House signature', 'Arrivage du marché': 'Market catch', 'Création végétale': 'Plant creation', 'Cuisson lente': 'Slow-cooked',
+  'Tout en finesse': 'Delicate', 'Intense': 'Intense', 'Classique français': 'French classic', 'Fruit de saison': 'Seasonal fruit',
+  'Cocktail signature': 'Signature cocktail', 'Sélection du sommelier': 'Sommelier’s selection', 'Sans alcool': 'Alcohol-free',
+  'Gougère au vieux comté': 'Aged Comté gougère', 'Tartare de tomate fumée': 'Smoked tomato tartare', 'Rillettes de truite': 'Trout rillettes',
+  'Croquette de volaille': 'Chicken croquette', 'Mini pissaladière': 'Mini pissaladière', 'Huître & granité citron': 'Oyster & lemon granita',
+  'Jambon persillé': 'Parsley ham terrine', 'Velouté de potimarron': 'Pumpkin velouté', 'Œuf parfait': 'Perfect egg',
+  'Poireau vinaigrette': 'Leek vinaigrette', 'Truite marinée': 'Marinated trout', 'Volaille fermière dorée': 'Golden free-range chicken',
+  'Lieu jaune nacré': 'Pearl-cooked pollock', 'Potimarron confit': 'Confit pumpkin', 'Bœuf braisé au vin rouge': 'Red wine-braised beef',
+  'Tarte fine aux pommes': 'Fine apple tart', 'Chocolat grand cru': 'Grand cru chocolate', 'Paris-Brest': 'Paris-Brest',
+  'Fraises & verveine': 'Strawberries & verbena', 'Savoraille Spritz': 'Savoraille Spritz', 'Verre de Bordeaux': 'Glass of Bordeaux',
+  'Citronnade au thym': 'Thyme lemonade', 'Eau pétillante botanique': 'Botanical sparkling water',
+  'Une pâte légère et dorée, garnie de vieux comté affiné et d’une pointe de muscade.': 'Light golden pastry filled with aged Comté and a hint of nutmeg.',
+  'Tomates de saison, huile de basilic et pain de campagne croustillant.': 'Seasonal tomatoes, basil oil and crisp country bread.',
+  'Truite délicatement fumée, crème citronnée et pickles de fenouil.': 'Delicately smoked trout, lemon cream and fennel pickles.',
+  'Volaille confite, cœur fondant et moutarde douce à l’ancienne.': 'Confit chicken, melting centre and mild wholegrain mustard.',
+  'Oignons doucement confits, anchois, olives noires et pâte croustillante.': 'Slow-cooked onions, anchovies, black olives and crisp pastry.',
+  'Huître fraîche, granité citronné et huile délicate aux herbes.': 'Fresh oyster, lemon granita and delicate herb oil.',
+  'Jambon fondant, gelée au persil et moutarde de Bourgogne.': 'Tender ham, parsley jelly and Burgundy mustard.',
+  'Crème de châtaigne, noisettes torréfiées et huile de sauge.': 'Chestnut cream, toasted hazelnuts and sage oil.',
+  'Champignons rôtis, émulsion de comté et mouillettes au beurre noisette.': 'Roasted mushrooms, Comté emulsion and brown-butter soldiers.',
+  'Poireau braisé, vinaigrette aux herbes et jaune d’œuf confit.': 'Braised leek, herb vinaigrette and confit egg yolk.',
+  'Crème crue, concombre, aneth et œufs de truite légèrement fumés.': 'Crème fraîche, cucumber, dill and lightly smoked trout roe.',
+  'Une peau croustillante, une chair tendre et un jus réduit lentement pour concentrer toute la saveur du terroir.': 'Crisp skin, tender meat and a slowly reduced jus concentrating the full flavour of the terroir.',
+  'Une cuisson juste nacrée, réveillée par un beurre vif et la douceur fondante du poireau de saison.': 'Gently pearl-cooked fish, bright butter and melting seasonal leek.',
+  'Le potimarron caramélise doucement avant de rencontrer la rondeur de la châtaigne et le croquant des noisettes.': 'Slowly caramelised pumpkin with mellow chestnut and crisp hazelnuts.',
+  'Paleron fondant, jus au bordeaux, échalotes confites et pommes grenailles.': 'Tender beef, Bordeaux jus, confit shallots and baby potatoes.',
+  'Pommes caramélisées, crème crue vanillée et caramel au beurre salé.': 'Caramelised apples, vanilla cream and salted butter caramel.',
+  'Crémeux chocolat noir, croustillant praliné et glace au grué de cacao.': 'Dark chocolate crémeux, crisp praline and cacao nib ice cream.',
+  'Pâte à choux, praliné noisette généreux et éclats de fruits secs.': 'Choux pastry, generous hazelnut praline and roasted nut pieces.',
+  'Fraises fraîches, crème légère, verveine citronnée et meringue craquante.': 'Fresh strawberries, light cream, lemon verbena and crisp meringue.',
+  'Apéritif maison, agrumes frais, fines bulles et romarin.': 'House aperitif, fresh citrus, fine bubbles and rosemary.',
+  'Une cuvée souple et fruitée choisie pour accompagner la carte du moment.': 'A supple, fruity wine selected to accompany the current menu.',
+  'Citron pressé, sirop léger au thym frais et eau filtrée.': 'Fresh lemon, light thyme syrup and filtered water.',
+  'Bulles fines, concombre, verveine et une pointe de baie rose.': 'Fine bubbles, cucumber, verbena and a touch of pink peppercorn.',
+});
+
+Object.assign(ar, {
+  'Bouchée chaude': 'لقمة ساخنة', 'Fraîcheur': 'طازج', 'Bord de mer': 'من البحر', 'Croustillant': 'مقرمش', 'Du Sud': 'من الجنوب',
+  'Iodé': 'بنكهة البحر', 'Terroir': 'من تراث الأرض', 'De saison': 'موسمي', 'Signature': 'طبق مميز', 'Végétal': 'نباتي',
+  'Signature de la maison': 'توقيع الدار', 'Arrivage du marché': 'صيد السوق', 'Création végétale': 'إبداع نباتي', 'Cuisson lente': 'طهي بطيء',
+  'Tout en finesse': 'رقيق ومتوازن', 'Intense': 'مكثف', 'Classique français': 'كلاسيكي فرنسي', 'Fruit de saison': 'فاكهة الموسم',
+  'Cocktail signature': 'كوكتيل مميز', 'Sélection du sommelier': 'اختيار الساقي', 'Sans alcool': 'دون كحول',
+  'Gougère au vieux comté': 'غوجير بجبن كونتي المعتّق', 'Tartare de tomate fumée': 'تارتار الطماطم المدخنة', 'Rillettes de truite': 'رييت سمك الترويت',
+  'Croquette de volaille': 'كروكيت الدجاج', 'Mini pissaladière': 'بيسالاديير صغيرة', 'Huître & granité citron': 'محار وغرانيتا الليمون',
+  'Jambon persillé': 'لحم هلامي بالبقدونس', 'Velouté de potimarron': 'حساء يقطين مخملي', 'Œuf parfait': 'بيضة مطهوة بإتقان',
+  'Poireau vinaigrette': 'كراث بصلصة الخل', 'Truite marinée': 'ترويت متبل', 'Volaille fermière dorée': 'دجاج بلدي ذهبي',
+  'Lieu jaune nacré': 'سمك مطهو برقة', 'Potimarron confit': 'يقطين كونفي', 'Bœuf braisé au vin rouge': 'لحم بقري مطهو بالنبيذ الأحمر',
+  'Tarte fine aux pommes': 'تارت تفاح رقيقة', 'Chocolat grand cru': 'شوكولاتة فاخرة', 'Paris-Brest': 'باريس بريست',
+  'Fraises & verveine': 'فراولة ولويزة', 'Savoraille Spritz': 'سافوراي سبريتز', 'Verre de Bordeaux': 'كأس بوردو',
+  'Citronnade au thym': 'ليمونادة بالزعتر', 'Eau pétillante botanique': 'مياه فوارة بالأعشاب',
+  'Une pâte légère et dorée, garnie de vieux comté affiné et d’une pointe de muscade.': 'عجينة ذهبية خفيفة محشوة بجبن كونتي المعتّق ولمسة جوزة الطيب.',
+  'Tomates de saison, huile de basilic et pain de campagne croustillant.': 'طماطم موسمية وزيت ريحان وخبز ريفي مقرمش.',
+  'Truite délicatement fumée, crème citronnée et pickles de fenouil.': 'ترويت مدخن برقة مع كريمة الليمون ومخلل الشمر.',
+  'Volaille confite, cœur fondant et moutarde douce à l’ancienne.': 'دجاج كونفي بقلب طري وخردل حبوب خفيف.',
+  'Oignons doucement confits, anchois, olives noires et pâte croustillante.': 'بصل مطهو ببطء وأنشوفة وزيتون أسود وعجينة مقرمشة.',
+  'Huître fraîche, granité citronné et huile délicate aux herbes.': 'محار طازج وغرانيتا الليمون وزيت أعشاب رقيق.',
+  'Jambon fondant, gelée au persil et moutarde de Bourgogne.': 'لحم طري وهلام البقدونس وخردل بورغوندي.',
+  'Crème de châtaigne, noisettes torréfiées et huile de sauge.': 'كريمة الكستناء وبندق محمص وزيت الميرمية.',
+  'Champignons rôtis, émulsion de comté et mouillettes au beurre noisette.': 'فطر مشوي ومستحلب جبن كونتي وخبز بزبدة البندق.',
+  'Poireau braisé, vinaigrette aux herbes et jaune d’œuf confit.': 'كراث مطهو وصلصة أعشاب وصفار بيض كونفي.',
+  'Crème crue, concombre, aneth et œufs de truite légèrement fumés.': 'كريمة طازجة وخيار وشبت وبيض ترويت مدخن بخفة.',
+  'Une peau croustillante, une chair tendre et un jus réduit lentement pour concentrer toute la saveur du terroir.': 'جلد مقرمش ولحم طري وصلصة مركزة ببطء لتجمع نكهات الأرض.',
+  'Une cuisson juste nacrée, réveillée par un beurre vif et la douceur fondante du poireau de saison.': 'سمك مطهو برقة مع زبدة منعشة وكراث موسمي طري.',
+  'Le potimarron caramélise doucement avant de rencontrer la rondeur de la châtaigne et le croquant des noisettes.': 'يكرمل اليقطين ببطء مع نعومة الكستناء وقرمشة البندق.',
+  'Paleron fondant, jus au bordeaux, échalotes confites et pommes grenailles.': 'لحم بقري طري وصلصة بوردو وكراث أندلسي كونفي وبطاطس صغيرة.',
+  'Pommes caramélisées, crème crue vanillée et caramel au beurre salé.': 'تفاح مكرمل وكريمة بالفانيليا وكراميل بالزبدة المملحة.',
+  'Crémeux chocolat noir, croustillant praliné et glace au grué de cacao.': 'كريمة شوكولاتة داكنة وبرالين مقرمش وآيس كريم بحبوب الكاكاو.',
+  'Pâte à choux, praliné noisette généreux et éclats de fruits secs.': 'عجينة شو مع برالين البندق وقطع مكسرات محمصة.',
+  'Fraises fraîches, crème légère, verveine citronnée et meringue craquante.': 'فراولة طازجة وكريمة خفيفة ولويزة ومرنغ مقرمش.',
+  'Apéritif maison, agrumes frais, fines bulles et romarin.': 'مشروب الدار مع حمضيات طازجة وفقاعات ناعمة وإكليل الجبل.',
+  'Une cuvée souple et fruitée choisie pour accompagner la carte du moment.': 'نبيذ ناعم وفاكهي مختار ليرافق قائمة الموسم.',
+  'Citron pressé, sirop léger au thym frais et eau filtrée.': 'ليمون طازج وشراب زعتر خفيف وماء مصفى.',
+  'Bulles fines, concombre, verveine et une pointe de baie rose.': 'فقاعات ناعمة وخيار ولويزة ولمسة فلفل وردي.',
+});
+
+type I18nValue = { locale: Locale; setLocale: (locale: Locale) => void; tr: (text: string) => string };
+const I18nContext = createContext<I18nValue | null>(null);
+
+export function I18nProvider({ children }: { children: ReactNode }) {
+  const [locale, setLocale] = useState<Locale>('fr');
+  const [storageReady, setStorageReady] = useState(false);
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem('savoraille-locale');
+    if (saved === 'fr' || saved === 'en' || saved === 'ar') setLocale(saved);
+    setStorageReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!storageReady) return;
+    window.localStorage.setItem('savoraille-locale', locale);
+    document.documentElement.lang = locale;
+    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
+  }, [locale, storageReady]);
+
+  const value = useMemo<I18nValue>(() => ({
+    locale,
+    setLocale,
+    tr: (text) => locale === 'fr' ? text : (locale === 'en' ? en[text] : ar[text]) ?? text,
+  }), [locale]);
+
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+}
+
+export function useI18n() {
+  const value = useContext(I18nContext);
+  if (!value) throw new Error('useI18n must be used inside I18nProvider');
+  return value;
+}

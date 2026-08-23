@@ -5,6 +5,8 @@ import { ArrowUpRight, ChefHat, ChevronLeft, ChevronRight, ScanLine, Shuffle, Sp
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { useI18n } from './i18n-provider';
+
 const images = {
   aperitif: 'https://images.unsplash.com/photo-1576006144029-e42bb7166c76?auto=format&fit=crop&w=1600&q=82',
   entree: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1600&q=82',
@@ -141,6 +143,7 @@ const pageTurnVariants = {
 };
 
 export function SummerMenuExperience() {
+  const { tr } = useI18n();
   const [selectedId, setSelectedId] = useState(defaultItem.id);
   const [screenOpen, setScreenOpen] = useState(true);
   const [mobileScreenOpen, setMobileScreenOpen] = useState(false);
@@ -229,17 +232,17 @@ export function SummerMenuExperience() {
       <div className="pointer-events-none absolute -left-40 top-1/3 size-96 rounded-full border border-[#C6A15B]/15" />
       <div className="relative mx-auto max-w-[1200px]">
         <div className="max-w-3xl">
-          <div className="flex items-center gap-3 text-[#C6A15B]"><span className="h-px w-10 bg-current" /><p className="text-xs font-bold tracking-[0.2em] uppercase">Carte d’été</p></div>
-          <h2 id="summer-menu-title" className="font-display mt-3 text-4xl leading-none font-semibold sm:text-5xl lg:text-6xl">L’assiette du moment</h2>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#FAF6EC]/68 sm:text-base">Volaille dorée, jus corsé, légumes de nos producteurs. Ouvrez la carte et laissez chaque assiette prendre vie.</p>
+          <div className="flex items-center gap-3 text-[#C6A15B]"><span className="h-px w-10 bg-current" /><p className="text-xs font-bold tracking-[0.2em] uppercase">{tr('Carte d’été')}</p></div>
+          <h2 id="summer-menu-title" className="font-display mt-3 text-4xl leading-none font-semibold sm:text-5xl lg:text-6xl">{tr('L’assiette du moment')}</h2>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#FAF6EC]/68 sm:text-base">{tr('Volaille dorée, jus corsé, légumes de nos producteurs. Ouvrez la carte et laissez chaque assiette prendre vie.')}</p>
         </div>
 
-        <nav className="mt-8 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Sections de la carte d’été">
+        <nav className="mt-8 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label={tr('Sections de la carte d’été')}>
           {menuSections.map((section) => {
             const active = section.id === currentPage.sectionId;
             return (
               <button key={section.id} type="button" onClick={() => changeSection(section.id)} aria-current={active ? 'page' : undefined} className={`shrink-0 rounded-full border px-4 py-2 text-xs font-bold tracking-[0.06em] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'border-[#C6A15B] bg-[#C6A15B] text-[#241F19]' : 'border-[#FAF6EC]/18 bg-[#FAF6EC]/5 text-[#FAF6EC]/68 hover:border-[#C6A15B]/60 hover:text-[#FAF6EC]'}`}>
-                {section.shortLabel}
+                {tr(section.shortLabel)}
               </button>
             );
           })}
@@ -258,11 +261,11 @@ export function SummerMenuExperience() {
               <div className="pointer-events-none absolute -left-3 inset-y-4 w-3 rounded-l-md bg-[linear-gradient(90deg,#7C2438,#C6A15B)] shadow-[-6px_8px_18px_rgba(0,0,0,0.25)]" />
               <div className="rounded-r-xl rounded-l-sm border border-[#C6A15B]/55 p-4 sm:p-5">
                 <div className="flex items-start justify-between border-b border-[#C6A15B]/45 pb-4">
-                  <div><p className="font-script text-xl text-[#7C2438]">{currentPage.label}</p><p className="mt-1 text-[0.65rem] font-bold tracking-[0.14em] text-[#1E3A5F]/65 uppercase">{currentPage.subtitle} · Page {currentPage.sectionPageIndex + 1}/{currentPage.sectionPageCount}</p></div>
+                  <div><p className="font-script text-xl text-[#7C2438]">{tr(currentPage.label)}</p><p className="mt-1 text-[0.65rem] font-bold tracking-[0.14em] text-[#1E3A5F]/65 uppercase">{tr(currentPage.subtitle)} · {tr('Page')} {currentPage.sectionPageIndex + 1}/{currentPage.sectionPageCount}</p></div>
                   <div className="grid size-9 place-items-center rounded-full border border-[#C6A15B]/60 text-[#1E3A5F]"><ChefHat className="size-4" strokeWidth={1.5} /></div>
                 </div>
 
-                <div className="mt-4 overflow-hidden" role="tablist" aria-label={`${currentPage.label}, page ${currentPage.sectionPageIndex + 1} sur ${currentPage.sectionPageCount}`}>
+                <div className="mt-4 overflow-hidden" role="tablist" aria-label={`${tr(currentPage.label)}, ${tr('Page')} ${currentPage.sectionPageIndex + 1} ${tr('sur')} ${currentPage.sectionPageCount}`}>
                   <motion.div
                     key={pageIndex}
                     custom={pageDirection}
@@ -293,7 +296,7 @@ export function SummerMenuExperience() {
                                 <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/70 via-transparent to-transparent" />
                                 <span className="font-display absolute bottom-1 left-1.5 text-xs font-semibold tabular-nums text-[#FAF6EC]">{String(itemNumber).padStart(2, '0')}</span>
                               </span>
-                              <span className="min-w-0 flex-1"><span className="block text-[0.625rem] font-bold tracking-[0.12em] uppercase opacity-65">{item.eyebrow}</span><span className="font-display mt-0.5 block text-lg font-semibold sm:text-xl">{item.name}</span></span>
+                              <span className="min-w-0 flex-1"><span className="block text-[0.625rem] font-bold tracking-[0.12em] uppercase opacity-65">{tr(item.eyebrow)}</span><span className="font-display mt-0.5 block text-lg font-semibold sm:text-xl">{tr(item.name)}</span></span>
                               <span className={`text-sm font-bold ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{item.price}</span>
                             </span>
                           </button>
@@ -303,12 +306,12 @@ export function SummerMenuExperience() {
                 </div>
 
                 <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#C6A15B]/45 pt-3">
-                  <button type="button" onClick={() => changePage(pageIndex - 1)} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Page précédente du menu"><ChevronLeft className="size-4" />Précédent</button>
+                  <button type="button" onClick={() => changePage(pageIndex - 1)} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Page précédente du menu')}><ChevronLeft className="size-4 rtl:rotate-180" />{tr('Précédent')}</button>
                   <span className="font-display text-sm font-semibold tabular-nums text-[#7C2438]" aria-live="polite">{String(pageIndex + 1).padStart(2, '0')} / {String(pageCount).padStart(2, '0')}</span>
-                  <button type="button" onClick={() => changePage(pageIndex + 1)} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Page suivante du menu">Suivant<ChevronRight className="size-4" /></button>
+                  <button type="button" onClick={() => changePage(pageIndex + 1)} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Page suivante du menu')}>{tr('Suivant')}<ChevronRight className="size-4 rtl:rotate-180" /></button>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between text-[0.625rem] font-semibold tracking-[0.08em] text-[#1E3A5F]/60 uppercase"><span>Cuisine de saison</span><span>Fait maison</span></div>
+                <div className="mt-3 flex items-center justify-between text-[0.625rem] font-semibold tracking-[0.08em] text-[#1E3A5F]/60 uppercase"><span>{tr('Cuisine de saison')}</span><span>{tr('Fait maison')}</span></div>
               </div>
             </motion.div>
           </div>
@@ -331,18 +334,18 @@ export function SummerMenuExperience() {
                 >
                   <div className="pointer-events-none absolute inset-3 z-20 border border-[#C6A15B]/25 [clip-path:polygon(0_8%,8%_0,100%_0,100%_92%,92%_100%,0_100%)]" />
                   <div className="relative h-[220px] sm:h-[250px] lg:h-[260px]">
-                    <Image src={selected.image} alt={selected.name} fill loading="eager" sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover" />
+                    <Image src={selected.image} alt={tr(selected.name)} fill loading="eager" sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/12 to-transparent" />
                     <motion.div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(198,161,91,.14),transparent)]" animate={reduceMotion ? undefined : { x: ['-100%', '100%'] }} transition={{ duration: 3.2, repeat: Infinity, ease: 'linear' }} />
-                    <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/72 px-3 py-2 text-[0.62rem] font-bold tracking-[0.16em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />Sélection active</div>
-                    <button type="button" onClick={() => setScreenOpen(false)} className="absolute right-6 top-6 z-30 grid size-10 place-items-center rounded-full border border-[#FAF6EC]/25 bg-[#071C33]/72 text-[#FAF6EC] outline-none backdrop-blur-md hover:border-[#C6A15B] hover:text-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Fermer l’écran du plat"><X className="size-4" /></button>
+                    <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/72 px-3 py-2 text-[0.62rem] font-bold tracking-[0.16em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />{tr('Sélection active')}</div>
+                    <button type="button" onClick={() => setScreenOpen(false)} className="absolute right-6 top-6 z-30 grid size-10 place-items-center rounded-full border border-[#FAF6EC]/25 bg-[#071C33]/72 text-[#FAF6EC] outline-none backdrop-blur-md hover:border-[#C6A15B] hover:text-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Fermer l’écran du plat')}><X className="size-4" /></button>
                   </div>
 
                   <div className="relative z-10 px-6 pb-7 pt-1 sm:px-8">
-                    <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.65rem] font-bold tracking-[0.18em] uppercase">{selected.eyebrow}</p></div>
-                    <div className="mt-2 flex items-start justify-between gap-5"><h3 className="font-display text-3xl leading-none font-semibold sm:text-4xl">{selected.name}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
-                    <p className="mt-3 max-w-xl text-sm leading-6 text-[#FAF6EC]/68">{selected.detail}</p>
-                    <a href="#commander" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander cette assiette<ArrowUpRight className="size-4" /></a>
+                    <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.65rem] font-bold tracking-[0.18em] uppercase">{tr(selected.eyebrow)}</p></div>
+                    <div className="mt-2 flex items-start justify-between gap-5"><h3 className="font-display text-3xl leading-none font-semibold sm:text-4xl">{tr(selected.name)}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
+                    <p className="mt-3 max-w-xl text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
+                    <a href="#commander" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></a>
                   </div>
                   <div className="pointer-events-none absolute bottom-3 left-3 size-8 border-b border-l border-[#C6A15B]" /><div className="pointer-events-none absolute right-3 top-3 size-8 border-r border-t border-[#C6A15B]" />
                 </motion.article>
@@ -353,14 +356,14 @@ export function SummerMenuExperience() {
                   onClick={() => setScreenOpen(true)}
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 >
-                  <span><ScanLine className="mx-auto size-8 text-[#C6A15B]" /><span className="font-display mt-4 block text-3xl">Écran refermé</span><span className="mt-2 block text-sm text-[#FAF6EC]/55">Cliquez ici ou choisissez une assiette pour l’ouvrir.</span></span>
+                  <span><ScanLine className="mx-auto size-8 text-[#C6A15B]" /><span className="font-display mt-4 block text-3xl">{tr('Écran refermé')}</span><span className="mt-2 block text-sm text-[#FAF6EC]/55">{tr('Cliquez ici ou choisissez une assiette pour l’ouvrir.')}</span></span>
                 </motion.button>
               )}
             </AnimatePresence>
           </div>
         </div>
 
-        <p className="mt-5 text-center text-xs font-semibold tracking-[0.08em] text-[#FAF6EC]/55 uppercase lg:hidden">Touchez une assiette pour ouvrir son écran</p>
+        <p className="mt-5 text-center text-xs font-semibold tracking-[0.08em] text-[#FAF6EC]/55 uppercase lg:hidden">{tr('Touchez une assiette pour ouvrir son écran')}</p>
       </div>
 
       <AnimatePresence>
@@ -383,17 +386,17 @@ export function SummerMenuExperience() {
             >
               <div className="pointer-events-none absolute inset-2 z-20 border border-[#C6A15B]/24 [clip-path:polygon(0_5%,5%_0,100%_0,100%_95%,95%_100%,0_100%)]" />
               <div className="relative h-[38dvh] min-h-[230px] max-h-[340px]">
-                <Image src={selected.image} alt={selected.name} fill loading="eager" sizes="100vw" className="object-cover" />
+                <Image src={selected.image} alt={tr(selected.name)} fill loading="eager" sizes="100vw" className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-transparent to-[#071C33]/15" />
                 <motion.div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(198,161,91,.16),transparent)]" animate={reduceMotion ? undefined : { x: ['-100%', '100%'] }} transition={{ duration: 2.8, repeat: Infinity, ease: 'linear' }} />
-                <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/76 px-3 py-2 text-[0.58rem] font-bold tracking-[0.15em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />Écran du menu</div>
-                <button type="button" autoFocus onClick={closeMobileScreen} className="absolute right-5 top-5 z-30 grid size-11 place-items-center rounded-full border border-[#FAF6EC]/30 bg-[#071C33]/78 text-[#FAF6EC] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Fermer l’écran mobile du plat"><X className="size-5" /></button>
+                <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/76 px-3 py-2 text-[0.58rem] font-bold tracking-[0.15em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />{tr('Écran du menu')}</div>
+                <button type="button" autoFocus onClick={closeMobileScreen} className="absolute right-5 top-5 z-30 grid size-11 place-items-center rounded-full border border-[#FAF6EC]/30 bg-[#071C33]/78 text-[#FAF6EC] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Fermer l’écran mobile du plat')}><X className="size-5" /></button>
               </div>
               <div className="relative z-10 px-6 pb-8 pt-1">
-                <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.6rem] font-bold tracking-[0.16em] uppercase">{selected.eyebrow}</p></div>
-                <div className="mt-2 flex items-start justify-between gap-4"><h3 id="mobile-dish-title" className="font-display text-3xl leading-none font-semibold text-[#FAF6EC]">{selected.name}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
-                <p className="mt-4 text-sm leading-6 text-[#FAF6EC]/68">{selected.detail}</p>
-                <a href="#commander" onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander cette assiette<ArrowUpRight className="size-4" /></a>
+                <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.6rem] font-bold tracking-[0.16em] uppercase">{tr(selected.eyebrow)}</p></div>
+                <div className="mt-2 flex items-start justify-between gap-4"><h3 id="mobile-dish-title" className="font-display text-3xl leading-none font-semibold text-[#FAF6EC]">{tr(selected.name)}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
+                <p className="mt-4 text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
+                <a href="#commander" onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></a>
               </div>
               <div className="pointer-events-none absolute bottom-2 left-2 size-7 border-b border-l border-[#C6A15B]" /><div className="pointer-events-none absolute right-2 top-2 size-7 border-r border-t border-[#C6A15B]" />
             </motion.article>
@@ -410,27 +413,27 @@ export function SummerMenuExperience() {
         <div className="relative mx-auto max-w-[1200px]">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <div className="flex items-center gap-3 text-[#7C2438]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.18em] uppercase">Sélection surprise · Carte d’été</p></div>
-              <h2 id="discovery-title" className="font-display mt-3 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">Trois envies, une seule carte.</h2>
-              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.</p>
+              <div className="flex items-center gap-3 text-[#7C2438]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.18em] uppercase">{tr('Sélection surprise · Carte d’été')}</p></div>
+              <h2 id="discovery-title" className="font-display mt-3 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">{tr('Trois envies, une seule carte.')}</h2>
+              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.')}</p>
             </div>
-            <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Afficher trois nouvelles suggestions de la Carte d’été"><Shuffle className="size-4" />Nouvelle sélection</button>
+            <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher trois nouvelles suggestions de la Carte d’été')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
           </div>
 
-          <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase md:hidden">Faites glisser pour voir les trois suggestions</p>
-          <div className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-8 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0" aria-live="polite" aria-label="Suggestions de la Carte d’été">
+          <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase md:hidden">{tr('Faites glisser pour voir les trois suggestions')}</p>
+          <div className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-8 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0" aria-live="polite" aria-label={tr('Suggestions de la Carte d’été')}>
             {discoveryItems.map((item, index) => (
               <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.07 }} className="group relative flex min-w-[84vw] snap-center overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_16px_36px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)] sm:min-w-[58vw] md:min-w-0 md:flex-col">
                 <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
                 <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">
-                  <Image src={item.image} alt={item.name} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Image src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/5 to-transparent" />
-                  <span className="absolute left-3 top-3 rounded-full border border-[#C6A15B]/50 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase backdrop-blur-md">{item.sectionLabel}</span>
+                  <span className="absolute left-3 top-3 rounded-full border border-[#C6A15B]/50 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(item.sectionLabel)}</span>
                 </div>
                 <div className="relative z-30 flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-                  <div className="flex items-start justify-between gap-3"><div><p className="text-[0.625rem] font-bold tracking-[0.12em] text-[#C6A15B] uppercase">{item.eyebrow}</p><h3 className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{item.name}</h3></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
-                  <p className="mt-3 text-xs leading-5 text-[#FAF6EC]/65 sm:text-sm sm:leading-6">{item.detail}</p>
-                  <a href="#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander ce plat<ArrowUpRight className="size-4" /></a>
+                  <div className="flex items-start justify-between gap-3"><div><p className="text-[0.625rem] font-bold tracking-[0.12em] text-[#C6A15B] uppercase">{tr(item.eyebrow)}</p><h3 className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{tr(item.name)}</h3></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
+                  <p className="mt-3 text-xs leading-5 text-[#FAF6EC]/65 sm:text-sm sm:leading-6">{tr(item.detail)}</p>
+                  <a href="#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander ce plat')}<ArrowUpRight className="size-4" /></a>
                 </div>
                 <div className="pointer-events-none absolute bottom-2 left-2 z-40 size-6 border-b border-l border-[#C6A15B]" /><div className="pointer-events-none absolute right-2 top-2 z-40 size-6 border-r border-t border-[#C6A15B]" />
               </motion.article>
