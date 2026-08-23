@@ -122,6 +122,42 @@ a { text-decoration: none; }
   color: var(--c-ivoire);
 }
 
+@keyframes savoraille-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes savoraille-overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes savoraille-dialog-in {
+  from { opacity: 0; translate: 0 24px; scale: 0.985; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+
+@keyframes savoraille-dialog-out {
+  from { opacity: 1; translate: 0 0; scale: 1; }
+  to { opacity: 0; translate: 0 16px; scale: 0.99; }
+}
+
+.savoraille-dialog-overlay[data-state='open'] {
+  animation: savoraille-overlay-in 260ms ease-out;
+}
+
+.savoraille-dialog-overlay[data-state='closed'] {
+  animation: savoraille-overlay-out 190ms ease-in forwards;
+}
+
+.savoraille-dialog-surface[data-state='open'] {
+  animation: savoraille-dialog-in 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.savoraille-dialog-surface[data-state='closed'] {
+  animation: savoraille-dialog-out 190ms ease-in forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;
