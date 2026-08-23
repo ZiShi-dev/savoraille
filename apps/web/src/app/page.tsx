@@ -5,6 +5,7 @@ import {
 
 import { BrandSeal } from '@/components/brand-seal';
 import { HeroContent } from '@/components/hero-content';
+import { RestaurantExperience } from '@/components/restaurant-experience';
 import { SiteHeader } from '@/components/site-header';
 import { SummerMenuExperience } from '@/components/summer-menu-experience';
 
@@ -72,6 +73,8 @@ export default function HomePage() {
         </section>
 
         <SummerMenuExperience />
+
+        <RestaurantExperience />
 
         <div className="gold-divider gold-divider-dark" aria-hidden="true" />
 
