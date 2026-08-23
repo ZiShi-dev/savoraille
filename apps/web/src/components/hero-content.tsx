@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarDays, Clock3, Leaf, MapPin, ShoppingBag } from 'lucide-react';
+import { CalendarDays, Clock3, Leaf, ShoppingBag } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 import { useI18n } from './i18n-provider';
@@ -62,14 +62,6 @@ export function HeroContent() {
       </motion.p>
 
       <motion.div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap" {...reveal(0.84)}>
-        <motion.a
-          href="#restaurants"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#C6A15B] px-6 py-4 font-semibold text-[#241F19] shadow-[0_8px_24px_rgba(0,0,0,0.22)] focus-visible:ring-2 focus-visible:ring-[#FAF6EC] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none"
-          whileHover={reduceMotion ? undefined : { y: -3, scale: 1.015 }}
-          whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-        >
-          <MapPin aria-hidden="true" className="size-5" strokeWidth={1.8} />{tr('Trouver le restaurant le plus proche')}
-        </motion.a>
         <motion.a
           href="#reservation"
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-semibold text-[#1E3A5F] shadow-[0_8px_24px_rgba(0,0,0,0.2)] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none"

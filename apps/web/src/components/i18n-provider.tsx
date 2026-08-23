@@ -175,6 +175,20 @@ Object.assign(ar, {
 });
 
 Object.assign(en, {
+  'Bienvenue chez Savoraille': 'Welcome to Savoraille',
+  'Choisissez votre restaurant.': 'Choose your restaurant.',
+  'Fermer': 'Close',
+  'Nous afficherons la carte, les horaires et les options de commande du restaurant le plus pratique pour vous.': 'We will show the menu, opening hours and ordering options for the most convenient restaurant.',
+  'Trouvez le plus proche': 'Find the nearest',
+  'Votre position sert uniquement à calculer la distance.': 'Your location is used only to calculate the distance.',
+  'Position indisponible. Choisissez un restaurant ci-dessous.': 'Location unavailable. Choose a restaurant below.',
+  'Votre choix': 'Your choice',
+  'Restaurant sélectionné': 'Restaurant selected',
+  'Choisir ce restaurant': 'Choose this restaurant',
+  'Vous pourrez modifier ce choix à tout moment depuis l’icône de localisation.': 'You can change this choice at any time from the location icon.',
+  'Changer de restaurant': 'Change restaurant',
+  'Aucun restaurant sélectionné': 'No restaurant selected',
+  'Choisir un restaurant': 'Choose a restaurant',
   'Votre parcours gourmand': 'Your dining journey',
   'Composez votre menu complet.': 'Build your complete menu.',
   'Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.': 'See at a glance what you have chosen and what is still waiting to be discovered.',
@@ -264,6 +278,20 @@ Object.assign(en, {
 });
 
 Object.assign(ar, {
+  'Bienvenue chez Savoraille': 'أهلًا بكم في سافوراي',
+  'Choisissez votre restaurant.': 'اختاروا مطعمكم.',
+  'Fermer': 'إغلاق',
+  'Nous afficherons la carte, les horaires et les options de commande du restaurant le plus pratique pour vous.': 'سنعرض لكم قائمة الطعام والمواعيد وخيارات الطلب للفرع الأنسب لكم.',
+  'Trouvez le plus proche': 'اعثروا على الأقرب',
+  'Votre position sert uniquement à calculer la distance.': 'يُستخدم موقعكم فقط لحساب المسافة.',
+  'Position indisponible. Choisissez un restaurant ci-dessous.': 'تعذّر تحديد الموقع. اختاروا مطعمًا أدناه.',
+  'Votre choix': 'اختياركم',
+  'Restaurant sélectionné': 'المطعم محدد',
+  'Choisir ce restaurant': 'اختيار هذا المطعم',
+  'Vous pourrez modifier ce choix à tout moment depuis l’icône de localisation.': 'يمكنكم تغيير هذا الاختيار في أي وقت من أيقونة الموقع.',
+  'Changer de restaurant': 'تغيير المطعم',
+  'Aucun restaurant sélectionné': 'لم يتم اختيار مطعم',
+  'Choisir un restaurant': 'اختيار مطعم',
   'Votre parcours gourmand': 'رحلتكم الشهية',
   'Composez votre menu complet.': 'كوّنوا قائمتكم المتكاملة.',
   'Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.': 'شاهدوا بلمحة ما اخترتموه وما بقي أمامكم لاكتشافه.',

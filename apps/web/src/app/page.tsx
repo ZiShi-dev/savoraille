@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  ArrowRight, Bike, CalendarDays, Clock3, MapPin,
+  ArrowRight, Bike, CalendarDays, Clock3,
   Phone, ShoppingBag,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -10,7 +10,6 @@ import { BrandSeal } from '@/components/brand-seal';
 import { HeroContent } from '@/components/hero-content';
 import { useI18n } from '@/components/i18n-provider';
 import { RestaurantExperience } from '@/components/restaurant-experience';
-import { RestaurantLocator } from '@/components/restaurant-locator';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SummerMenuExperience } from '@/components/summer-menu-experience';
@@ -56,10 +55,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        <div className="gold-divider gold-divider-dark" aria-hidden="true" />
-
-        <RestaurantLocator />
 
         <div className="gold-divider" aria-hidden="true" />
 
@@ -112,7 +107,7 @@ export default function HomePage() {
               <div>
                 <p className="font-script text-3xl text-[#C6A15B]">{tr('Votre table vous attend')}</p>
                 <h2 className="font-display mt-3 max-w-2xl text-5xl leading-none font-semibold sm:text-6xl">{tr('Quel plaisir vous ferait envie aujourd’hui ?')}</h2>
-                <div className="mt-7 flex flex-wrap gap-x-8 gap-y-3 text-sm text-[#FAF6EC]/78"><span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />{tr('Mar–Dim · 12 h–23 h')}</span><a href="#restaurants" className="flex items-center gap-2 rounded-sm outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><MapPin className="size-4 text-[#C6A15B]" />{tr('Trouver le restaurant le plus proche')}</a></div>
+                <div className="mt-7 flex flex-wrap gap-x-8 gap-y-3 text-sm text-[#FAF6EC]/78"><span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />{tr('Mar–Dim · 12 h–23 h')}</span></div>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
                 <a href="tel:+33000000000" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-bold text-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><Phone className="size-5" strokeWidth={1.8} />{tr('Réserver par téléphone')}</a>

@@ -3,7 +3,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUpRight, CalendarDays, Menu, ShoppingBag, X } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, MapPin, Menu, ShoppingBag, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ import { BrandSeal } from './brand-seal';
 import { useCart } from './cart-provider';
 import { useI18n } from './i18n-provider';
 import { LanguageSwitcher } from './language-switcher';
+import { useRestaurant } from './restaurant-provider';
 
 const navigation = [
   { label: 'Accueil', href: '/#accueil', sectionId: 'accueil' },
@@ -25,6 +26,7 @@ export function SiteHeader() {
   const [activeHref, setActiveHref] = useState('/#accueil');
   const { tr, locale } = useI18n();
   const { itemCount } = useCart();
+  const { selectedRestaurant, openPicker } = useRestaurant();
   const pathname = usePathname();
   const isRtl = locale === 'ar';
 
@@ -86,6 +88,10 @@ export function SiteHeader() {
         </NavigationMenu.Root>
 
         <div className="flex items-center gap-2">
+          <button type="button" onClick={openPicker} aria-label={`${tr('Changer de restaurant')} · ${selectedRestaurant?.name ?? tr('Aucun restaurant sélectionné')}`} title={selectedRestaurant ? `${selectedRestaurant.name} · ${tr(selectedRestaurant.area)}` : tr('Choisir un restaurant')} className="relative grid size-10 shrink-0 place-items-center rounded-lg border border-[#1E3A5F]/12 bg-white text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B]/60 hover:bg-[#FFFDF7] focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:size-11">
+            <MapPin aria-hidden="true" className="size-5" strokeWidth={1.8} />
+            <span className={`absolute end-1.5 top-1.5 size-2 rounded-full ring-2 ring-white ${selectedRestaurant ? 'bg-[#C4703F]' : 'bg-[#C6A15B]'}`} />
+          </button>
           <LanguageSwitcher />
           <Link href="/commandes" className="relative hidden items-center gap-2 rounded-lg border border-[#1E3A5F]/15 px-3.5 py-3 text-sm font-semibold text-[#1E3A5F] transition-colors hover:border-[#C6A15B]/60 hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none xl:flex">
             <ShoppingBag aria-hidden="true" className="size-4" strokeWidth={1.8} />{tr('Ma commande')}

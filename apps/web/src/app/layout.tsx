@@ -20,6 +20,7 @@ import './globals.css';
 
 import { CartProvider } from '@/components/cart-provider';
 import { I18nProvider } from '@/components/i18n-provider';
+import { RestaurantProvider } from '@/components/restaurant-provider';
 
 export const metadata: Metadata = {
   title: 'Savoraille — La merveille des saveurs',
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body><I18nProvider><CartProvider>{children}</CartProvider></I18nProvider></body>
+      <body><I18nProvider><RestaurantProvider><CartProvider>{children}</CartProvider></RestaurantProvider></I18nProvider></body>
     </html>
   );
 }
