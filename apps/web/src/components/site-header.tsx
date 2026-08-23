@@ -22,8 +22,9 @@ const navigation = [
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('/#accueil');
-  const { tr } = useI18n();
+  const { tr, locale } = useI18n();
   const pathname = usePathname();
+  const isRtl = locale === 'ar';
 
   useEffect(() => {
     if (pathname !== '/') {
@@ -57,7 +58,7 @@ export function SiteHeader() {
   }, [pathname]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
+    <header dir={isRtl ? 'rtl' : 'ltr'} className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
       <div className="mx-auto flex h-20 max-w-[1200px] items-center justify-between rounded-2xl border border-[#1E3A5F]/12 bg-[#FAF6EC]/92 px-3 shadow-[0_8px_24px_rgba(30,58,95,0.12)] backdrop-blur-xl sm:px-4">
         <Link href="/#accueil" className="group flex items-center gap-3 rounded-lg pe-2 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={`Savoraille · ${tr('Accueil')}`}>
           <BrandSeal className="size-14 shrink-0 transition-transform duration-300 group-hover:scale-[1.04]" />
@@ -67,7 +68,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <NavigationMenu.Root className="hidden lg:block" aria-label={tr('Navigation principale')}>
+        <NavigationMenu.Root dir={isRtl ? 'rtl' : 'ltr'} className="hidden lg:block" aria-label={tr('Navigation principale')}>
           <NavigationMenu.List className="flex items-center gap-1 rounded-xl border border-[#1E3A5F]/8 bg-white/55 p-1">
             {navigation.map((item) => {
               const active = activeHref === item.href;
@@ -88,7 +89,7 @@ export function SiteHeader() {
             <ShoppingBag aria-hidden="true" className="size-4" strokeWidth={1.8} />{tr('Commander')}
           </Link>
           <Link href="/#reservation" className="hidden items-center gap-2 rounded-lg bg-[#7C2438] px-4 py-3 text-sm font-semibold text-[#FAF6EC] shadow-[0_8px_20px_rgba(124,36,56,0.2)] transition-all hover:-translate-y-0.5 hover:bg-[#691d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:outline-none sm:flex">
-            {tr('Réserver')}<ArrowUpRight aria-hidden="true" className="size-4" />
+            {tr('Réserver')}<ArrowUpRight aria-hidden="true" className="size-4 rtl:-scale-x-100" />
           </Link>
 
           <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -105,7 +106,7 @@ export function SiteHeader() {
                     <motion.div className="fixed inset-0 z-50 bg-[#1E3A5F]/45 backdrop-blur-sm lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
                   </Dialog.Overlay>
                   <Dialog.Content asChild aria-describedby={undefined}>
-                    <motion.div className="fixed inset-x-3 top-3 z-50 overflow-hidden rounded-2xl border border-[#C6A15B]/30 bg-[#1E3A5F] p-4 shadow-2xl outline-none sm:inset-x-6 sm:top-4 lg:hidden" initial={{ opacity: 0, y: -16, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -12, scale: 0.98 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}>
+                    <motion.div dir={isRtl ? 'rtl' : 'ltr'} className="fixed inset-x-3 top-3 z-50 overflow-hidden rounded-2xl border border-[#C6A15B]/30 bg-[#1E3A5F] p-4 shadow-2xl outline-none sm:inset-x-6 sm:top-4 lg:hidden" initial={{ opacity: 0, y: -16, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -12, scale: 0.98 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}>
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="flex items-center gap-3 text-lg font-semibold tracking-tight text-[#FAF6EC]">
                           <BrandSeal inverse className="size-14" />
@@ -129,7 +130,7 @@ export function SiteHeader() {
                               <Dialog.Close asChild>
                                 <Link href={item.href} aria-current={active ? 'page' : undefined} className={`group flex items-center justify-between rounded-lg px-3 py-3.5 text-lg font-medium text-[#FAF6EC] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${active ? 'bg-white/10' : 'hover:bg-white/8'}`}>
                                   <span className="flex items-center gap-3"><span className="text-xs tabular-nums text-[#C6A15B]">0{index + 1}</span>{tr(item.label)}</span>
-                                  <ArrowUpRight aria-hidden="true" className="size-4 text-[#C6A15B] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                                  <ArrowUpRight aria-hidden="true" className="size-4 text-[#C6A15B] transition-transform group-hover:-translate-y-0.5 ltr:group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5" />
                                 </Link>
                               </Dialog.Close>
                             </li>;
