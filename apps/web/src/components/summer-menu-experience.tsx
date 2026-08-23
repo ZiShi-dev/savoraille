@@ -185,13 +185,14 @@ export function SummerMenuExperience() {
 
   function changePage(nextPage: number) {
     closeMobileScreen();
-    if (nextPage < 0 || nextPage >= pageCount || nextPage === pageIndex) return;
+    const wrappedPage = (nextPage + pageCount) % pageCount;
+    if (wrappedPage === pageIndex) return;
 
-    const firstItem = bookPages[nextPage]?.items[0];
+    const firstItem = bookPages[wrappedPage]?.items[0];
     if (!firstItem) return;
 
     setPageDirection(nextPage > pageIndex ? 1 : -1);
-    setPageIndex(nextPage);
+    setPageIndex(wrappedPage);
     setSelectedId(firstItem.id);
     setScreenOpen(true);
   }
@@ -278,9 +279,9 @@ export function SummerMenuExperience() {
                 </div>
 
                 <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#C6A15B]/45 pt-3">
-                  <button type="button" onClick={() => changePage(pageIndex - 1)} disabled={pageIndex === 0} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:cursor-not-allowed disabled:opacity-30" aria-label="Page précédente du menu"><ChevronLeft className="size-4" />Précédent</button>
+                  <button type="button" onClick={() => changePage(pageIndex - 1)} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Page précédente du menu"><ChevronLeft className="size-4" />Précédent</button>
                   <span className="font-display text-sm font-semibold tabular-nums text-[#7C2438]" aria-live="polite">{String(pageIndex + 1).padStart(2, '0')} / {String(pageCount).padStart(2, '0')}</span>
-                  <button type="button" onClick={() => changePage(pageIndex + 1)} disabled={pageIndex === pageCount - 1} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:cursor-not-allowed disabled:opacity-30" aria-label="Page suivante du menu">Suivant<ChevronRight className="size-4" /></button>
+                  <button type="button" onClick={() => changePage(pageIndex + 1)} className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[0.62rem] font-bold tracking-[0.08em] text-[#1E3A5F] uppercase outline-none transition-colors hover:bg-[#1E3A5F]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Page suivante du menu">Suivant<ChevronRight className="size-4" /></button>
                 </div>
 
                 <div className="mt-3 flex items-center justify-between text-[0.58rem] font-semibold tracking-[0.1em] text-[#1E3A5F]/55 uppercase"><span>Cuisine de saison</span><span>Fait maison</span></div>
@@ -349,7 +350,7 @@ export function SummerMenuExperience() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="mobile-dish-title"
-              className="relative max-h-[90dvh] w-full max-w-md overflow-y-auto border border-[#C6A15B]/55 bg-[#071C33] shadow-[0_28px_90px_rgba(0,0,0,0.6)] [clip-path:polygon(0_5%,5%_0,100%_0,100%_95%,95%_100%,0_100%)]"
+              className="relative max-h-[90dvh] w-full max-w-md overflow-y-auto border border-[#C6A15B]/55 bg-[#071C33] shadow-[0_28px_90px_rgba(0,0,0,0.6)] [clip-path:polygon(0_5%,5%_0,100%_0,100%_95%,95%_100%,0_100%)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 36, scale: 0.94, rotateX: -10 }}
               animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.96 }}
