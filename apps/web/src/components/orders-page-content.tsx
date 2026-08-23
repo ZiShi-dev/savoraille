@@ -30,7 +30,7 @@ export function OrdersPageContent() {
             <span className="grid size-20 place-items-center rounded-full border border-[#C6A15B]/50 bg-white text-[#1E3A5F]"><ShoppingBag className="size-9" strokeWidth={1.5} /></span>
             <h2 className="font-display mt-6 text-4xl font-semibold text-[#1E3A5F]">{tr('Votre commande est vide.')}</h2>
             <p className="mt-3 leading-7 text-[#241F19]/62">{tr('Parcourez la carte et choisissez les assiettes qui vous font envie.')}</p>
-            <Link href="/carte#menu-complet" className="mt-7 inline-flex items-center gap-2 rounded-lg bg-[#1E3A5F] px-6 py-4 font-bold text-[#FAF6EC]">{tr('Découvrir la carte')}<ArrowRight className="size-4 rtl:-scale-x-100" /></Link>
+            <Link href="/carte" className="mt-7 inline-flex items-center gap-2 rounded-lg bg-[#1E3A5F] px-6 py-4 font-bold text-[#FAF6EC]">{tr('Découvrir la carte')}<ArrowRight className="size-4 rtl:-scale-x-100" /></Link>
           </section>
         ) : (
           <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
@@ -50,7 +50,7 @@ export function OrdersPageContent() {
                   </div>
                 </article>;
               })}
-              <Link href="/carte#menu-complet" className="mt-2 inline-flex w-fit items-center gap-2 text-sm font-bold text-[#7C2438] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Plus className="size-4" />{tr('Ajouter un autre plat')}</Link>
+              <Link href="/carte" className="mt-2 inline-flex w-fit items-center gap-2 text-sm font-bold text-[#7C2438] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Plus className="size-4" />{tr('Ajouter un autre plat')}</Link>
             </section>
 
             <aside className="sticky top-28 overflow-hidden rounded-2xl bg-[#102B4D] p-6 text-[#FAF6EC] shadow-[0_18px_45px_rgba(30,58,95,0.2)] sm:p-7" aria-labelledby="summary-title">

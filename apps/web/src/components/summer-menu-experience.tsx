@@ -444,7 +444,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
               <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Vous hésitez encore ? Nous tirons trois assiettes au hasard parmi toute notre carte pour vous faire découvrir des saveurs, des textures et des prix différents.')}</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="/carte#menu-complet" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></Link>
+              <Link href="/carte" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></Link>
               <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher trois nouvelles suggestions aléatoires')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
             </div>
           </div>

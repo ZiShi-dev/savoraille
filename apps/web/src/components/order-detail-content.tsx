@@ -42,7 +42,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
     <main className="bg-[#FAF6EC] pt-28 text-[#241F19]">
       <section className="px-6 pb-14 pt-6 sm:pb-20" aria-labelledby="dish-title">
         <div className="mx-auto max-w-[1200px]">
-          <Link href="/carte#menu-complet" className="inline-flex items-center gap-2 rounded-lg text-sm font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour à la carte')}</Link>
+          <Link href="/carte" className="inline-flex items-center gap-2 rounded-lg text-sm font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour à la carte')}</Link>
           <div className="mt-6 grid overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white shadow-[0_18px_50px_rgba(30,58,95,0.14)] lg:grid-cols-[1.08fr_0.92fr]">
             <div className="relative min-h-[360px] overflow-hidden sm:min-h-[520px]">
               <Image src={item.image} alt={tr(item.name)} fill priority sizes="(min-width:1024px) 55vw, 100vw" className="object-cover" />
