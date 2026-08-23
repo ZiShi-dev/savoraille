@@ -57,6 +57,10 @@ export default function HomePage() {
           </div>
         </section>
 
+        <div className="gold-divider gold-divider-dark" aria-hidden="true" />
+
+        <RestaurantLocator />
+
         <div className="gold-divider" aria-hidden="true" />
 
         <section className="bg-[#FAF6EC] px-6 py-16 sm:py-20 lg:py-24" aria-labelledby="services-title">
@@ -86,8 +90,6 @@ export default function HomePage() {
         <SummerMenuExperience />
 
         <RestaurantExperience />
-
-        <RestaurantLocator />
 
         <div className="gold-divider gold-divider-dark" aria-hidden="true" />
 
