@@ -268,7 +268,11 @@ export function SummerMenuExperience() {
                           >
                             {active ? <motion.span layoutId="menu-active" className="absolute inset-y-0 left-0 w-1 bg-[#C6A15B]" /> : null}
                             <span className="flex items-center gap-4">
-                              <span className={`font-display text-base tabular-nums ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{String(itemNumber).padStart(2, '0')}</span>
+                              <span className={`relative size-12 shrink-0 overflow-hidden rounded-md border sm:size-14 ${active ? 'border-[#C6A15B]/65' : 'border-[#1E3A5F]/12'}`}>
+                                <Image src={item.image} alt="" fill loading="lazy" sizes="56px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                                <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/70 via-transparent to-transparent" />
+                                <span className="font-display absolute bottom-1 left-1.5 text-xs font-semibold tabular-nums text-[#FAF6EC]">{String(itemNumber).padStart(2, '0')}</span>
+                              </span>
                               <span className="min-w-0 flex-1"><span className="block text-[0.55rem] font-bold tracking-[0.14em] uppercase opacity-60">{item.eyebrow}</span><span className="font-display mt-0.5 block text-lg font-semibold sm:text-xl">{item.name}</span></span>
                               <span className={`text-sm font-bold ${active ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{item.price}</span>
                             </span>
