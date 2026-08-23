@@ -102,7 +102,7 @@ export const menuSections: readonly MenuSection[] = [
   },
 ] as const;
 
-const menuItems = menuSections.flatMap((section) => section.items);
+export const menuItems = menuSections.flatMap((section) => section.items);
 const defaultItem = menuSections[0]!.items[0]!;
 const CHOICES_PER_PAGE = 4;
 
@@ -370,7 +370,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                     <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.65rem] font-bold tracking-[0.18em] uppercase">{tr(selected.eyebrow)}</p></div>
                     <div className="mt-2 flex items-start justify-between gap-5"><h3 className="font-display text-3xl leading-none font-semibold sm:text-4xl">{tr(selected.name)}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
                     <p className="mt-3 max-w-xl text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
-                    <Link href="/#commander" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></Link>
+                    <Link href={`/commander/${selected.id}`} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir et commander')}<ArrowUpRight className="size-4" /></Link>
                   </div>
                   <div className={`pointer-events-none absolute bottom-3 size-8 border-b border-[#C6A15B] ${rtl ? 'right-3 border-r' : 'left-3 border-l'}`} /><div className={`pointer-events-none absolute top-3 size-8 border-t border-[#C6A15B] ${rtl ? 'left-3 border-l' : 'right-3 border-r'}`} />
                 </motion.article>
@@ -422,7 +422,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                 <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.6rem] font-bold tracking-[0.16em] uppercase">{tr(selected.eyebrow)}</p></div>
                 <div className="mt-2 flex items-start justify-between gap-4"><h3 id="mobile-dish-title" className="font-display text-3xl leading-none font-semibold text-[#FAF6EC]">{tr(selected.name)}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
                 <p className="mt-4 text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
-                <Link href="/#commander" onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander cette assiette')}<ArrowUpRight className="size-4" /></Link>
+                <Link href={`/commander/${selected.id}`} onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir et commander')}<ArrowUpRight className="size-4" /></Link>
               </div>
               <div className={`pointer-events-none absolute bottom-2 size-7 border-b border-[#C6A15B] ${rtl ? 'right-2 border-r' : 'left-2 border-l'}`} /><div className={`pointer-events-none absolute top-2 size-7 border-t border-[#C6A15B] ${rtl ? 'left-2 border-l' : 'right-2 border-r'}`} />
             </motion.article>
@@ -462,7 +462,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                 <div className="relative z-30 flex min-w-0 flex-1 flex-col p-4 sm:p-5">
                   <div className="flex items-start justify-between gap-3"><div><p className="text-[0.625rem] font-bold tracking-[0.12em] text-[#C6A15B] uppercase">{tr(item.eyebrow)}</p><h3 className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{tr(item.name)}</h3></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
                   <p className="mt-3 text-xs leading-5 text-[#FAF6EC]/65 sm:text-sm sm:leading-6">{tr(item.detail)}</p>
-                  <Link href="/#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander ce plat')}<ArrowUpRight className="size-4" /></Link>
+                  <Link href={`/commander/${item.id}`} className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir et commander')}<ArrowUpRight className="size-4" /></Link>
                 </div>
                 <div className={`pointer-events-none absolute bottom-2 z-40 size-6 border-b border-[#C6A15B] ${rtl ? 'right-2 border-r' : 'left-2 border-l'}`} /><div className={`pointer-events-none absolute top-2 z-40 size-6 border-t border-[#C6A15B] ${rtl ? 'left-2 border-l' : 'right-2 border-r'}`} />
               </motion.article>

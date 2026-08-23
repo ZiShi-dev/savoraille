@@ -70,7 +70,7 @@ export function FullMenuCatalog() {
                   <p className="text-[0.625rem] font-bold tracking-[0.14em] text-[#C6A15B] uppercase">{tr(item.eyebrow)}</p>
                   <h3 className="font-display mt-1.5 text-2xl leading-tight font-semibold text-[#FAF6EC]">{tr(item.name)}</h3>
                   <p className="mt-3 text-sm leading-6 text-[#FAF6EC]/65">{tr(item.detail)}</p>
-                  <Link href="/#commander" className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Commander ce plat')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
+                  <Link href={`/commander/${item.id}`} className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir et commander')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
                 </div>
                 <div className="pointer-events-none absolute bottom-2 start-2 z-40 size-6 border-b border-s border-[#C6A15B]" />
                 <div className="pointer-events-none absolute end-2 top-2 z-40 size-6 border-e border-t border-[#C6A15B]" />

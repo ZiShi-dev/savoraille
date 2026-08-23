@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { BrandSeal } from './brand-seal';
+import { useCart } from './cart-provider';
 import { useI18n } from './i18n-provider';
 import { LanguageSwitcher } from './language-switcher';
 
@@ -23,6 +24,7 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('/#accueil');
   const { tr, locale } = useI18n();
+  const { itemCount } = useCart();
   const pathname = usePathname();
   const isRtl = locale === 'ar';
 
@@ -85,8 +87,9 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <Link href="/#commander" className="hidden items-center gap-2 rounded-lg border border-[#1E3A5F]/15 px-3.5 py-3 text-sm font-semibold text-[#1E3A5F] transition-colors hover:border-[#C6A15B]/60 hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none xl:flex">
-            <ShoppingBag aria-hidden="true" className="size-4" strokeWidth={1.8} />{tr('Commander')}
+          <Link href="/commandes" className="relative hidden items-center gap-2 rounded-lg border border-[#1E3A5F]/15 px-3.5 py-3 text-sm font-semibold text-[#1E3A5F] transition-colors hover:border-[#C6A15B]/60 hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none xl:flex">
+            <ShoppingBag aria-hidden="true" className="size-4" strokeWidth={1.8} />{tr('Ma commande')}
+            {itemCount > 0 ? <span className="grid min-w-5 place-items-center rounded-full bg-[#7C2438] px-1.5 py-0.5 text-[0.65rem] font-bold text-[#FAF6EC]">{itemCount}</span> : null}
           </Link>
           <Link href="/#reservation" className="hidden items-center gap-2 rounded-lg bg-[#7C2438] px-4 py-3 text-sm font-semibold text-[#FAF6EC] shadow-[0_8px_20px_rgba(124,36,56,0.2)] transition-all hover:-translate-y-0.5 hover:bg-[#691d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:outline-none sm:flex">
             {tr('Réserver')}<ArrowUpRight aria-hidden="true" className="size-4 rtl:-scale-x-100" />
@@ -141,6 +144,11 @@ export function SiteHeader() {
                       <Dialog.Close asChild>
                         <Link href="/#reservation" className="mt-6 flex items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-4 py-4 font-semibold text-[#FAF6EC] shadow-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F]">
                           <CalendarDays aria-hidden="true" className="size-5" />{tr('Réserver une table')}
+                        </Link>
+                      </Dialog.Close>
+                      <Dialog.Close asChild>
+                        <Link href="/commandes" className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-[#C6A15B]/45 px-4 py-4 font-semibold text-[#FAF6EC] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+                          <ShoppingBag aria-hidden="true" className="size-5" />{tr('Ma commande')}{itemCount > 0 ? <span className="rounded-full bg-[#C6A15B] px-2 py-0.5 text-xs font-bold text-[#241F19]">{itemCount}</span> : null}
                         </Link>
                       </Dialog.Close>
                     </motion.div>

@@ -79,7 +79,7 @@ export function HeroContent() {
           <CalendarDays aria-hidden="true" className="size-5" strokeWidth={1.8} />{tr('Réserver une table')}
         </motion.a>
         <motion.a
-          href="#commander"
+          href="/carte#menu-complet"
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-6 py-4 font-semibold text-[#FAF6EC] shadow-[0_8px_24px_rgba(0,0,0,0.18)] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none"
           whileHover={reduceMotion ? undefined : { y: -3, scale: 1.015 }}
           whileTap={reduceMotion ? undefined : { scale: 0.98 }}

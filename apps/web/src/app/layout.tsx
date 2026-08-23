@@ -18,6 +18,7 @@ import '@fontsource/parisienne/400.css';
 
 import './globals.css';
 
+import { CartProvider } from '@/components/cart-provider';
 import { I18nProvider } from '@/components/i18n-provider';
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body><I18nProvider>{children}</I18nProvider></body>
+      <body><I18nProvider><CartProvider>{children}</CartProvider></I18nProvider></body>
     </html>
   );
 }
