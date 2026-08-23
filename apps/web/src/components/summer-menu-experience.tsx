@@ -223,7 +223,8 @@ export function SummerMenuExperience() {
   }
 
   return (
-    <section id="carte" className="relative scroll-mt-28 overflow-hidden bg-[#102B4D] px-6 py-16 text-[#FAF6EC] sm:py-20" aria-labelledby="summer-menu-title">
+    <>
+      <section id="carte" className="relative scroll-mt-28 overflow-hidden bg-[#102B4D] px-6 py-16 text-[#FAF6EC] sm:py-20" aria-labelledby="summer-menu-title">
       <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_85%_18%,#C6A15B_0,transparent_26%),linear-gradient(rgba(198,161,91,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(198,161,91,.08)_1px,transparent_1px)] [background-size:auto,48px_48px,48px_48px]" />
       <div className="pointer-events-none absolute -left-40 top-1/3 size-96 rounded-full border border-[#C6A15B]/15" />
       <div className="relative mx-auto max-w-[1200px]">
@@ -360,37 +361,6 @@ export function SummerMenuExperience() {
         </div>
 
         <p className="mt-5 text-center text-xs font-semibold tracking-[0.08em] text-[#FAF6EC]/55 uppercase lg:hidden">Touchez une assiette pour ouvrir son écran</p>
-
-        <div className="relative mt-16 overflow-hidden rounded-3xl border border-[#C6A15B]/45 bg-[#FAF6EC] p-5 text-[#241F19] shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:p-8 lg:p-10">
-          <div className="pointer-events-none absolute right-[-5rem] top-[-6rem] size-72 rounded-full border border-[#C6A15B]/25" />
-          <div className="pointer-events-none absolute right-[-3rem] top-[-4rem] size-56 rounded-full border border-[#C6A15B]/25" />
-
-          <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <div className="flex items-center gap-3 text-[#7C2438]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.18em] uppercase">Sélection surprise · Carte d’été</p></div>
-              <h3 className="font-display mt-3 text-3xl leading-none font-semibold text-[#1E3A5F] sm:text-4xl">Trois envies, une seule carte.</h3>
-              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.</p>
-            </div>
-            <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Afficher trois nouvelles suggestions de la Carte d’été"><Shuffle className="size-4" />Nouvelle sélection</button>
-          </div>
-
-          <div className="relative mt-8 grid gap-5 md:grid-cols-3" aria-live="polite">
-            {discoveryItems.map((item, index) => (
-              <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.07 }} className="group flex overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white/60 shadow-[0_8px_24px_rgba(30,58,95,0.1)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B]/60 hover:shadow-[0_16px_32px_rgba(30,58,95,0.16)] md:flex-col">
-                <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">
-                  <Image src={item.image} alt={item.name} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/45 via-transparent to-transparent" />
-                  <span className="absolute left-3 top-3 rounded-full border border-[#FAF6EC]/35 bg-[#071C33]/72 px-3 py-1.5 text-[0.58rem] font-bold tracking-[0.12em] text-[#FAF6EC] uppercase backdrop-blur-md">{item.sectionLabel}</span>
-                </div>
-                <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-                  <div className="flex items-start justify-between gap-3"><div><p className="text-[0.58rem] font-bold tracking-[0.14em] text-[#C4703F] uppercase">{item.eyebrow}</p><h4 className="font-display mt-1 text-xl leading-tight font-semibold text-[#1E3A5F] sm:text-2xl">{item.name}</h4></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
-                  <p className="mt-3 text-xs leading-5 text-[#241F19]/65 sm:text-sm sm:leading-6">{item.detail}</p>
-                  <a href="#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#7C2438] outline-none transition-colors hover:text-[#1E3A5F] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander ce plat<ArrowUpRight className="size-4" /></a>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </div>
       </div>
 
       <AnimatePresence>
@@ -430,6 +400,43 @@ export function SummerMenuExperience() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </section>
+      </section>
+
+      <section id="selection-surprise" className="relative scroll-mt-28 overflow-hidden bg-[#FAF6EC] px-6 py-16 text-[#241F19] sm:py-20" aria-labelledby="discovery-title">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-2 border-y border-[#C6A15B]/55" />
+        <div className="pointer-events-none absolute -right-28 top-20 size-80 rounded-full border border-[#C6A15B]/20" />
+        <div className="pointer-events-none absolute -right-14 top-28 size-64 rounded-full border border-[#C6A15B]/20" />
+
+        <div className="relative mx-auto max-w-[1200px]">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 text-[#7C2438]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.18em] uppercase">Sélection surprise · Carte d’été</p></div>
+              <h2 id="discovery-title" className="font-display mt-3 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">Trois envies, une seule carte.</h2>
+              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">Vous hésitez encore ? Nous tirons trois assiettes de notre Carte d’été pour vous faire découvrir des saveurs, des textures et des prix différents.</p>
+            </div>
+            <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Afficher trois nouvelles suggestions de la Carte d’été"><Shuffle className="size-4" />Nouvelle sélection</button>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-3" aria-live="polite">
+            {discoveryItems.map((item, index) => (
+              <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.07 }} className="group relative flex overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_16px_36px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)] md:flex-col">
+                <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
+                <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">
+                  <Image src={item.image} alt={item.name} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/5 to-transparent" />
+                  <span className="absolute left-3 top-3 rounded-full border border-[#C6A15B]/50 bg-[#071C33]/78 px-3 py-1.5 text-[0.58rem] font-bold tracking-[0.12em] text-[#C6A15B] uppercase backdrop-blur-md">{item.sectionLabel}</span>
+                </div>
+                <div className="relative z-30 flex min-w-0 flex-1 flex-col p-4 sm:p-5">
+                  <div className="flex items-start justify-between gap-3"><div><p className="text-[0.58rem] font-bold tracking-[0.14em] text-[#C6A15B] uppercase">{item.eyebrow}</p><h3 className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{item.name}</h3></div><span className="shrink-0 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC]">{item.price}</span></div>
+                  <p className="mt-3 text-xs leading-5 text-[#FAF6EC]/65 sm:text-sm sm:leading-6">{item.detail}</p>
+                  <a href="#commander" className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">Commander ce plat<ArrowUpRight className="size-4" /></a>
+                </div>
+                <div className="pointer-events-none absolute bottom-2 left-2 z-40 size-6 border-b border-l border-[#C6A15B]" /><div className="pointer-events-none absolute right-2 top-2 z-40 size-6 border-r border-t border-[#C6A15B]" />
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
