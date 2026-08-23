@@ -2,7 +2,7 @@
 
 import * as Dialog from '@radix-ui/react-dialog';
 import { Check, Clock3, LocateFixed, MapPin, Navigation, X } from 'lucide-react';
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { BrandSeal } from './brand-seal';
 import { useI18n } from './i18n-provider';
@@ -10,7 +10,7 @@ import { distanceInKilometres, restaurants, type Restaurant } from './restaurant
 
 type RestaurantContextValue = {
   selectedRestaurant: Restaurant | null;
-  openPicker: () => void;
+  openPicker: (onSelected?: () => void) => void;
 };
 
 const RestaurantContext = createContext<RestaurantContextValue | null>(null);
@@ -22,6 +22,7 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [locationState, setLocationState] = useState<'idle' | 'loading' | 'error'>('idle');
   const [distances, setDistances] = useState<Record<string, number>>({});
+  const selectedCallback = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const saved = window.localStorage.getItem('savoraille-restaurant');
@@ -52,11 +53,14 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   };
 
   const choose = (restaurantId: string) => {
+    const onSelected = selectedCallback.current;
+    selectedCallback.current = null;
     setSelectedId(restaurantId);
     setOpen(false);
+    if (onSelected) window.setTimeout(onSelected, 180);
   };
 
-  const value = useMemo<RestaurantContextValue>(() => ({ selectedRestaurant, openPicker: () => setOpen(true) }), [selectedRestaurant]);
+  const value = useMemo<RestaurantContextValue>(() => ({ selectedRestaurant, openPicker: (onSelected) => { selectedCallback.current = onSelected ?? null; setOpen(true); } }), [selectedRestaurant]);
 
   return (
     <RestaurantContext.Provider value={value}>
@@ -67,7 +71,7 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
         <MapPin aria-hidden="true" className="relative size-6 transition-transform group-hover:scale-110 sm:size-7" strokeWidth={1.7} />
         <span className={`absolute end-1 top-1 size-3 rounded-full border-2 border-[#7C2438] ${selectedRestaurant ? 'bg-[#C4703F]' : 'bg-[#C6A15B]'}`} />
       </button>
-      <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Root open={open} onOpenChange={(nextOpen) => { setOpen(nextOpen); if (!nextOpen) selectedCallback.current = null; }}>
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-[80] bg-[#071C33]/80 backdrop-blur-md data-[state=closed]:animate-out data-[state=open]:animate-in" />
           <Dialog.Content dir={locale === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 top-1/2 z-[90] max-h-[92svh] -translate-y-1/2 overflow-y-auto rounded-2xl border border-[#C6A15B]/40 bg-[#FAF6EC] shadow-[0_30px_100px_rgba(3,16,31,0.55)] outline-none sm:inset-x-6 lg:left-1/2 lg:right-auto lg:w-[min(1040px,calc(100vw-48px))] lg:-translate-x-1/2 rtl:lg:left-auto rtl:lg:right-1/2 rtl:lg:translate-x-1/2">

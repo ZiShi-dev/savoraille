@@ -101,7 +101,7 @@ export function OrdersPageContent() {
               <h2 id="summary-title" className="font-display text-3xl font-semibold">{tr('Récapitulatif')}</h2>
               <dl className="mt-6 grid gap-4 text-sm"><div className="flex justify-between gap-4 text-[#FAF6EC]/65"><dt>{tr('Sous-total')}</dt><dd>{money(total)}</dd></div><div className="flex justify-between gap-4 text-[#FAF6EC]/65"><dt>{tr('Frais de service')}</dt><dd>{money(0)}</dd></div><div className="gold-divider gold-divider-dark" /><div className="flex items-end justify-between gap-4"><dt className="font-bold">{tr('Total')}</dt><dd className="font-display text-4xl font-bold text-[#C6A15B]">{money(total)}</dd></div></dl>
               <CheckoutFlow itemCount={itemCount} total={total} />
-              <p className="mt-4 text-center text-xs leading-5 text-[#FAF6EC]/48">{tr('Choisissez sur place ou à emporter à l’étape suivante.')}</p>
+              <p className="mt-4 text-center text-xs leading-5 text-[#FAF6EC]/48">{tr('Choisissez sur place, à emporter ou en livraison à l’étape suivante.')}</p>
             </aside>
           </div>
           </>
