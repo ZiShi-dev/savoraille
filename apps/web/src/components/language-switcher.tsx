@@ -2,6 +2,7 @@
 
 import * as Select from '@radix-ui/react-select';
 import { Check, ChevronDown, Languages } from 'lucide-react';
+import { useEffect } from 'react';
 
 import { useI18n, type Locale } from './i18n-provider';
 
@@ -14,8 +15,29 @@ export function LanguageSwitcher() {
   ];
   const selected = languages.find((language) => language.code === locale) ?? languages[0]!;
 
+  useEffect(() => () => {
+    document.documentElement.removeAttribute('data-language-menu-open');
+    document.body.style.removeProperty('overflow-y');
+    document.body.style.removeProperty('margin-right');
+  }, []);
+
+  const handleOpenChange = (open: boolean) => {
+    document.documentElement.toggleAttribute('data-language-menu-open', open);
+
+    window.requestAnimationFrame(() => {
+      if (open && document.documentElement.hasAttribute('data-language-menu-open')) {
+        document.body.style.setProperty('overflow-y', 'scroll', 'important');
+        document.body.style.setProperty('margin-right', '0px', 'important');
+        return;
+      }
+
+      document.body.style.removeProperty('overflow-y');
+      document.body.style.removeProperty('margin-right');
+    });
+  };
+
   return (
-    <Select.Root value={locale} onValueChange={(value) => setLocale(value as Locale)} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <Select.Root value={locale} onValueChange={(value) => setLocale(value as Locale)} onOpenChange={handleOpenChange} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <Select.Trigger className="group inline-flex h-11 items-center gap-2 rounded-lg border border-[#1E3A5F]/12 bg-white px-2.5 text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B]/60 hover:bg-[#FFFDF8] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Langue · Language · اللغة">
         <Languages aria-hidden="true" className="size-4 shrink-0 text-[#7C2438]" strokeWidth={1.8} />
         <span className="text-xs font-bold">{selected.short}</span>

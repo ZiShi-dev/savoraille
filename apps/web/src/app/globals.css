@@ -44,9 +44,37 @@ html[lang='ar'] .font-script {
 * { box-sizing: border-box; }
 
 html {
+  background: var(--c-sevres);
   scroll-behavior: smooth;
   scroll-padding-top: 7rem;
   scrollbar-gutter: stable;
+  scrollbar-color: var(--c-or) var(--c-sevres);
+  scrollbar-width: thin;
+}
+
+html::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--c-sevres);
+  border-inline-start: 1px solid rgb(198 161 91 / 18%);
+}
+
+html::-webkit-scrollbar-thumb {
+  min-height: 48px;
+  border: 3px solid var(--c-sevres);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d8bd82, var(--c-or));
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--c-or), var(--c-bordeaux));
+}
+
+html::-webkit-scrollbar-corner {
+  background: var(--c-sevres);
 }
 
 body[data-scroll-locked] {
