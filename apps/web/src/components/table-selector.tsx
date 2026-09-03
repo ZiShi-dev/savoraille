@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import { Armchair, Check, LockKeyhole, UsersRound } from 'lucide-react';
 
 import { useI18n } from './i18n-provider';
@@ -45,7 +45,7 @@ export function TableSelector({ guests, value, onChange }: { guests: number; val
       </div>
 
       <div className="relative mt-5 aspect-[16/9] overflow-hidden rounded-2xl border border-[#C6A15B]/40 bg-[#102B4D] shadow-[0_18px_45px_rgba(30,58,95,0.2)]">
-        <Image src="/images/savoraille-dining-room-3d.png" alt={tr('Vue 3D de la salle Savoraille et de ses tables')} fill priority sizes="(max-width: 768px) 100vw, 900px" className="object-cover" />
+        <AppImage src="/images/savoraille-dining-room-3d.png" alt={tr('Vue 3D de la salle Savoraille et de ses tables')} fill priority sizes="(max-width: 768px) 100vw, 900px" className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/24 via-transparent to-[#071C33]/8" />
         {tables.map((table) => {
           const tooSmall = table.seats < guests;

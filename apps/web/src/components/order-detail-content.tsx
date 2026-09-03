@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowLeft, ArrowRight, Check, CircleDashed, Info, Minus, Plus, ShoppingBag, SlidersHorizontal, Sparkles } from 'lucide-react';
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -74,7 +74,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
           <Link href="/carte" className="inline-flex items-center gap-2 rounded-lg text-sm font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour à la carte')}</Link>
           <div className="mt-6 grid overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white shadow-[0_18px_50px_rgba(30,58,95,0.14)] lg:grid-cols-[1.08fr_0.92fr]">
             <div className="relative min-h-[360px] overflow-hidden sm:min-h-[520px]">
-              <Image src={item.image} alt={tr(item.name)} fill priority sizes="(min-width:1024px) 55vw, 100vw" className="object-cover" />
+              <AppImage src={item.image} alt={tr(item.name)} fill priority sizes="(min-width:1024px) 55vw, 100vw" className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#102B4D]/70 via-transparent to-transparent" />
               <span className="absolute bottom-5 start-5 rounded-full border border-[#C6A15B]/55 bg-[#102B4D]/85 px-4 py-2 text-xs font-bold tracking-[0.1em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(itemSection.shortLabel)}</span>
             </div>
@@ -148,7 +148,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
           <div className="-mx-6 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0" aria-live="polite">
             {suggestions.map((suggestion) => (
               <article key={suggestion.id} className="grid min-w-[86%] snap-center grid-cols-[88px_1fr_auto] items-center gap-3 rounded-xl border border-[#FAF6EC]/14 bg-white/[0.055] p-3 sm:min-w-0">
-                <Link href={`/commander/${suggestion.id}`} className="relative aspect-square overflow-hidden rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Image src={suggestion.image} alt={tr(suggestion.name)} fill sizes="88px" className="object-cover" /></Link>
+                <Link href={`/commander/${suggestion.id}`} className="relative aspect-square overflow-hidden rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><AppImage src={suggestion.image} alt={tr(suggestion.name)} fill sizes="88px" className="object-cover" /></Link>
                 <div className="min-w-0"><p className="truncate text-[0.65rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase">{tr(suggestion.eyebrow)}</p><Link href={`/commander/${suggestion.id}`} className="font-display mt-1 block text-lg leading-tight font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(suggestion.name)}</Link><p className="mt-1 text-sm font-bold text-[#DFA17A]">{suggestion.price}</p></div>
                 <button type="button" onClick={() => addSuggestion(suggestion.id)} aria-label={`${tr('Ajouter')} ${tr(suggestion.name)}`} className={`grid size-10 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${suggestionAdded === suggestion.id ? 'bg-[#C4703F] text-white' : 'bg-[#7C2438] text-white hover:bg-[#681d2f]'}`}>{suggestionAdded === suggestion.id ? <Check className="size-4" /> : <Plus className="size-4" />}</button>
               </article>

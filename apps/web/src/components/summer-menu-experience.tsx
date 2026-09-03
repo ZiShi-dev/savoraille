@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ChefHat, ChevronLeft, ChevronRight, ScanLine, Shuffle, Sparkles, X } from 'lucide-react';
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -220,7 +220,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                             {active ? <motion.span layoutId="menu-active" className="absolute inset-y-0 start-0 w-1 bg-[#C6A15B]" /> : null}
                             <span className="flex items-center gap-4">
                               <span className={`relative size-12 shrink-0 overflow-hidden rounded-md border sm:size-14 ${active ? 'border-[#C6A15B]/65' : 'border-[#1E3A5F]/12'}`}>
-                                <Image src={item.image} alt="" fill loading="lazy" sizes="56px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                                <AppImage src={item.image} alt="" fill loading="lazy" sizes="56px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                                 <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/70 via-transparent to-transparent" />
                                 <span className="font-display absolute bottom-1 start-1.5 text-xs font-semibold tabular-nums text-[#FAF6EC]">{String(itemNumber).padStart(2, '0')}</span>
                               </span>
@@ -262,7 +262,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                 >
                   <div className="pointer-events-none absolute inset-3 z-20 border border-[#C6A15B]/25" style={{ clipPath: screenClipPath }} />
                   <div className="relative h-[220px] sm:h-[250px] lg:h-[260px]">
-                    <Image src={selected.image} alt={tr(selected.name)} fill loading="eager" sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover" />
+                    <AppImage src={selected.image} alt={tr(selected.name)} fill loading="eager" sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/12 to-transparent" />
                     <motion.div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(198,161,91,.14),transparent)]" animate={reduceMotion ? undefined : { x: ['-100%', '100%'] }} transition={{ duration: 3.2, repeat: Infinity, ease: 'linear' }} />
                     <div className="absolute start-6 top-6 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/72 px-3 py-2 text-[0.62rem] font-bold tracking-[0.16em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />{tr('Sélection active')}</div>
@@ -315,7 +315,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
             >
               <div className="pointer-events-none absolute inset-2 z-20 border border-[#C6A15B]/24" style={{ clipPath: mobileClipPath }} />
               <div className="relative h-[38dvh] min-h-[230px] max-h-[340px]">
-                <Image src={selected.image} alt={tr(selected.name)} fill loading="eager" sizes="100vw" className="object-cover" />
+                <AppImage src={selected.image} alt={tr(selected.name)} fill loading="eager" sizes="100vw" className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-transparent to-[#071C33]/15" />
                 <motion.div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(198,161,91,.16),transparent)]" animate={reduceMotion ? undefined : { x: ['-100%', '100%'] }} transition={{ duration: 2.8, repeat: Infinity, ease: 'linear' }} />
                 <div className="absolute start-5 top-5 flex items-center gap-2 rounded-full border border-[#C6A15B]/45 bg-[#071C33]/76 px-3 py-2 text-[0.58rem] font-bold tracking-[0.15em] text-[#C6A15B] uppercase backdrop-blur-md"><ScanLine className="size-3.5" />{tr('Écran du menu')}</div>
@@ -363,7 +363,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                 <Link href={`/commander/${item.id}`} aria-label={`${tr('Voir et commander')} · ${tr(item.name)}`} className="absolute inset-0 z-50 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C6A15B]"><span className="sr-only">{tr('Voir et commander')} · {tr(item.name)}</span></Link>
                 <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
                 <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">
-                  <Image src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <AppImage src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/5 to-transparent" />
                   <span className="absolute start-3 top-3 rounded-full border border-[#C6A15B]/50 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(item.sectionLabel)}</span>
                 </div>

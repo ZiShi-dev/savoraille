@@ -32,5 +32,6 @@ export const siteConfig = {
 export function withBasePath(path: string) {
   if (!siteConfig.basePath) return path;
   if (path.startsWith('http')) return path;
+  if (path.startsWith(`${siteConfig.basePath}/`)) return path;
   return `${siteConfig.basePath}${path.startsWith('/') ? path : `/${path}`}`;
 }

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, CheckCircle2, Clock3, Mail, MapPin, MessageSquareText, Send, Sparkles } from 'lucide-react';
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -29,7 +29,7 @@ export function ContactPageContent() {
   return (
     <main className="overflow-hidden bg-[#FAF6EC] pt-20 text-[#241F19]">
       <section className="relative isolate min-h-[600px] overflow-hidden bg-[#102B4D] text-[#FAF6EC]">
-        <Image src="/images/reservations/private-event.png" alt={tr('Une table préparée pour recevoir les invités chez Savoraille')} fill priority sizes="100vw" className="object-cover object-center" />
+        <AppImage src="/images/reservations/private-event.png" alt={tr('Une table préparée pour recevoir les invités chez Savoraille')} fill priority sizes="100vw" className="object-cover object-center" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,25,45,.94)_0%,rgba(7,25,45,.74)_52%,rgba(7,25,45,.25)_100%)] rtl:bg-[linear-gradient(270deg,rgba(7,25,45,.94)_0%,rgba(7,25,45,.74)_52%,rgba(7,25,45,.25)_100%)]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#07192D]/70 via-transparent to-transparent" />
         <div className="relative mx-auto flex min-h-[600px] max-w-[1200px] items-end px-6 pb-16 pt-24 sm:pb-20 lg:px-8">
@@ -99,7 +99,7 @@ export function ContactPageContent() {
       <section id="adresse" className="bg-[#102B4D] px-6 py-16 text-[#FAF6EC] sm:py-24 lg:px-8" aria-labelledby="address-title">
         <motion.div {...reveal} className="mx-auto grid max-w-[1200px] overflow-hidden rounded-3xl border border-[#C6A15B]/25 bg-[#0B2746] shadow-[0_24px_65px_rgba(3,16,31,0.3)] lg:grid-cols-[1.05fr_0.95fr]">
           <div className="relative min-h-[420px] lg:min-h-[560px]">
-            <Image src="/images/savoraille-dining-room-3d.png" alt={tr('La salle du restaurant Savoraille')} fill sizes="(max-width: 1024px) 100vw, 52vw" className="object-cover" />
+            <AppImage src="/images/savoraille-dining-room-3d.png" alt={tr('La salle du restaurant Savoraille')} fill sizes="(max-width: 1024px) 100vw, 52vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#07192D]/65 via-transparent to-transparent" />
             <span className="absolute bottom-5 start-5 inline-flex items-center gap-2 rounded-full border border-[#FAF6EC]/25 bg-[#102B4D]/72 px-4 py-2 text-xs font-bold backdrop-blur-md"><MapPin className="size-4 text-[#C6A15B]" />{tr('Votre restaurant Savoraille')}</span>
           </div>

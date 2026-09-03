@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ListFilter, UtensilsCrossed } from 'lucide-react';
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -66,7 +66,7 @@ export function FullMenuCatalog() {
                 <Link href={`/commander/${item.id}`} aria-label={`${tr('Voir et commander')} · ${tr(item.name)}`} className="absolute inset-0 z-50 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C6A15B]"><span className="sr-only">{tr('Voir et commander')} · {tr(item.name)}</span></Link>
                 <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
                 <div className="relative aspect-[16/10] overflow-hidden">
-                  <Image src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <AppImage src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071C33] via-[#071C33]/8 to-transparent" />
                   <span className="absolute start-4 top-4 z-30 rounded-full border border-[#C6A15B]/55 bg-[#071C33]/78 px-3 py-1.5 text-[0.625rem] font-bold tracking-[0.08em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(item.sectionLabel)}</span>
                   <span className="absolute bottom-4 end-4 z-30 rounded-full bg-[#7C2438] px-3 py-1.5 text-sm font-bold text-[#FAF6EC] shadow-lg">{item.price}</span>

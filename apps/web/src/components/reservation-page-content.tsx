@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, BriefcaseBusiness, CalendarDays, Check, Clock3, Heart, MapPin, Phone, Sparkles, UserRound, UsersRound, UtensilsCrossed } from 'lucide-react';
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -115,7 +115,7 @@ export function ReservationPageContent() {
                     const Icon = item.icon;
                     return <button key={item.id} type="button" onClick={() => chooseReason(item.id)} className="group flex min-h-[22rem] flex-col overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white text-start shadow-[0_8px_24px_rgba(30,58,95,0.08)] outline-none transition-all hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_16px_36px_rgba(30,58,95,0.16)] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
                       <span className="relative block aspect-[16/10] w-full overflow-hidden bg-[#102B4D]">
-                        <Image src={item.image} alt="" fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                        <AppImage src={item.image} alt="" fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
                         <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/58 via-transparent to-transparent" />
                         <span className="absolute bottom-3 end-3 grid size-11 place-items-center rounded-full border border-[#FAF6EC]/35 bg-[#1E3A5F]/88 text-[#C6A15B] shadow-lg backdrop-blur-md"><Icon className="size-5" strokeWidth={1.7} /></span>
                       </span>
@@ -132,7 +132,7 @@ export function ReservationPageContent() {
               <motion.form key={`form-${reason}`} variants={variants} initial="enter" animate="center" exit="exit" transition={transition} onSubmit={handleSubmit(submit)} noValidate className="grid min-w-0 lg:grid-cols-[1fr_330px]">
                 <div className="min-w-0 p-5 sm:p-8">
                   <div className="relative aspect-[16/8] min-h-44 overflow-hidden rounded-2xl border border-[#C6A15B]/35 bg-[#102B4D] sm:aspect-[16/5]">
-                    <Image src={chosenReason.image} alt={tr(chosenReason.title)} fill priority sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
+                    <AppImage src={chosenReason.image} alt={tr(chosenReason.title)} fill priority sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/90 via-[#071C33]/20 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 flex items-end gap-3 p-5 text-[#FAF6EC] sm:p-6">
                       <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#C6A15B] text-[#241F19]"><chosenReason.icon className="size-5" /></span>

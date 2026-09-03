@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Flame, Gem, Heart, Leaf, Sparkles, UsersRound, UtensilsCrossed, Wheat } from 'lucide-react';
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import Link from 'next/link';
 
 import { BrandSeal } from './brand-seal';
@@ -34,7 +34,7 @@ export function HistoryPageContent() {
   return (
     <main className="overflow-hidden bg-[#FAF6EC] pt-20 text-[#241F19]">
       <section className="relative isolate min-h-[680px] overflow-hidden bg-[#102B4D] text-[#FAF6EC] sm:min-h-[760px]">
-        <Image src="/images/savoraille-dining-room-3d.png" alt={tr('La salle Savoraille, préparée pour le service du soir')} fill priority sizes="100vw" className="object-cover object-center" />
+        <AppImage src="/images/savoraille-dining-room-3d.png" alt={tr('La salle Savoraille, préparée pour le service du soir')} fill priority sizes="100vw" className="object-cover object-center" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,25,45,.92)_0%,rgba(7,25,45,.74)_48%,rgba(7,25,45,.26)_100%)] rtl:bg-[linear-gradient(270deg,rgba(7,25,45,.92)_0%,rgba(7,25,45,.74)_48%,rgba(7,25,45,.26)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(7,25,45,.72)_0%,transparent_55%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[#C6A15B]/70" />
@@ -66,7 +66,7 @@ export function HistoryPageContent() {
         <motion.div {...reveal} className="mx-auto grid max-w-[1200px] gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-center lg:gap-16">
           <div className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-[#1E3A5F] shadow-[0_24px_55px_rgba(30,58,95,0.18)] sm:aspect-[5/4] lg:aspect-[4/5]">
-              <Image src="/images/reservations/dinner.png" alt={tr('Une table Savoraille dressée avec soin')} fill sizes="(max-width: 1024px) 100vw, 46vw" className="object-cover" />
+              <AppImage src="/images/reservations/dinner.png" alt={tr('Une table Savoraille dressée avec soin')} fill sizes="(max-width: 1024px) 100vw, 46vw" className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#102B4D]/60 via-transparent to-transparent" />
             </div>
             <div className="absolute -bottom-5 end-4 max-w-[240px] rounded-2xl border border-[#C6A15B]/45 bg-[#FAF6EC] p-5 shadow-[0_16px_38px_rgba(30,58,95,0.18)] sm:end-8">
@@ -127,7 +127,7 @@ export function HistoryPageContent() {
 
       <section className="px-4 pb-4 sm:px-6 sm:pb-6 lg:px-8" aria-labelledby="table-story-title">
         <motion.div {...reveal} className="relative mx-auto min-h-[540px] max-w-[1200px] overflow-hidden rounded-3xl bg-[#7C2438] shadow-[0_24px_60px_rgba(30,58,95,0.18)]">
-          <Image src="/images/reservations/romantic.png" alt={tr('Une table intime dans la salle Savoraille')} fill sizes="(max-width: 1200px) 100vw, 1200px" className="object-cover object-center" />
+          <AppImage src="/images/reservations/romantic.png" alt={tr('Une table intime dans la salle Savoraille')} fill sizes="(max-width: 1200px) 100vw, 1200px" className="object-cover object-center" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(20,25,34,.9)_0%,rgba(20,25,34,.65)_48%,rgba(20,25,34,.18)_100%)] rtl:bg-[linear-gradient(270deg,rgba(20,25,34,.9)_0%,rgba(20,25,34,.65)_48%,rgba(20,25,34,.18)_100%)]" />
           <div className="relative flex min-h-[540px] max-w-xl flex-col justify-end p-7 text-[#FAF6EC] sm:p-12 lg:p-16">
             <p className="font-script text-3xl text-[#C6A15B]">{tr('Bienvenue à notre table.')}</p>

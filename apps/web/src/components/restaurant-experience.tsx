@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import Link from 'next/link';
 
 import { useI18n } from './i18n-provider';
@@ -34,7 +34,7 @@ export function RestaurantExperience() {
         </div>
 
         <figure className="group relative aspect-[16/11] overflow-hidden rounded-2xl border border-[#C6A15B]/40 bg-[#102B4D] shadow-[0_22px_55px_rgba(7,28,51,0.38)] sm:aspect-[16/10]" aria-label={tr('Trois moments de l’expérience Savoraille')}>
-          <Image src="/images/savoraille-dining-room-3d.png" alt={tr('Vue 3D de la salle Savoraille et de ses tables')} fill loading="lazy" sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.025]" />
+          <AppImage src="/images/savoraille-dining-room-3d.png" alt={tr('Vue 3D de la salle Savoraille et de ses tables')} fill loading="lazy" sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/82 via-transparent to-[#071C33]/10" />
           <div className="pointer-events-none absolute inset-4 rounded-xl border border-[#C6A15B]/35 sm:inset-5" aria-hidden="true" />
           <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 sm:p-8">

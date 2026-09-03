@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowRight, Check, CircleDashed, Minus, Plus, ShoppingBag, Sparkles, Trash2 } from 'lucide-react';
-import Image from 'next/image';
+import { AppImage } from './app-image';
 import Link from 'next/link';
 
 import { useCart } from './cart-provider';
@@ -64,7 +64,7 @@ export function OrdersPageContent() {
               {detailedLines.map(({ item, quantity, menuId, customization }) => {
                 const unitPrice = Number.parseFloat(item.price) + (customization?.unitSupplement ?? 0);
                 return <article key={`${menuId}-${item.id}`} className="grid grid-cols-[88px_1fr] gap-4 rounded-2xl border border-[#1E3A5F]/12 bg-white p-3 shadow-[0_8px_24px_rgba(30,58,95,0.08)] sm:grid-cols-[128px_1fr_auto] sm:items-center sm:gap-5 sm:p-4">
-                  <Link href={`/commander/${item.id}`} className="relative aspect-square overflow-hidden rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Image src={item.image} alt={tr(item.name)} fill sizes="128px" className="object-cover" /></Link>
+                  <Link href={`/commander/${item.id}`} className="relative aspect-square overflow-hidden rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><AppImage src={item.image} alt={tr(item.name)} fill sizes="128px" className="object-cover" /></Link>
                   <div className="min-w-0"><Link href={`/commander/${item.id}`} className="font-display text-xl font-semibold text-[#1E3A5F] outline-none hover:text-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:text-2xl">{tr(item.name)}</Link><p className="mt-1 text-sm font-bold text-[#7C2438]">{item.price}{customization?.unitSupplement ? ` · +${money(customization.unitSupplement)}` : ''}</p>{customization?.optionLabels.length ? <div className="mt-2 flex flex-wrap gap-1.5">{customization.optionLabels.map((label) => <span key={label} className="rounded-full border border-[#C6A15B]/35 bg-[#FAF6EC] px-2.5 py-1 text-[0.68rem] font-bold text-[#1E3A5F]">+ {tr(label)}</span>)}</div> : null}<button type="button" onClick={() => removeItem(menuId, item.id)} className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#241F19]/48 outline-none hover:text-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Trash2 className="size-3.5" />{tr('Retirer')}</button></div>
                   <div className="col-span-2 flex items-center justify-between border-t border-[#1E3A5F]/8 pt-3 sm:col-span-1 sm:block sm:border-0 sm:pt-0 sm:text-end">
                     <div className="inline-flex items-center rounded-lg border border-[#1E3A5F]/14 bg-[#FAF6EC] p-1">
