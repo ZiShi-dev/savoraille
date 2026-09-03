@@ -620,7 +620,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     tr: (text) => locale === 'fr' ? text : (locale === 'en' ? en[text] : ar[text]) ?? text,
   }), [locale]);
 
-  return <I18nContext.Provider value={value}><div className={storageReady ? 'contents' : 'invisible'}>{children}</div></I18nContext.Provider>;
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
 export function useI18n() {
