@@ -6,103 +6,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { menuItems, menuSections, type MenuItem, type MenuSection } from '@/lib/menu-data';
+
 import { useI18n } from './i18n-provider';
 
-const images = {
-  aperitif: 'https://images.unsplash.com/photo-1576006144029-e42bb7166c76?auto=format&fit=crop&w=1600&q=82',
-  entree: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1600&q=82',
-  volaille: 'https://images.unsplash.com/photo-1616401616927-3c81de22dfa8?auto=format&fit=crop&w=1600&q=82',
-  poisson: 'https://images.unsplash.com/photo-1776097633704-6666ffafc58d?auto=format&fit=crop&w=1600&q=82',
-  vegetal: 'https://images.unsplash.com/photo-1470338950318-40320a722782?auto=format&fit=crop&w=1600&q=82',
-  dessert: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1600&q=82',
-  cocktail: 'https://images.unsplash.com/photo-1677825949218-608c76ed1fbf?auto=format&fit=crop&w=1600&q=82',
-  vin: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1600&q=82',
-} as const;
+export type { MenuItem, MenuSection };
+export { menuItems, menuSections } from '@/lib/menu-data';
 
-export type MenuItem = {
-  id: string;
-  eyebrow: string;
-  name: string;
-  detail: string;
-  price: string;
-  image: string;
-};
-
-export type MenuSection = {
-  id: string;
-  label: string;
-  shortLabel: string;
-  subtitle: string;
-  items: readonly MenuItem[];
-};
-
-export const menuSections: readonly MenuSection[] = [
-  {
-    id: 'aperitifs',
-    label: 'Apéritifs & amuse-bouches',
-    shortLabel: 'Apéritifs',
-    subtitle: 'Pour ouvrir l’appétit',
-    items: [
-      { id: 'gougere', eyebrow: 'Bouchée chaude', name: 'Gougère au vieux comté', detail: 'Une pâte légère et dorée, garnie de vieux comté affiné et d’une pointe de muscade.', price: '9 €', image: images.aperitif },
-      { id: 'tomate-fumee', eyebrow: 'Fraîcheur', name: 'Tartare de tomate fumée', detail: 'Tomates de saison, huile de basilic et pain de campagne croustillant.', price: '11 €', image: images.entree },
-      { id: 'rillettes-truite', eyebrow: 'Bord de mer', name: 'Rillettes de truite', detail: 'Truite délicatement fumée, crème citronnée et pickles de fenouil.', price: '13 €', image: images.poisson },
-      { id: 'croquette-volaille', eyebrow: 'Croustillant', name: 'Croquette de volaille', detail: 'Volaille confite, cœur fondant et moutarde douce à l’ancienne.', price: '12 €', image: images.volaille },
-      { id: 'pissaladiere', eyebrow: 'Du Sud', name: 'Mini pissaladière', detail: 'Oignons doucement confits, anchois, olives noires et pâte croustillante.', price: '10 €', image: images.aperitif },
-      { id: 'huitre', eyebrow: 'Iodé', name: 'Huître & granité citron', detail: 'Huître fraîche, granité citronné et huile délicate aux herbes.', price: '15 €', image: images.poisson },
-      { id: 'jambon-persille', eyebrow: 'Terroir', name: 'Jambon persillé', detail: 'Jambon fondant, gelée au persil et moutarde de Bourgogne.', price: '12 €', image: images.volaille },
-    ],
-  },
-  {
-    id: 'entrees',
-    label: 'Entrées',
-    shortLabel: 'Entrées',
-    subtitle: 'Les premiers parfums',
-    items: [
-      { id: 'veloute', eyebrow: 'De saison', name: 'Velouté de potimarron', detail: 'Crème de châtaigne, noisettes torréfiées et huile de sauge.', price: '14 €', image: images.vegetal },
-      { id: 'oeuf-parfait', eyebrow: 'Signature', name: 'Œuf parfait', detail: 'Champignons rôtis, émulsion de comté et mouillettes au beurre noisette.', price: '15 €', image: images.aperitif },
-      { id: 'poireau', eyebrow: 'Végétal', name: 'Poireau vinaigrette', detail: 'Poireau braisé, vinaigrette aux herbes et jaune d’œuf confit.', price: '13 €', image: images.entree },
-      { id: 'truite-marinee', eyebrow: 'Fraîcheur', name: 'Truite marinée', detail: 'Crème crue, concombre, aneth et œufs de truite légèrement fumés.', price: '17 €', image: images.poisson },
-    ],
-  },
-  {
-    id: 'plats',
-    label: 'Plats principaux',
-    shortLabel: 'Plats',
-    subtitle: 'Le cœur de la table',
-    items: [
-      { id: 'volaille', eyebrow: 'Signature de la maison', name: 'Volaille fermière dorée', detail: 'Une peau croustillante, une chair tendre et un jus réduit lentement pour concentrer toute la saveur du terroir.', price: '26 €', image: images.volaille },
-      { id: 'lieu', eyebrow: 'Arrivage du marché', name: 'Lieu jaune nacré', detail: 'Une cuisson juste nacrée, réveillée par un beurre vif et la douceur fondante du poireau de saison.', price: '29 €', image: images.poisson },
-      { id: 'potimarron', eyebrow: 'Création végétale', name: 'Potimarron confit', detail: 'Le potimarron caramélise doucement avant de rencontrer la rondeur de la châtaigne et le croquant des noisettes.', price: '21 €', image: images.vegetal },
-      { id: 'boeuf-braise', eyebrow: 'Cuisson lente', name: 'Bœuf braisé au vin rouge', detail: 'Paleron fondant, jus au bordeaux, échalotes confites et pommes grenailles.', price: '31 €', image: images.volaille },
-    ],
-  },
-  {
-    id: 'desserts',
-    label: 'Desserts',
-    shortLabel: 'Desserts',
-    subtitle: 'La dernière gourmandise',
-    items: [
-      { id: 'tarte-pomme', eyebrow: 'Tout en finesse', name: 'Tarte fine aux pommes', detail: 'Pommes caramélisées, crème crue vanillée et caramel au beurre salé.', price: '11 €', image: images.dessert },
-      { id: 'chocolat', eyebrow: 'Intense', name: 'Chocolat grand cru', detail: 'Crémeux chocolat noir, croustillant praliné et glace au grué de cacao.', price: '12 €', image: images.dessert },
-      { id: 'paris-brest', eyebrow: 'Classique français', name: 'Paris-Brest', detail: 'Pâte à choux, praliné noisette généreux et éclats de fruits secs.', price: '13 €', image: images.aperitif },
-      { id: 'fraises', eyebrow: 'Fruit de saison', name: 'Fraises & verveine', detail: 'Fraises fraîches, crème légère, verveine citronnée et meringue craquante.', price: '12 €', image: images.entree },
-    ],
-  },
-  {
-    id: 'boissons',
-    label: 'Boissons',
-    shortLabel: 'Boissons',
-    subtitle: 'Avec ou sans alcool',
-    items: [
-      { id: 'spritz', eyebrow: 'Cocktail signature', name: 'Savoraille Spritz', detail: 'Apéritif maison, agrumes frais, fines bulles et romarin.', price: '10 €', image: images.cocktail },
-      { id: 'bordeaux', eyebrow: 'Sélection du sommelier', name: 'Verre de Bordeaux', detail: 'Une cuvée souple et fruitée choisie pour accompagner la carte du moment.', price: '9 €', image: images.vin },
-      { id: 'citronnade', eyebrow: 'Fait maison', name: 'Citronnade au thym', detail: 'Citron pressé, sirop léger au thym frais et eau filtrée.', price: '6 €', image: images.cocktail },
-      { id: 'eau-botanique', eyebrow: 'Sans alcool', name: 'Eau pétillante botanique', detail: 'Bulles fines, concombre, verveine et une pointe de baie rose.', price: '5 €', image: images.vin },
-    ],
-  },
-] as const;
-
-export const menuItems = menuSections.flatMap((section) => section.items);
 const defaultItem = menuSections[0]!.items[0]!;
 const CHOICES_PER_PAGE = 4;
 
@@ -120,21 +30,14 @@ const bookPages = menuSections.flatMap((section, sectionIndex) => {
   }));
 });
 
-const discoveryMenuItems = menuSections.flatMap((section) =>
-  section.items.map((item) => ({ ...item, sectionLabel: section.shortLabel })),
-);
-
 function createDiscoverySelection(seed: number) {
-  const shuffledItems = [...discoveryMenuItems];
   let randomState = seed;
 
-  for (let index = shuffledItems.length - 1; index > 0; index -= 1) {
+  return menuSections.map((section) => {
     randomState = (Math.imul(randomState, 1664525) + 1013904223) >>> 0;
-    const swapIndex = randomState % (index + 1);
-    [shuffledItems[index], shuffledItems[swapIndex]] = [shuffledItems[swapIndex]!, shuffledItems[index]!];
-  }
-
-  return shuffledItems.slice(0, 3);
+    const item = section.items[randomState % section.items.length]!;
+    return { ...item, sectionLabel: section.shortLabel };
+  });
 }
 
 const pageTurnVariants = {
@@ -177,9 +80,9 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
   const visibleItems = currentPage.items;
   const discoveryItems = useMemo(() => createDiscoverySelection(discoverySeed), [discoverySeed]);
 
-  useEffect(() => {
-    setDiscoverySeed(Date.now() >>> 0);
-  }, []);
+  function shuffleDiscovery() {
+    setDiscoverySeed((seed) => (seed + 1) % 2_147_483_647);
+  }
 
   useEffect(() => {
     if (!mobileScreenOpen) return;
@@ -440,19 +343,23 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
               <div className="flex items-center gap-3 text-[#7C2438]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.18em] uppercase">{tr('Sélection surprise · Toute la carte')}</p></div>
-              <h2 id="discovery-title" className="font-display mt-3 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">{tr('Trois envies, trois surprises.')}</h2>
-              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Vous hésitez encore ? Nous tirons trois assiettes au hasard parmi toute notre carte pour vous faire découvrir des saveurs, des textures et des prix différents.')}</p>
+              <h2 id="discovery-title" className="font-display mt-3 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">{tr('Cinq envies, cinq surprises.')}</h2>
+              <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Une suggestion aléatoire vous attend dans chaque catégorie : apéritif, entrée, plat, dessert et boisson.')}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link href="/carte" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></Link>
-              <button type="button" onClick={() => setDiscoverySeed((seed) => seed + 1)} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher trois nouvelles suggestions aléatoires')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
+              <button type="button" onClick={shuffleDiscovery} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher cinq nouvelles suggestions aléatoires')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
             </div>
           </div>
 
-          <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase md:hidden">{tr('Faites glisser pour voir les trois suggestions')}</p>
-          <div className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-8 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0" aria-live="polite" aria-label={tr('Suggestions aléatoires de la carte')}>
+          <div className="-mx-6 mt-7 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-5 md:px-0" aria-label={tr('Catégories de la sélection surprise')}>
+            {menuSections.map((section) => <Link key={section.id} href={`/carte?section=${section.id}#menu-complet`} className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#C6A15B]/40 bg-white px-4 py-2 text-xs font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-[#1E3A5F] hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(section.shortLabel)}</Link>)}
+          </div>
+
+          <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase md:hidden">{tr('Faites glisser pour voir les cinq suggestions')}</p>
+          <div className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-8 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 xl:grid-cols-5" aria-live="polite" aria-label={tr('Cinq suggestions aléatoires de la carte')}>
             {discoveryItems.map((item, index) => (
-              <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.07 }} className="group relative flex min-w-[84vw] snap-center overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_16px_36px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)] sm:min-w-[58vw] md:min-w-0 md:flex-col">
+              <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.06 }} className="group relative flex min-w-[84vw] snap-center overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_16px_36px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)] sm:min-w-[58vw] md:min-w-0 md:flex-col">
                 <Link href={`/commander/${item.id}`} aria-label={`${tr('Voir et commander')} · ${tr(item.name)}`} className="absolute inset-0 z-50 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C6A15B]"><span className="sr-only">{tr('Voir et commander')} · {tr(item.name)}</span></Link>
                 <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
                 <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">

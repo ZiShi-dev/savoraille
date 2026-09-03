@@ -13,11 +13,12 @@ import { RestaurantExperience } from '@/components/restaurant-experience';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SummerMenuExperience } from '@/components/summer-menu-experience';
+import { withBasePath } from '@/lib/site-config';
 
 const services = [
-  { icon: CalendarDays, eyebrow: 'Sur place', title: 'Votre table vous attend.', description: 'Choisissez votre heure, nous préparons le reste.', action: 'Réserver une table', href: '#reservation' },
-  { icon: ShoppingBag, eyebrow: 'À emporter', title: 'Votre panier sent déjà bon.', description: 'Commandez la carte du moment et passez la chercher.', action: 'Commander', href: '#commander' },
-  { icon: Bike, eyebrow: 'Livraison', title: 'La cloche sonne bientôt.', description: 'Nos assiettes voyagent jusque chez vous.', action: 'Se faire livrer', href: '#commander' },
+  { icon: CalendarDays, eyebrow: 'Sur place', title: 'Votre table vous attend.', description: 'Choisissez votre heure, nous préparons le reste.', action: 'Réserver une table', href: '/reservation' },
+  { icon: ShoppingBag, eyebrow: 'À emporter', title: 'Votre panier sent déjà bon.', description: 'Commandez la carte du moment et passez la chercher.', action: 'Commander', href: '/carte?service=takeaway#menu-complet' },
+  { icon: Bike, eyebrow: 'Livraison', title: 'La cloche sonne bientôt.', description: 'Nos assiettes voyagent jusque chez vous.', action: 'Se faire livrer', href: '/carte?service=delivery#menu-complet' },
 ];
 
 export default function HomePage() {
@@ -26,10 +27,10 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main>
+      <main id="contenu-principal">
         <section id="accueil" className="relative min-h-[100svh] overflow-hidden bg-[#1E3A5F] px-6 pb-64 pt-36 sm:pb-48 sm:pt-40">
           <video className="absolute inset-0 size-full object-cover motion-reduce:hidden" autoPlay muted loop playsInline preload="metadata" aria-hidden="true">
-            <source src="/videos/savoraille-hero.mp4" type="video/mp4" />
+            <source src={withBasePath('/videos/savoraille-hero.mp4')} type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,36,64,0.96)_0%,rgba(30,58,95,0.82)_48%,rgba(30,58,95,0.42)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(15,36,64,0.72)_0%,transparent_55%)]" />
@@ -74,7 +75,7 @@ export default function HomePage() {
                     <p className="mt-7 text-xs font-bold tracking-[0.17em] text-[#C4703F] uppercase">{tr(service.eyebrow)}</p>
                     <h3 className="font-display mt-2 text-3xl font-semibold text-[#1E3A5F]">{tr(service.title)}</h3>
                     <p className="mt-3 leading-7 text-[#241F19]/65">{tr(service.description)}</p>
-                    <a href={service.href} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#7C2438] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(service.action)}<ArrowRight className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" /></a>
+                    <Link href={service.href} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#7C2438] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(service.action)}<ArrowRight className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" /></Link>
                   </article>
                 );
               })}
@@ -110,8 +111,8 @@ export default function HomePage() {
                 <div className="mt-7 flex flex-wrap gap-x-8 gap-y-3 text-sm text-[#FAF6EC]/78"><span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />{tr('Mar–Dim · 12 h–23 h')}</span></div>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <a href="tel:+33000000000" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-bold text-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><Phone className="size-5" strokeWidth={1.8} />{tr('Réserver par téléphone')}</a>
-                <Link href="/carte" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#FAF6EC]/40 px-6 py-4 font-bold text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><ShoppingBag className="size-5" strokeWidth={1.8} />{tr('Commander en ligne')}</Link>
+                <Link href="/reservation" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-bold text-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><CalendarDays className="size-5" strokeWidth={1.8} />{tr('Faire une demande de réservation')}</Link>
+                <a href="mailto:bonjour@savoraille.fr" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#FAF6EC]/40 px-6 py-4 font-bold text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><Phone className="size-5" strokeWidth={1.8} />{tr('Nous écrire')}</a>
               </div>
             </div>
           </div>

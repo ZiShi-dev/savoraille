@@ -4,6 +4,7 @@ node_modules/
 
 # Builds and caches
 .next/
+out/
 dist/
 coverage/
 .turbo/

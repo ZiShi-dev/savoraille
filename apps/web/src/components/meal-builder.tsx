@@ -10,14 +10,17 @@ import { menuSections } from './summer-menu-experience';
 
 export function MealBuilder() {
   const { tr } = useI18n();
-  const { lines, itemCount } = useCart();
+  const { lines, menus, activeMenuId } = useCart();
+  const activeLines = useMemo(() => lines.filter((line) => line.menuId === activeMenuId), [activeMenuId, lines]);
+  const activeMenu = menus.find((menu) => menu.id === activeMenuId);
+  const itemCount = activeLines.reduce((sum, line) => sum + line.quantity, 0);
 
   const sectionStates = useMemo(() => menuSections.map((section) => ({
     section,
-    count: lines
+    count: activeLines
       .filter((line) => section.items.some((item) => item.id === line.itemId))
       .reduce((sum, line) => sum + line.quantity, 0),
-  })), [lines]);
+  })), [activeLines]);
   const completedSections = sectionStates.filter(({ count }) => count > 0).length;
 
   return (
@@ -29,7 +32,7 @@ export function MealBuilder() {
       <div className="relative mx-auto max-w-[1200px]">
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.17em] uppercase">{tr('Votre parcours gourmand')}</p></div>
+            <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.17em] uppercase">{tr('Votre parcours gourmand')} · {activeMenu ? tr(activeMenu.name) : ''}</p></div>
             <h2 id="meal-progress-title" className="font-display mt-3 text-4xl leading-none font-semibold sm:text-5xl lg:text-6xl">{tr('Composez votre menu complet.')}</h2>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-[#FAF6EC]/66 sm:text-base">{tr('Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.')}</p>
           </div>

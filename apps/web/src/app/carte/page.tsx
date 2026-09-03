@@ -8,7 +8,7 @@ import { SiteHeader } from '@/components/site-header';
 import { SummerMenuExperience } from '@/components/summer-menu-experience';
 
 export const metadata: Metadata = {
-  title: 'La carte — Savoraille',
+  title: 'La carte',
   description: 'Découvrez la carte de saison et les sélections surprises de Savoraille.',
 };
 
@@ -17,8 +17,8 @@ export default function MenuPage() {
     <>
       <ScrollToTop />
       <SiteHeader />
-      <main className="bg-[#102B4D] pt-24">
-        <SummerMenuExperience showDiscovery={false} standalone />
+      <main className="bg-[#102B4D] pt-24" id="contenu-principal">
+        <SummerMenuExperience showDiscovery standalone />
         <MealBuilder />
         <FullMenuCatalog />
       </main>

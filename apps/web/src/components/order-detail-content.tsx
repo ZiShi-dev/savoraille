@@ -1,23 +1,27 @@
 'use client';
 
-import { ArrowLeft, ArrowRight, Check, CircleDashed, Minus, Plus, ShoppingBag, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, CircleDashed, Info, Minus, Plus, ShoppingBag, SlidersHorizontal, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { useCart } from './cart-provider';
+import { useCart, type CartCustomization } from './cart-provider';
+import { getDishAllergens, getDishExtras } from './dish-customizations';
 import { useI18n } from './i18n-provider';
+import { MenuAssignmentDialog } from './menu-assignment-dialog';
 import { menuItems, menuSections } from './summer-menu-experience';
 
 export function OrderDetailContent({ itemId }: { itemId: string }) {
   const { locale, tr } = useI18n();
-  const { lines, addItem, itemCount, total } = useCart();
+  const { lines, activeMenuId, itemCount, total } = useCart();
   const item = menuItems.find((candidate) => candidate.id === itemId);
   const itemSection = menuSections.find((section) => section.items.some((candidate) => candidate.id === itemId));
   const [quantity, setQuantity] = useState(1);
+  const [selectedExtraIds, setSelectedExtraIds] = useState<string[]>([]);
   const [activeSection, setActiveSection] = useState(itemSection?.id ?? menuSections[0]?.id ?? 'aperitifs');
   const [added, setAdded] = useState(false);
   const [suggestionAdded, setSuggestionAdded] = useState<string | null>(null);
+  const [pendingAdd, setPendingAdd] = useState<{ itemId: string; itemName: string; quantity: number; kind: 'main' | 'suggestion'; customization?: CartCustomization } | null>(null);
 
   const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value);
 
@@ -26,22 +30,41 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
   }
 
   const unitPrice = Number.parseFloat(item.price);
+  const extras = getDishExtras(itemSection.id);
+  const allergens = getDishAllergens(itemSection.id);
+  const selectedExtras = extras.filter((extra) => selectedExtraIds.includes(extra.id));
+  const supplementTotal = selectedExtras.reduce((sum, extra) => sum + extra.price, 0);
+  const activeLines = lines.filter((line) => line.menuId === activeMenuId);
   const sectionStates = menuSections.map((section) => ({
     section,
-    count: lines.filter((line) => section.items.some((candidate) => candidate.id === line.itemId)).reduce((sum, line) => sum + line.quantity, 0),
+    count: activeLines.filter((line) => section.items.some((candidate) => candidate.id === line.itemId)).reduce((sum, line) => sum + line.quantity, 0),
   }));
   const completedSections = sectionStates.filter(({ count }) => count > 0).length;
   const activeState = sectionStates.find(({ section }) => section.id === activeSection) ?? sectionStates[0]!;
   const suggestions = activeState.section.items.filter((candidate) => candidate.id !== item.id).slice(0, 3);
 
   const addCurrentItem = () => {
-    addItem(item.id, quantity);
-    setAdded(true);
+    setPendingAdd({
+      itemId: item.id,
+      itemName: item.name,
+      quantity,
+      kind: 'main',
+      customization: selectedExtras.length > 0 ? {
+        optionIds: selectedExtras.map((extra) => extra.id),
+        optionLabels: selectedExtras.map((extra) => extra.label),
+        unitSupplement: supplementTotal,
+      } : undefined,
+    });
+  };
+
+  const toggleExtra = (extraId: string) => {
+    setSelectedExtraIds((current) => current.includes(extraId) ? current.filter((id) => id !== extraId) : [...current, extraId]);
+    setAdded(false);
   };
 
   const addSuggestion = (suggestionId: string) => {
-    addItem(suggestionId);
-    setSuggestionAdded(suggestionId);
+    const suggestion = menuItems.find((candidate) => candidate.id === suggestionId);
+    if (suggestion) setPendingAdd({ itemId: suggestion.id, itemName: suggestion.name, quantity: 1, kind: 'suggestion' });
   };
 
   return (
@@ -61,6 +84,34 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
                 <span className="shrink-0 rounded-full bg-[#7C2438] px-4 py-2 text-lg font-bold text-[#FAF6EC]">{item.price}</span>
               </div>
               <p className="mt-6 text-base leading-8 text-[#241F19]/68">{tr(item.detail)}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <span className="rounded-full border border-[#1E3A5F]/12 bg-[#FAF6EC] px-3 py-1.5 text-xs font-bold text-[#1E3A5F]">{tr('Préparé à la minute')}</span>
+                <span className="rounded-full border border-[#C4703F]/20 bg-[#C4703F]/8 px-3 py-1.5 text-xs font-bold text-[#8C4829]">{tr('Cuisine de saison')}</span>
+              </div>
+
+              <div className="mt-7 rounded-2xl border border-[#C6A15B]/35 bg-[#FAF6EC] p-4 sm:p-5">
+                <div className="flex items-start gap-3">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[#1E3A5F] text-[#C6A15B]"><SlidersHorizontal className="size-4" /></span>
+                  <div><h2 className="font-display text-2xl leading-none font-semibold text-[#1E3A5F]">{tr('Personnalisez votre assiette')}</h2><p className="mt-1.5 text-sm leading-6 text-[#241F19]/58">{tr('Cochez les suppléments que vous souhaitez ajouter.')}</p></div>
+                </div>
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {extras.map((extra) => {
+                    const selected = selectedExtraIds.includes(extra.id);
+                    return (
+                      <label key={extra.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 outline-none transition-all has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#C6A15B] ${selected ? 'border-[#C6A15B] bg-white shadow-[0_6px_18px_rgba(30,58,95,0.08)]' : 'border-[#1E3A5F]/10 bg-white/55 hover:border-[#C6A15B]/60'}`}>
+                        <input type="checkbox" checked={selected} onChange={() => toggleExtra(extra.id)} className="sr-only" />
+                        <span className={`grid size-6 shrink-0 place-items-center rounded-md border ${selected ? 'border-[#1E3A5F] bg-[#1E3A5F] text-[#FAF6EC]' : 'border-[#1E3A5F]/25 bg-white text-transparent'}`}><Check className="size-3.5" /></span>
+                        <span className="min-w-0 flex-1 text-sm font-bold text-[#1E3A5F]">{tr(extra.label)}</span>
+                        <span className="shrink-0 text-xs font-bold text-[#7C2438]">{extra.price === 0 ? tr('Offert') : `+${money(extra.price)}`}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                {selectedExtras.length > 0 && <div className="mt-4 flex items-center justify-between gap-3 rounded-xl bg-[#1E3A5F] px-4 py-3 text-sm text-[#FAF6EC]"><span><strong>{selectedExtras.length}</strong> {tr(selectedExtras.length === 1 ? 'supplément choisi' : 'suppléments choisis')}</span><strong className="text-[#C6A15B]">+{money(supplementTotal)} {tr('par assiette')}</strong></div>}
+              </div>
+
+              {allergens.length > 0 && <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#7C2438]/16 bg-[#7C2438]/[0.045] p-4"><Info className="mt-0.5 size-4 shrink-0 text-[#7C2438]" /><div><p className="text-xs font-bold text-[#7C2438]">{tr('Allergènes')}</p><p className="mt-1 text-xs leading-5 text-[#241F19]/58">{allergens.map((allergen) => tr(allergen)).join(' · ')}. {tr('Informez notre équipe de toute allergie.')}</p></div></div>}
+
               <div className="gold-divider my-7" aria-hidden="true" />
               <p className="text-xs font-bold tracking-[0.15em] text-[#1E3A5F]/55 uppercase">{tr('Quantité')}</p>
               <div className="mt-3 flex items-center justify-between gap-4">
@@ -69,7 +120,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
                   <span className="min-w-10 text-center font-bold tabular-nums text-[#1E3A5F]" aria-live="polite">{quantity}</span>
                   <button type="button" onClick={() => { setQuantity((current) => current + 1); setAdded(false); }} aria-label={tr('Augmenter la quantité')} className="grid size-11 place-items-center rounded-md text-[#1E3A5F] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Plus className="size-4" /></button>
                 </div>
-                <p className="text-end"><span className="block text-xs text-[#241F19]/50">{tr('Sous-total')}</span><span className="font-display text-3xl font-bold text-[#7C2438]">{money(unitPrice * quantity)}</span></p>
+                <p className="text-end"><span className="block text-xs text-[#241F19]/50">{supplementTotal > 0 ? `${tr('Plat et suppléments')} · ${tr('Sous-total')}` : tr('Sous-total')}</span><span className="font-display text-3xl font-bold text-[#7C2438]">{money((unitPrice + supplementTotal) * quantity)}</span></p>
               </div>
               <button type="button" onClick={addCurrentItem} className={`mt-6 inline-flex items-center justify-center gap-2 rounded-lg px-6 py-4 font-bold text-[#FAF6EC] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 ${added ? 'bg-[#C4703F]' : 'bg-[#7C2438] hover:bg-[#681d2f]'}`}><span aria-live="polite" className="inline-flex items-center gap-2">{added ? <Check className="size-5" /> : <ShoppingBag className="size-5" />}{tr(added ? 'Ajouté à votre commande' : 'Ajouter à ma commande')}</span></button>
               <div className="mt-auto pt-7 text-sm text-[#241F19]/60"><span className="font-bold text-[#1E3A5F]">{itemCount}</span> {tr('articles dans votre commande')} · <span className="font-bold text-[#7C2438]">{money(total)}</span><Link href="/commandes" className="ms-3 font-bold text-[#1E3A5F] underline decoration-[#C6A15B] underline-offset-4">{tr('Voir ma commande')}</Link></div>
@@ -107,6 +158,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
           <div className="relative mt-6 flex flex-col gap-3 border-t border-[#C6A15B]/22 pt-5 sm:flex-row sm:items-center sm:justify-between"><p className="text-sm text-[#FAF6EC]/55">{tr('Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.')}</p><Link href="/carte#composer-menu" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#C6A15B]/55 px-5 py-3 text-sm font-bold text-[#C6A15B] outline-none hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Compléter mon menu')}<ArrowRight className="size-4 rtl:-scale-x-100" /></Link></div>
         </div>
       </section>
+      <MenuAssignmentDialog open={!!pendingAdd} onOpenChange={(open) => { if (!open) setPendingAdd(null); }} itemId={pendingAdd?.itemId ?? null} itemName={pendingAdd?.itemName} quantity={pendingAdd?.quantity} customization={pendingAdd?.customization} onAdded={() => { if (pendingAdd?.kind === 'main') setAdded(true); else if (pendingAdd) setSuggestionAdded(pendingAdd.itemId); }} />
     </main>
   );
 }

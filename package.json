@@ -9,6 +9,8 @@
   "scripts": {
     "dev:web": "pnpm --filter @savoraill/web dev",
     "dev:api": "pnpm --filter @savoraill/api start:dev",
+    "build:web": "pnpm --filter @savoraill/web build",
+    "build:web:portfolio": "pnpm --filter @savoraill/web build:portfolio",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",

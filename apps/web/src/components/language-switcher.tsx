@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 import { useI18n, type Locale } from './i18n-provider';
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ variant = 'light', compact = false }: { variant?: 'light' | 'dark'; compact?: boolean }) {
   const { locale, setLocale } = useI18n();
   const languages: Array<{ code: Locale; short: string; label: string; native: string }> = [
     { code: 'fr', short: 'FR', label: 'Français', native: 'Français' },
@@ -36,13 +36,27 @@ export function LanguageSwitcher() {
     });
   };
 
+  const isDark = variant === 'dark';
+
   return (
     <Select.Root value={locale} onValueChange={(value) => setLocale(value as Locale)} onOpenChange={handleOpenChange} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
-      <Select.Trigger className="group inline-flex h-11 items-center gap-2 rounded-lg border border-[#1E3A5F]/12 bg-white px-2.5 text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B]/60 hover:bg-[#FFFDF8] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label="Langue · Language · اللغة">
-        <Languages aria-hidden="true" className="size-4 shrink-0 text-[#7C2438]" strokeWidth={1.8} />
+      <Select.Trigger className={`group inline-flex shrink-0 items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${
+        compact ? 'size-10 justify-center gap-0 px-0' : 'h-10 gap-1.5 px-2.5'
+      } ${
+        isDark
+          ? 'text-[#FAF6EC]/85 hover:bg-white/10'
+          : 'border border-[#1E3A5F]/10 bg-white/70 text-[#1E3A5F] hover:border-[#C6A15B]/45 hover:bg-white'
+      }`} aria-label="Langue · Language · اللغة">
+        {!compact ? (
+          <Languages aria-hidden="true" className={`size-4 shrink-0 ${isDark ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`} strokeWidth={1.8} />
+        ) : null}
         <span className="text-xs font-bold">{selected.short}</span>
-        <span className="hidden max-w-20 truncate text-xs font-semibold text-[#1E3A5F]/68 2xl:inline">{selected.native}</span>
-        <Select.Icon asChild><ChevronDown aria-hidden="true" className="size-3.5 text-[#1E3A5F]/55 transition-transform group-data-[state=open]:rotate-180" /></Select.Icon>
+        {!compact ? (
+          <span className={`hidden max-w-20 truncate text-xs font-semibold 2xl:inline ${isDark ? 'text-[#FAF6EC]/55' : 'text-[#1E3A5F]/55'}`}>{selected.native}</span>
+        ) : null}
+        {!compact ? (
+          <Select.Icon asChild><ChevronDown aria-hidden="true" className={`size-3.5 transition-transform group-data-[state=open]:rotate-180 ${isDark ? 'text-[#FAF6EC]/45' : 'text-[#1E3A5F]/45'}`} /></Select.Icon>
+        ) : null}
       </Select.Trigger>
 
       <Select.Portal>

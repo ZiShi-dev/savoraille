@@ -1,9 +1,12 @@
 'use client';
 
 import { CalendarDays, Clock3, Leaf, ShoppingBag } from 'lucide-react';
+import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 
 import { useI18n } from './i18n-provider';
+
+const MotionLink = motion.create(Link);
 
 export function HeroContent() {
   const reduceMotion = useReducedMotion();
@@ -30,19 +33,18 @@ export function HeroContent() {
       </motion.div>
 
       <h1 className="font-display mt-5 text-[clamp(3.6rem,7vw,6.8rem)] leading-[0.88] font-semibold tracking-[-0.045em] text-[#FAF6EC]">
-        <span className="block" aria-label={tr('Le terroir,')}>
+        <span className="block">
           {firstLine.map((word, index) => (
-            <motion.span key={word} className="mr-[0.2em] inline-block" aria-hidden="true" {...reveal(0.16 + index * 0.1)}>
+            <motion.span key={word} className="mr-[0.2em] inline-block" {...reveal(0.16 + index * 0.1)}>
               {word}
             </motion.span>
           ))}
         </span>
-        <span className="block italic text-[#C6A15B]" aria-label={tr('dans l’air du temps.')}>
+        <span className="block italic text-[#C6A15B]">
           {secondLine.map((word, index) => (
             <motion.span
               key={word}
               className="mr-[0.2em] inline-block"
-              aria-hidden="true"
               {...reveal(0.34 + index * 0.08)}
             >
               <motion.span
@@ -62,22 +64,22 @@ export function HeroContent() {
       </motion.p>
 
       <motion.div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap" {...reveal(0.84)}>
-        <motion.a
-          href="#reservation"
+        <MotionLink
+          href="/reservation"
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-semibold text-[#1E3A5F] shadow-[0_8px_24px_rgba(0,0,0,0.2)] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none"
           whileHover={reduceMotion ? undefined : { y: -3, scale: 1.015 }}
           whileTap={reduceMotion ? undefined : { scale: 0.98 }}
         >
           <CalendarDays aria-hidden="true" className="size-5" strokeWidth={1.8} />{tr('Réserver une table')}
-        </motion.a>
-        <motion.a
+        </MotionLink>
+        <MotionLink
           href="/carte"
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-6 py-4 font-semibold text-[#FAF6EC] shadow-[0_8px_24px_rgba(0,0,0,0.18)] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] focus-visible:outline-none"
           whileHover={reduceMotion ? undefined : { y: -3, scale: 1.015 }}
           whileTap={reduceMotion ? undefined : { scale: 0.98 }}
         >
           <ShoppingBag aria-hidden="true" className="size-5" strokeWidth={1.8} />{tr('Commander')}
-        </motion.a>
+        </MotionLink>
       </motion.div>
 
       <motion.div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-[#FAF6EC]/78" {...reveal(0.96)}>

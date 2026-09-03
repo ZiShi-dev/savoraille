@@ -46,7 +46,7 @@ html[lang='ar'] .font-script {
 html {
   background: var(--c-sevres);
   scroll-behavior: smooth;
-  scroll-padding-top: 7rem;
+  scroll-padding-top: 5.5rem;
   scrollbar-gutter: stable;
   scrollbar-color: var(--c-or) var(--c-sevres);
   scrollbar-width: thin;
@@ -89,6 +89,14 @@ body {
   font-weight: 400;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
+}
+
+body.portfolio-demo {
+  --portfolio-banner-height: 2rem;
+}
+
+html:has(body.portfolio-demo) {
+  scroll-padding-top: 7.5rem;
 }
 
 .font-display { font-family: var(--f-display); }

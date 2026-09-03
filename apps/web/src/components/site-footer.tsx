@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import { BrandSeal } from './brand-seal';
 import { useI18n } from './i18n-provider';
+import { siteConfig } from '@/lib/site-config';
 
 export function SiteFooter() {
   const { tr } = useI18n();
@@ -17,9 +18,27 @@ export function SiteFooter() {
           <div><p className="font-display text-4xl font-semibold">Savoraille</p><p className="font-script mt-1 text-2xl text-[#C6A15B]">{tr('La merveille des saveurs')}</p></div>
         </Link>
         <div><p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">{tr('Nous trouver')}</p><p className="mt-4 text-sm leading-7 text-[#FAF6EC]/70">{tr('Votre adresse')}<br />{tr('Votre ville, France')}</p></div>
-        <div><p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">{tr('Nous suivre')}</p><a href="#" className="mt-4 inline-flex items-center gap-2 text-sm text-[#FAF6EC]/75 hover:text-[#FAF6EC]"><Instagram className="size-5" />Instagram</a></div>
+        <div><p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">{tr('Nous suivre')}</p><a href="https://vorzix.com" target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm text-[#FAF6EC]/75 hover:text-[#FAF6EC]"><Instagram className="size-5" />VORZIX</a></div>
       </div>
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-2 pt-6 text-xs text-[#FAF6EC]/50 sm:flex-row sm:justify-between"><p>© 2026 Savoraille. {tr('Tous droits réservés.')}</p><p>{tr('Restaurant français moderne.')}</p></div>
+      <div className="mx-auto flex max-w-[1200px] flex-col gap-3 pt-6 text-xs text-[#FAF6EC]/50 sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 Savoraille. {tr('Tous droits réservés.')}</p>
+        <div className="flex flex-col gap-2 sm:items-end">
+          <p>{tr('Restaurant français moderne.')}</p>
+          {siteConfig.portfolioMode ? (
+            <p>
+              {tr('Site d’entreprise')} ·{' '}
+              <a
+                href={siteConfig.vorzixUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
+              >
+                VORZIX
+              </a>
+            </p>
+          ) : null}
+        </div>
+      </div>
     </footer>
   );
 }

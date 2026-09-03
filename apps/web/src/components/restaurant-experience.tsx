@@ -1,29 +1,9 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { useI18n } from './i18n-provider';
-
-const moments = [
-  {
-    label: 'Le geste',
-    title: 'Précis, puis généreux.',
-    image: 'https://images.unsplash.com/photo-1576006144029-e42bb7166c76?auto=format&fit=crop&w=1200&q=82',
-    className: 'col-span-2 min-h-72 sm:col-span-1 sm:row-span-2 sm:min-h-full',
-  },
-  {
-    label: 'L’assiette',
-    title: 'La saison en lumière.',
-    image: 'https://images.unsplash.com/photo-1616401616927-3c81de22dfa8?auto=format&fit=crop&w=1200&q=82',
-    className: 'min-h-52',
-  },
-  {
-    label: 'Le moment',
-    title: 'Un verre, et le temps ralentit.',
-    image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1200&q=82',
-    className: 'min-h-52',
-  },
-];
 
 export function RestaurantExperience() {
   const { tr } = useI18n();
@@ -47,24 +27,24 @@ export function RestaurantExperience() {
             <span className="h-px w-10 bg-[#C6A15B]/55" aria-hidden="true" />
             <span>{tr('Service attentionné')}</span>
           </div>
-          <a href="#reservation" className="mt-8 inline-flex items-center gap-3 rounded-lg bg-[#FAF6EC] px-5 py-3.5 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+          <Link href="/reservation" className="mt-8 inline-flex items-center gap-3 rounded-lg bg-[#FAF6EC] px-5 py-3.5 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
             {tr('Vivre l’expérience')}
             <span aria-hidden="true">→</span>
-          </a>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-rows-2 sm:gap-4" aria-label={tr('Trois moments de l’expérience Savoraille')}>
-          {moments.map((moment, index) => (
-            <figure key={moment.label} className={`group relative overflow-hidden rounded-2xl border border-[#C6A15B]/30 bg-[#102B4D] shadow-[0_18px_42px_rgba(7,28,51,0.28)] ${moment.className}`}>
-              <Image src={moment.image} alt={tr(moment.title)} fill loading="lazy" sizes={index === 0 ? '(min-width: 1024px) 30vw, 100vw' : '(min-width: 1024px) 24vw, 50vw'} className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/90 via-[#071C33]/10 to-transparent" />
-              <figcaption className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                <p className="text-[0.65rem] font-bold tracking-[0.15em] text-[#C6A15B] uppercase">{tr(moment.label)}</p>
-                <p className="font-display mt-1 text-xl leading-tight font-semibold sm:text-2xl">{tr(moment.title)}</p>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <figure className="group relative aspect-[16/11] overflow-hidden rounded-2xl border border-[#C6A15B]/40 bg-[#102B4D] shadow-[0_22px_55px_rgba(7,28,51,0.38)] sm:aspect-[16/10]" aria-label={tr('Trois moments de l’expérience Savoraille')}>
+          <Image src="/images/savoraille-dining-room-3d.png" alt={tr('Vue 3D de la salle Savoraille et de ses tables')} fill loading="lazy" sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.025]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/82 via-transparent to-[#071C33]/10" />
+          <div className="pointer-events-none absolute inset-4 rounded-xl border border-[#C6A15B]/35 sm:inset-5" aria-hidden="true" />
+          <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 sm:p-8">
+            <div>
+              <p className="text-[0.65rem] font-bold tracking-[0.15em] text-[#C6A15B] uppercase">{tr('L’expérience Savoraille')}</p>
+              <p className="font-display mt-1 text-2xl leading-tight font-semibold sm:text-3xl">{tr('Votre table vous attend.')}</p>
+            </div>
+            <span className="hidden rounded-full border border-[#C6A15B]/45 bg-[#071C33]/45 px-4 py-2 text-xs font-bold text-[#FAF6EC] backdrop-blur-md sm:block">{tr('Mar–Dim · 12 h–23 h')}</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
