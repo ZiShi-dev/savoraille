@@ -5,8 +5,8 @@ const images = {
   poisson: 'https://images.unsplash.com/photo-1776097633704-6666ffafc58d?auto=format&fit=crop&w=1600&q=82',
   vegetal: 'https://images.unsplash.com/photo-1470338950318-40320a722782?auto=format&fit=crop&w=1600&q=82',
   dessert: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1600&q=82',
-  cocktail: 'https://images.unsplash.com/photo-1677825949218-608c76ed1fbf?auto=format&fit=crop&w=1600&q=82',
-  vin: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1600&q=82',
+  boisson: 'https://images.unsplash.com/photo-1622596079993-05005b6a3c7b?auto=format&fit=crop&w=1600&q=82',
+  agneau: 'https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&w=1600&q=82',
 } as const;
 
 export type MenuItem = {
@@ -37,9 +37,10 @@ export const menuSections: readonly MenuSection[] = [
       { id: 'tomate-fumee', eyebrow: 'Fraîcheur', name: 'Tartare de tomate fumée', detail: 'Tomates de saison, huile de basilic et pain de campagne croustillant.', price: '11 €', image: images.entree },
       { id: 'rillettes-truite', eyebrow: 'Bord de mer', name: 'Rillettes de truite', detail: 'Truite délicatement fumée, crème citronnée et pickles de fenouil.', price: '13 €', image: images.poisson },
       { id: 'croquette-volaille', eyebrow: 'Croustillant', name: 'Croquette de volaille', detail: 'Volaille confite, cœur fondant et moutarde douce à l’ancienne.', price: '12 €', image: images.volaille },
-      { id: 'pissaladiere', eyebrow: 'Du Sud', name: 'Mini pissaladière', detail: 'Oignons doucement confits, anchois, olives noires et pâte croustillante.', price: '10 €', image: images.aperitif },
+      { id: 'pissaladiere', eyebrow: 'Du Sud', name: 'Mini pissaladière', detail: 'Oignons doucement confits, olives noires, thym et pâte croustillante.', price: '10 €', image: images.aperitif },
       { id: 'huitre', eyebrow: 'Iodé', name: 'Huître & granité citron', detail: 'Huître fraîche, granité citronné et huile délicate aux herbes.', price: '15 €', image: images.poisson },
-      { id: 'jambon-persille', eyebrow: 'Terroir', name: 'Jambon persillé', detail: 'Jambon fondant, gelée au persil et moutarde de Bourgogne.', price: '12 €', image: images.volaille },
+      { id: 'briouates-agneau', eyebrow: 'Épices douces', name: 'Briouates d’agneau', detail: 'Agneau mariné aux herbes, feuilles de brick croustillantes et yaourt au citron.', price: '13 €', image: images.agneau },
+      { id: 'brick-oeuf', eyebrow: 'Croustillant', name: 'Brick à l’œuf aux fines herbes', detail: 'Œuf coulant, persil, ciboulette et pâte brick dorée au beurre clarifié.', price: '11 €', image: images.aperitif },
     ],
   },
   {
@@ -52,6 +53,7 @@ export const menuSections: readonly MenuSection[] = [
       { id: 'oeuf-parfait', eyebrow: 'Signature', name: 'Œuf parfait', detail: 'Champignons rôtis, émulsion de comté et mouillettes au beurre noisette.', price: '15 €', image: images.aperitif },
       { id: 'poireau', eyebrow: 'Végétal', name: 'Poireau vinaigrette', detail: 'Poireau braisé, vinaigrette aux herbes et jaune d’œuf confit.', price: '13 €', image: images.entree },
       { id: 'truite-marinee', eyebrow: 'Fraîcheur', name: 'Truite marinée', detail: 'Crème crue, concombre, aneth et œufs de truite légèrement fumés.', price: '17 €', image: images.poisson },
+      { id: 'salade-lentilles', eyebrow: 'Végétal', name: 'Salade de lentilles & grenade', detail: 'Lentilles du Puy, grenade, menthe fraîche et vinaigrette au citron confit.', price: '14 €', image: images.vegetal },
     ],
   },
   {
@@ -63,7 +65,9 @@ export const menuSections: readonly MenuSection[] = [
       { id: 'volaille', eyebrow: 'Signature de la maison', name: 'Volaille fermière dorée', detail: 'Une peau croustillante, une chair tendre et un jus réduit lentement pour concentrer toute la saveur du terroir.', price: '26 €', image: images.volaille },
       { id: 'lieu', eyebrow: 'Arrivage du marché', name: 'Lieu jaune nacré', detail: 'Une cuisson juste nacrée, réveillée par un beurre vif et la douceur fondante du poireau de saison.', price: '29 €', image: images.poisson },
       { id: 'potimarron', eyebrow: 'Création végétale', name: 'Potimarron confit', detail: 'Le potimarron caramélise doucement avant de rencontrer la rondeur de la châtaigne et le croquant des noisettes.', price: '21 €', image: images.vegetal },
-      { id: 'boeuf-braise', eyebrow: 'Cuisson lente', name: 'Bœuf braisé au vin rouge', detail: 'Paleron fondant, jus au bordeaux, échalotes confites et pommes grenailles.', price: '31 €', image: images.volaille },
+      { id: 'agneau-epices', eyebrow: 'Épices douces', name: 'Agneau confit aux épices douces', detail: 'Épaule fondante, jus parfumé au cumin et coriandre, semoule dorée et légumes rôtis.', price: '30 €', image: images.agneau },
+      { id: 'tagine-poulet', eyebrow: 'Volaille du terroir', name: 'Tagine de poulet aux olives', detail: 'Poulet fermier, olives vertes, citrons confits et herbes fraîches, servi avec semoule légère.', price: '27 €', image: images.volaille },
+      { id: 'couscous-legumes', eyebrow: 'Saveurs du marché', name: 'Couscous royal aux légumes', detail: 'Semoule aérienne, légumes de saison, pois chiches et bouillon parfumé aux épices douces.', price: '24 €', image: images.vegetal },
     ],
   },
   {
@@ -82,12 +86,13 @@ export const menuSections: readonly MenuSection[] = [
     id: 'boissons',
     label: 'Boissons',
     shortLabel: 'Boissons',
-    subtitle: 'Avec ou sans alcool',
+    subtitle: '100 % sans alcool',
     items: [
-      { id: 'spritz', eyebrow: 'Cocktail signature', name: 'Savoraille Spritz', detail: 'Apéritif maison, agrumes frais, fines bulles et romarin.', price: '10 €', image: images.cocktail },
-      { id: 'bordeaux', eyebrow: 'Sélection du sommelier', name: 'Verre de Bordeaux', detail: 'Une cuvée souple et fruitée choisie pour accompagner la carte du moment.', price: '9 €', image: images.vin },
-      { id: 'citronnade', eyebrow: 'Fait maison', name: 'Citronnade au thym', detail: 'Citron pressé, sirop léger au thym frais et eau filtrée.', price: '6 €', image: images.cocktail },
-      { id: 'eau-botanique', eyebrow: 'Sans alcool', name: 'Eau pétillante botanique', detail: 'Bulles fines, concombre, verveine et une pointe de baie rose.', price: '5 €', image: images.vin },
+      { id: 'citronnade', eyebrow: 'Fait maison', name: 'Citronnade au thym', detail: 'Citron pressé, sirop léger au thym frais et eau filtrée.', price: '6 €', image: images.boisson },
+      { id: 'eau-botanique', eyebrow: 'Fait maison', name: 'Eau pétillante botanique', detail: 'Bulles fines, concombre, verveine et une pointe de baie rose.', price: '5 €', image: images.boisson },
+      { id: 'jus-fruits', eyebrow: 'Pressé à la demande', name: 'Jus de fruits pressés', detail: 'Orange, pomme ou grenade, pressés devant vous et servis bien frais.', price: '7 €', image: images.boisson },
+      { id: 'the-menthe', eyebrow: 'Chaud & frais', name: 'Thé à la menthe maison', detail: 'Menthe fraîche, thé vert parfumé et une touche de fleur d’oranger.', price: '5 €', image: images.boisson },
+      { id: 'limonade-rose', eyebrow: 'Fait maison', name: 'Limonade rose au litchi', detail: 'Litchi, framboise, citron vert et eau gazeuse légèrement sucrée.', price: '6 €', image: images.boisson },
     ],
   },
 ];
