@@ -2,7 +2,9 @@
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
-export type Locale = 'fr' | 'en' | 'ar';
+import { type Locale, defaultLocale } from '@/lib/i18n-routing';
+
+export type { Locale };
 
 const en: Record<string, string> = {
   'Accueil': 'Home', 'La carte': 'Menu', 'Notre histoire': 'Our story', 'Contact': 'Contact',
@@ -613,22 +615,18 @@ Object.assign(ar, {
 type I18nValue = { locale: Locale; setLocale: (locale: Locale) => void; tr: (text: string) => string };
 const I18nContext = createContext<I18nValue | null>(null);
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>('fr');
-  const [storageReady, setStorageReady] = useState(false);
+export function I18nProvider({ children, initialLocale = defaultLocale }: { children: ReactNode; initialLocale?: Locale }) {
+  const [locale, setLocale] = useState<Locale>(initialLocale);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('savoraille-locale');
-    if (saved === 'fr' || saved === 'en' || saved === 'ar') setLocale(saved);
-    setStorageReady(true);
-  }, []);
+    setLocale(initialLocale);
+  }, [initialLocale]);
 
   useEffect(() => {
-    if (!storageReady) return;
     window.localStorage.setItem('savoraille-locale', locale);
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
-  }, [locale, storageReady]);
+  }, [locale]);
 
   const value = useMemo<I18nValue>(() => ({
     locale,

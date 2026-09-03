@@ -6,12 +6,14 @@ import { ScrollToTop } from '@/components/scroll-to-top';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SummerMenuExperience } from '@/components/summer-menu-experience';
-import { pageMetadata } from '@/lib/seo';
+import { type Locale } from '@/lib/i18n-routing';
+import { getPageCopy, pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = pageMetadata('/carte/', {
-  title: 'La carte',
-  description: 'Découvrez la carte de saison et les sélections surprises de Savoraille.',
-});
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = getPageCopy('carte', locale as Locale);
+  return pageMetadata(locale as Locale, '/carte/', copy);
+}
 
 export default function MenuPage() {
   return (

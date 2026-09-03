@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ListFilter, UtensilsCrossed } from 'lucide-react';
 import { AppImage } from './app-image';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useI18n } from './i18n-provider';
@@ -63,7 +63,7 @@ export function FullMenuCatalog() {
                 transition={{ duration: 0.28, delay: reduceMotion ? 0 : Math.min(index, 5) * 0.035 }}
                 className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_14px_34px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)]"
               >
-                <Link href={`/commander/${item.id}`} aria-label={`${tr('Voir et commander')} · ${tr(item.name)}`} className="absolute inset-0 z-50 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C6A15B]"><span className="sr-only">{tr('Voir et commander')} · {tr(item.name)}</span></Link>
+                <LocalizedLink href={`/commander/${item.id}`} aria-label={`${tr('Voir et commander')} · ${tr(item.name)}`} className="absolute inset-0 z-50 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C6A15B]"><span className="sr-only">{tr('Voir et commander')} · {tr(item.name)}</span></LocalizedLink>
                 <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <AppImage src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />

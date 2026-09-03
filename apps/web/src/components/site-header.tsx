@@ -3,7 +3,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CalendarDays, LogIn, LogOut, Menu, ShoppingBag, UserPlus, UserRound, X } from 'lucide-react';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -12,6 +12,7 @@ import { useAuth } from './auth-provider';
 import { useCart } from './cart-provider';
 import { useI18n } from './i18n-provider';
 import { LanguageSwitcher } from './language-switcher';
+import { stripLocaleFromPath } from '@/lib/i18n-routing';
 import { siteConfig } from '@/lib/site-config';
 
 const navigation = [
@@ -21,8 +22,6 @@ const navigation = [
   { label: 'Contact', href: '/contact', sectionId: null },
 ];
 
-const darkHeroPaths = ['/', '/carte'];
-
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('/#accueil');
@@ -31,8 +30,9 @@ export function SiteHeader() {
   const { itemCount } = useCart();
   const { user, openAuth, signOut } = useAuth();
   const pathname = usePathname();
+  const barePath = stripLocaleFromPath(pathname).replace(/\/$/, '') || '/';
   const isRtl = locale === 'ar';
-  const onDarkHero = darkHeroPaths.includes(pathname);
+  const onDarkHero = barePath === '/' || barePath === '/carte';
   const isTransparent = onDarkHero && !scrolled;
 
   const openMobileAuth = (mode: 'signin' | 'signup') => {
@@ -53,8 +53,11 @@ export function SiteHeader() {
   }, [pathname]);
 
   useEffect(() => {
-    if (pathname !== '/') {
-      setActiveHref(navigation.find((item) => item.href === pathname)?.href ?? '');
+    if (barePath !== '/') {
+      setActiveHref(navigation.find((item) => {
+        const itemPath = item.href.replace(/#.*$/, '').replace(/\/$/, '') || '/';
+        return itemPath === barePath;
+      })?.href ?? '');
       return;
     }
 
@@ -81,7 +84,7 @@ export function SiteHeader() {
       observer.disconnect();
       window.removeEventListener('hashchange', syncHash);
     };
-  }, [pathname]);
+  }, [barePath]);
 
   const linkTone = isTransparent
     ? 'text-[#FAF6EC]/72 hover:text-[#FAF6EC]'
@@ -104,7 +107,7 @@ export function SiteHeader() {
       }`}
     >
       <div className="mx-auto grid h-[4.5rem] max-w-[1280px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 sm:gap-3 sm:px-5 lg:px-8">
-        <Link
+        <LocalizedLink
           href="/#accueil"
           className="group flex min-w-0 items-center gap-2.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:gap-3"
           aria-label={`Savoraille · ${tr('Accueil')}`}
@@ -114,7 +117,7 @@ export function SiteHeader() {
             <span className={`font-display block text-lg leading-none font-semibold sm:text-xl ${isTransparent ? 'text-[#FAF6EC]' : 'text-[#1E3A5F]'}`}>Savoraille</span>
             <span className={`font-script mt-0.5 block text-[0.7rem] leading-none sm:text-xs ${isTransparent ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{tr('La merveille des saveurs')}</span>
           </span>
-        </Link>
+        </LocalizedLink>
 
         <nav className="hidden min-w-0 justify-self-center xl:block" aria-label={tr('Navigation principale')}>
           <ul className="flex items-center justify-center gap-4 2xl:gap-7">
@@ -122,7 +125,7 @@ export function SiteHeader() {
               const active = activeHref === item.href;
               return (
                 <li key={item.href} className="shrink-0">
-                  <Link
+                  <LocalizedLink
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={`relative block whitespace-nowrap py-2 text-[0.62rem] font-bold tracking-[0.16em] uppercase transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:text-[0.68rem] sm:tracking-[0.18em] ${active ? activeTone : linkTone}`}
@@ -132,7 +135,7 @@ export function SiteHeader() {
                       aria-hidden="true"
                       className={`absolute inset-x-0 -bottom-0.5 mx-auto h-px origin-center bg-[#C6A15B] transition-transform duration-300 ${active ? 'scale-x-100' : 'scale-x-0'}`}
                     />
-                  </Link>
+                  </LocalizedLink>
                 </li>
               );
             })}
@@ -199,7 +202,7 @@ export function SiteHeader() {
             </button>
           )}
 
-          <Link
+          <LocalizedLink
             href="/commandes"
             className={`relative grid size-10 place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${iconButtonTone}`}
             aria-label={tr('Ma commande')}
@@ -215,15 +218,15 @@ export function SiteHeader() {
                 {itemCount}
               </span>
             ) : null}
-          </Link>
+          </LocalizedLink>
 
-          <Link
+          <LocalizedLink
             href="/reservation"
             className={`hidden items-center gap-2 rounded-full px-3 py-2.5 text-xs font-bold tracking-[0.08em] uppercase transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 lg:inline-flex lg:px-4 ${reserveTone} ${isTransparent ? 'focus-visible:ring-offset-[#1E3A5F]' : 'focus-visible:ring-offset-[#FAF6EC]'}`}
           >
             <CalendarDays aria-hidden="true" className="size-4" />
             <span className="hidden xl:inline">{tr('Réserver')}</span>
-          </Link>
+          </LocalizedLink>
 
           <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
             <Dialog.Trigger asChild>
@@ -285,7 +288,7 @@ export function SiteHeader() {
                             return (
                               <li key={item.href}>
                                 <Dialog.Close asChild>
-                                  <Link
+                                  <LocalizedLink
                                     href={item.href}
                                     aria-current={active ? 'page' : undefined}
                                     className={`block rounded-xl px-4 py-3.5 font-display text-2xl font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${
@@ -293,7 +296,7 @@ export function SiteHeader() {
                                     }`}
                                   >
                                     {tr(item.label)}
-                                  </Link>
+                                  </LocalizedLink>
                                 </Dialog.Close>
                               </li>
                             );
@@ -342,16 +345,16 @@ export function SiteHeader() {
                         </section>
 
                         <Dialog.Close asChild>
-                          <Link
+                          <LocalizedLink
                             href="/reservation"
                             className="flex items-center justify-center gap-2 rounded-full bg-[#7C2438] px-4 py-3.5 text-sm font-bold text-[#FAF6EC] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
                           >
                             <CalendarDays aria-hidden="true" className="size-4" />
                             {tr('Réserver une table')}
-                          </Link>
+                          </LocalizedLink>
                         </Dialog.Close>
                         <Dialog.Close asChild>
-                          <Link
+                          <LocalizedLink
                             href="/commandes"
                             className="flex items-center justify-center gap-2 rounded-full border border-[#1E3A5F]/12 px-4 py-3.5 text-sm font-bold text-[#1E3A5F] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
                           >
@@ -360,7 +363,7 @@ export function SiteHeader() {
                             {itemCount > 0 ? (
                               <span className="rounded-full bg-[#7C2438] px-2 py-0.5 text-xs font-bold text-[#FAF6EC]">{itemCount}</span>
                             ) : null}
-                          </Link>
+                          </LocalizedLink>
                         </Dialog.Close>
                       </div>
                     </motion.aside>

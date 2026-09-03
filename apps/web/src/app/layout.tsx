@@ -41,14 +41,9 @@ export const metadata: Metadata = {
   robots: siteConfig.portfolioMode ? { index: false, follow: false } : { index: true, follow: true },
 };
 
-const localeSyncScript = `(function(){try{var l=localStorage.getItem('savoraille-locale');if(l==='ar'){document.documentElement.lang='ar';document.documentElement.dir='rtl';}else if(l==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}}catch(e){}})();`;
-
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="fr" className={fontVariables} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: localeSyncScript }} />
-      </head>
       <body className={siteConfig.portfolioMode ? 'portfolio-demo' : undefined}>
         <I18nProvider>
           <AuthProvider>

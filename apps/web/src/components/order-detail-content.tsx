@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, Check, CircleDashed, Info, Minus, Plus, ShoppingBag, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { AppImage } from './app-image';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 import { useState } from 'react';
 
 import { useCart, type CartCustomization } from './cart-provider';
@@ -26,7 +26,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
   const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value);
 
   if (!item || !itemSection) {
-    return <main className="grid min-h-[70svh] place-items-center bg-[#FAF6EC] px-6 pt-28 text-center"><div><h1 className="font-display text-5xl font-semibold text-[#1E3A5F]">{tr('Plat introuvable')}</h1><Link href="/carte" className="mt-6 inline-flex rounded-lg bg-[#1E3A5F] px-5 py-3 font-bold text-[#FAF6EC]">{tr('Retour à la carte')}</Link></div></main>;
+    return <main className="grid min-h-[70svh] place-items-center bg-[#FAF6EC] px-6 pt-28 text-center"><div><h1 className="font-display text-5xl font-semibold text-[#1E3A5F]">{tr('Plat introuvable')}</h1><LocalizedLink href="/carte" className="mt-6 inline-flex rounded-lg bg-[#1E3A5F] px-5 py-3 font-bold text-[#FAF6EC]">{tr('Retour à la carte')}</LocalizedLink></div></main>;
   }
 
   const unitPrice = Number.parseFloat(item.price);
@@ -71,7 +71,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
     <main className="bg-[#FAF6EC] pt-28 text-[#241F19]">
       <section className="px-6 pb-14 pt-6 sm:pb-20" aria-labelledby="dish-title">
         <div className="mx-auto max-w-[1200px]">
-          <Link href="/carte" className="inline-flex items-center gap-2 rounded-lg text-sm font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour à la carte')}</Link>
+          <LocalizedLink href="/carte" className="inline-flex items-center gap-2 rounded-lg text-sm font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour à la carte')}</LocalizedLink>
           <div className="mt-6 grid overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white shadow-[0_18px_50px_rgba(30,58,95,0.14)] lg:grid-cols-[1.08fr_0.92fr]">
             <div className="relative min-h-[360px] overflow-hidden sm:min-h-[520px]">
               <AppImage src={item.image} alt={tr(item.name)} fill priority sizes="(min-width:1024px) 55vw, 100vw" className="object-cover" />
@@ -123,7 +123,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
                 <p className="text-end"><span className="block text-xs text-[#241F19]/50">{supplementTotal > 0 ? `${tr('Plat et suppléments')} · ${tr('Sous-total')}` : tr('Sous-total')}</span><span className="font-display text-3xl font-bold text-[#7C2438]">{money((unitPrice + supplementTotal) * quantity)}</span></p>
               </div>
               <button type="button" onClick={addCurrentItem} className={`mt-6 inline-flex items-center justify-center gap-2 rounded-lg px-6 py-4 font-bold text-[#FAF6EC] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 ${added ? 'bg-[#C4703F]' : 'bg-[#7C2438] hover:bg-[#681d2f]'}`}><span aria-live="polite" className="inline-flex items-center gap-2">{added ? <Check className="size-5" /> : <ShoppingBag className="size-5" />}{tr(added ? 'Ajouté à votre commande' : 'Ajouter à ma commande')}</span></button>
-              <div className="mt-auto pt-7 text-sm text-[#241F19]/60"><span className="font-bold text-[#1E3A5F]">{itemCount}</span> {tr('articles dans votre commande')} · <span className="font-bold text-[#7C2438]">{money(total)}</span><Link href="/commandes" className="ms-3 font-bold text-[#1E3A5F] underline decoration-[#C6A15B] underline-offset-4">{tr('Voir ma commande')}</Link></div>
+              <div className="mt-auto pt-7 text-sm text-[#241F19]/60"><span className="font-bold text-[#1E3A5F]">{itemCount}</span> {tr('articles dans votre commande')} · <span className="font-bold text-[#7C2438]">{money(total)}</span><LocalizedLink href="/commandes" className="ms-3 font-bold text-[#1E3A5F] underline decoration-[#C6A15B] underline-offset-4">{tr('Voir ma commande')}</LocalizedLink></div>
             </div>
           </div>
         </div>
@@ -148,14 +148,14 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
           <div className="-mx-6 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0" aria-live="polite">
             {suggestions.map((suggestion) => (
               <article key={suggestion.id} className="grid min-w-[86%] snap-center grid-cols-[88px_1fr_auto] items-center gap-3 rounded-xl border border-[#FAF6EC]/14 bg-white/[0.055] p-3 sm:min-w-0">
-                <Link href={`/commander/${suggestion.id}`} className="relative aspect-square overflow-hidden rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><AppImage src={suggestion.image} alt={tr(suggestion.name)} fill sizes="88px" className="object-cover" /></Link>
-                <div className="min-w-0"><p className="truncate text-[0.65rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase">{tr(suggestion.eyebrow)}</p><Link href={`/commander/${suggestion.id}`} className="font-display mt-1 block text-lg leading-tight font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(suggestion.name)}</Link><p className="mt-1 text-sm font-bold text-[#DFA17A]">{suggestion.price}</p></div>
+                <LocalizedLink href={`/commander/${suggestion.id}`} className="relative aspect-square overflow-hidden rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><AppImage src={suggestion.image} alt={tr(suggestion.name)} fill sizes="88px" className="object-cover" /></LocalizedLink>
+                <div className="min-w-0"><p className="truncate text-[0.65rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase">{tr(suggestion.eyebrow)}</p><LocalizedLink href={`/commander/${suggestion.id}`} className="font-display mt-1 block text-lg leading-tight font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(suggestion.name)}</LocalizedLink><p className="mt-1 text-sm font-bold text-[#DFA17A]">{suggestion.price}</p></div>
                 <button type="button" onClick={() => addSuggestion(suggestion.id)} aria-label={`${tr('Ajouter')} ${tr(suggestion.name)}`} className={`grid size-10 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${suggestionAdded === suggestion.id ? 'bg-[#C4703F] text-white' : 'bg-[#7C2438] text-white hover:bg-[#681d2f]'}`}>{suggestionAdded === suggestion.id ? <Check className="size-4" /> : <Plus className="size-4" />}</button>
               </article>
             ))}
           </div>
 
-          <div className="relative mt-6 flex flex-col gap-3 border-t border-[#C6A15B]/22 pt-5 sm:flex-row sm:items-center sm:justify-between"><p className="text-sm text-[#FAF6EC]/55">{tr('Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.')}</p><Link href="/carte#composer-menu" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#C6A15B]/55 px-5 py-3 text-sm font-bold text-[#C6A15B] outline-none hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Compléter mon menu')}<ArrowRight className="size-4 rtl:-scale-x-100" /></Link></div>
+          <div className="relative mt-6 flex flex-col gap-3 border-t border-[#C6A15B]/22 pt-5 sm:flex-row sm:items-center sm:justify-between"><p className="text-sm text-[#FAF6EC]/55">{tr('Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.')}</p><LocalizedLink href="/carte#composer-menu" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#C6A15B]/55 px-5 py-3 text-sm font-bold text-[#C6A15B] outline-none hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Compléter mon menu')}<ArrowRight className="size-4 rtl:-scale-x-100" /></LocalizedLink></div>
         </div>
       </section>
       <MenuAssignmentDialog open={!!pendingAdd} onOpenChange={(open) => { if (!open) setPendingAdd(null); }} itemId={pendingAdd?.itemId ?? null} itemName={pendingAdd?.itemName} quantity={pendingAdd?.quantity} customization={pendingAdd?.customization} onAdded={() => { if (pendingAdd?.kind === 'main') setAdded(true); else if (pendingAdd) setSuggestionAdded(pendingAdd.itemId); }} />

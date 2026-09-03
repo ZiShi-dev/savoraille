@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, ChefHat, ChevronLeft, ChevronRight, ScanLine, Shuffle, Sparkles, X } from 'lucide-react';
 import { AppImage } from './app-image';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { menuItems, menuSections, type MenuItem, type MenuSection } from '@/lib/menu-data';
@@ -273,7 +273,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                     <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.65rem] font-bold tracking-[0.18em] uppercase">{tr(selected.eyebrow)}</p></div>
                     <div className="mt-2 flex items-start justify-between gap-5"><h3 className="font-display text-3xl leading-none font-semibold sm:text-4xl">{tr(selected.name)}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
                     <p className="mt-3 max-w-xl text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
-                    <Link href={`/commander/${selected.id}`} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir et commander')}<ArrowUpRight className="size-4" /></Link>
+                    <LocalizedLink href={`/commander/${selected.id}`} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir et commander')}<ArrowUpRight className="size-4" /></LocalizedLink>
                   </div>
                   <div className={`pointer-events-none absolute bottom-3 size-8 border-b border-[#C6A15B] ${rtl ? 'right-3 border-r' : 'left-3 border-l'}`} /><div className={`pointer-events-none absolute top-3 size-8 border-t border-[#C6A15B] ${rtl ? 'left-3 border-l' : 'right-3 border-r'}`} />
                 </motion.article>
@@ -325,7 +325,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                 <div className="flex items-center gap-2 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-[0.6rem] font-bold tracking-[0.16em] uppercase">{tr(selected.eyebrow)}</p></div>
                 <div className="mt-2 flex items-start justify-between gap-4"><h3 id="mobile-dish-title" className="font-display text-3xl leading-none font-semibold text-[#FAF6EC]">{tr(selected.name)}</h3><span className="shrink-0 text-lg font-bold text-[#C6A15B]">{selected.price}</span></div>
                 <p className="mt-4 text-sm leading-6 text-[#FAF6EC]/68">{tr(selected.detail)}</p>
-                <Link href={`/commander/${selected.id}`} onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir et commander')}<ArrowUpRight className="size-4" /></Link>
+                <LocalizedLink href={`/commander/${selected.id}`} onClick={closeMobileScreen} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir et commander')}<ArrowUpRight className="size-4" /></LocalizedLink>
               </div>
               <div className={`pointer-events-none absolute bottom-2 size-7 border-b border-[#C6A15B] ${rtl ? 'right-2 border-r' : 'left-2 border-l'}`} /><div className={`pointer-events-none absolute top-2 size-7 border-t border-[#C6A15B] ${rtl ? 'left-2 border-l' : 'right-2 border-r'}`} />
             </motion.article>
@@ -347,20 +347,20 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
               <p className="mt-4 text-sm leading-6 text-[#241F19]/68 sm:text-base">{tr('Une suggestion aléatoire vous attend dans chaque catégorie : apéritif, entrée, plat, dessert et boisson.')}</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="/carte" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></Link>
+              <LocalizedLink href="/carte" className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 px-5 py-3 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir toute la carte')}<ArrowUpRight className="size-4" /></LocalizedLink>
               <button type="button" onClick={shuffleDiscovery} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#1E3A5F]/18 bg-[#1E3A5F] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr('Afficher cinq nouvelles suggestions aléatoires')}><Shuffle className="size-4" />{tr('Nouvelle sélection')}</button>
             </div>
           </div>
 
           <div className="-mx-6 mt-7 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-5 md:px-0" aria-label={tr('Catégories de la sélection surprise')}>
-            {menuSections.map((section) => <Link key={section.id} href={`/carte?section=${section.id}#menu-complet`} className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#C6A15B]/40 bg-white px-4 py-2 text-xs font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-[#1E3A5F] hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(section.shortLabel)}</Link>)}
+            {menuSections.map((section) => <LocalizedLink key={section.id} href={`/carte?section=${section.id}#menu-complet`} className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#C6A15B]/40 bg-white px-4 py-2 text-xs font-bold text-[#1E3A5F] outline-none transition-colors hover:border-[#C6A15B] hover:bg-[#1E3A5F] hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(section.shortLabel)}</LocalizedLink>)}
           </div>
 
           <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#1E3A5F]/55 uppercase md:hidden">{tr('Faites glisser pour voir les cinq suggestions')}</p>
           <div className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:mt-8 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 xl:grid-cols-5" aria-live="polite" aria-label={tr('Cinq suggestions aléatoires de la carte')}>
             {discoveryItems.map((item, index) => (
               <motion.article key={`${discoverySeed}-${item.id}`} initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: reduceMotion ? 0 : index * 0.06 }} className="group relative flex min-w-[84vw] snap-center overflow-hidden rounded-2xl border border-[#C6A15B]/50 bg-[#071C33] text-[#FAF6EC] shadow-[0_16px_36px_rgba(30,58,95,0.18)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_22px_44px_rgba(30,58,95,0.24)] sm:min-w-[58vw] md:min-w-0 md:flex-col">
-                <Link href={`/commander/${item.id}`} aria-label={`${tr('Voir et commander')} · ${tr(item.name)}`} className="absolute inset-0 z-50 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C6A15B]"><span className="sr-only">{tr('Voir et commander')} · {tr(item.name)}</span></Link>
+                <LocalizedLink href={`/commander/${item.id}`} aria-label={`${tr('Voir et commander')} · ${tr(item.name)}`} className="absolute inset-0 z-50 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C6A15B]"><span className="sr-only">{tr('Voir et commander')} · {tr(item.name)}</span></LocalizedLink>
                 <div className="pointer-events-none absolute inset-2 z-20 rounded-xl border border-[#C6A15B]/18" />
                 <div className="relative min-h-40 w-[38%] shrink-0 overflow-hidden md:aspect-[4/3] md:min-h-0 md:w-full">
                   <AppImage src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="(min-width: 768px) 33vw, 38vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />

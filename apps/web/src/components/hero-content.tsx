@@ -1,12 +1,12 @@
 'use client';
 
 import { CalendarDays, Clock3, Leaf, ShoppingBag } from 'lucide-react';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 import { motion, useReducedMotion } from 'framer-motion';
 
 import { useI18n } from './i18n-provider';
 
-const MotionLink = motion.create(Link);
+const MotionLink = motion.create(LocalizedLink);
 
 export function HeroContent() {
   const reduceMotion = useReducedMotion();

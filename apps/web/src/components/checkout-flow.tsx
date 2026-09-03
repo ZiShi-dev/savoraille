@@ -16,6 +16,7 @@ import { useRestaurant } from './restaurant-provider';
 import { TableSelector } from './table-selector';
 import { DatePicker } from './ui/date-picker';
 import { FormSelect } from './ui/form-select';
+import { useLocalizedPath } from '@/hooks/use-localized-path';
 
 type ServiceMode = 'dine-in' | 'takeaway' | 'delivery';
 type CheckoutStep = 'service' | 'details' | 'table' | 'done';
@@ -38,6 +39,7 @@ type CheckoutValues = z.infer<typeof baseSchema>;
 
 export function CheckoutFlow({ itemCount, total }: { itemCount: number; total: number }) {
   const router = useRouter();
+  const toLocalizedPath = useLocalizedPath();
   const { requireAuth } = useAuth();
   const { locale, tr } = useI18n();
   const { menus, lines } = useCart();
@@ -62,7 +64,7 @@ export function CheckoutFlow({ itemCount, total }: { itemCount: number; total: n
   const guests = Number(watch('guests') ?? '2');
   const startDineInReservation = () => {
     setOpen(false);
-    router.push('/reservation');
+    router.push(toLocalizedPath('/reservation'));
   };
   const chooseService = (mode: ServiceMode) => { setService(mode); setSelectedTable(null); reset({ date: today, time: mode === 'takeaway' ? 'asap' : '20:00', guests: '2', name: '', phone: '', address: '', notes: '' }); setStep('details'); };
   const finishOrder = () => { setReference(`SV-${Date.now().toString().slice(-5)}`); setStep('done'); };

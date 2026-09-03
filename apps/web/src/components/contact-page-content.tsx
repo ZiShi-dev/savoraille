@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, CheckCircle2, Clock3, Mail, MapPin, MessageSquareText, Send, Sparkles } from 'lucide-react';
 import { AppImage } from './app-image';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 import { useRef, useState } from 'react';
 
 import { useI18n } from './i18n-provider';
@@ -52,7 +52,7 @@ export function ContactPageContent() {
             <p className="font-script mt-7 text-3xl text-[#C6A15B] sm:text-4xl">{tr('Nous contacter')}</p>
             <h1 className="font-display mt-3 max-w-4xl text-5xl leading-[0.9] font-semibold text-balance sm:text-7xl lg:text-[5.2rem]">{tr('Parlons de votre prochaine table.')}</h1>
             <p className="mt-7 max-w-2xl text-base leading-8 text-[#FAF6EC]/76 sm:text-lg">{tr('Une réservation, un événement privé ou une question sur la carte ? Notre équipe vous répond avec plaisir.')}</p>
-            <Link href="#ecrire" className="mt-9 inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19] outline-none transition-colors hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Écrivez-nous')}<ArrowDown className="size-4" /></Link>
+            <LocalizedLink href="#ecrire" className="mt-9 inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19] outline-none transition-colors hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Écrivez-nous')}<ArrowDown className="size-4" /></LocalizedLink>
           </motion.div>
         </div>
       </section>
@@ -131,7 +131,7 @@ export function ContactPageContent() {
               <div className="flex gap-4"><Clock3 className="mt-0.5 size-5 shrink-0 text-[#C6A15B]" /><div><p className="text-xs font-bold tracking-[0.13em] text-[#C6A15B] uppercase">{tr('Horaires')}</p><p className="mt-1 text-sm leading-6 text-[#FAF6EC]/70">{tr('Mar–Dim · service continu de 12 h à 23 h')}</p></div></div>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/reservation" className="inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Réserver une table')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
+              <LocalizedLink href="/reservation" className="inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Réserver une table')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></LocalizedLink>
               <button type="button" onClick={() => openPicker()} className="inline-flex items-center gap-2 rounded-lg border border-[#FAF6EC]/28 px-5 py-3.5 text-sm font-bold text-[#FAF6EC] outline-none hover:bg-[#FAF6EC]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Trouver le restaurant le plus proche')}<MapPin className="size-4" /></button>
             </div>
           </div>

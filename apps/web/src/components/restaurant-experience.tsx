@@ -1,7 +1,7 @@
 'use client';
 
 import { AppImage } from './app-image';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 
 import { useI18n } from './i18n-provider';
 
@@ -27,10 +27,10 @@ export function RestaurantExperience() {
             <span className="h-px w-10 bg-[#C6A15B]/55" aria-hidden="true" />
             <span>{tr('Service attentionné')}</span>
           </div>
-          <Link href="/reservation" className="mt-8 inline-flex items-center gap-3 rounded-lg bg-[#FAF6EC] px-5 py-3.5 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+          <LocalizedLink href="/reservation" className="mt-8 inline-flex items-center gap-3 rounded-lg bg-[#FAF6EC] px-5 py-3.5 text-sm font-bold text-[#1E3A5F] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
             {tr('Vivre l’expérience')}
             <span aria-hidden="true">→</span>
-          </Link>
+          </LocalizedLink>
         </div>
 
         <figure className="group relative aspect-[16/11] overflow-hidden rounded-2xl border border-[#C6A15B]/40 bg-[#102B4D] shadow-[0_22px_55px_rgba(7,28,51,0.38)] sm:aspect-[16/10]" aria-label={tr('Trois moments de l’expérience Savoraille')}>

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Flame, Gem, Heart, Leaf, Sparkles, UsersRound, UtensilsCrossed, Wheat } from 'lucide-react';
 import { AppImage } from './app-image';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 
 import { BrandSeal } from './brand-seal';
 import { useI18n } from './i18n-provider';
@@ -48,8 +48,8 @@ export function HistoryPageContent() {
             <h1 className="font-display mt-3 max-w-[850px] text-5xl leading-[0.9] font-semibold text-balance sm:text-7xl lg:text-[5.5rem]">{tr('Notre histoire, servie à table.')}</h1>
             <p className="mt-7 max-w-2xl text-base leading-8 text-[#FAF6EC]/78 sm:text-lg">{tr('Savoraille est née d’une envie simple : faire vivre la cuisine française avec les saisons, sans perdre la chaleur du bistrot ni la précision des beaux gestes.')}</p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/carte" className="inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19] outline-none transition-colors hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Voir la carte de saison')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
-              <Link href="#notre-geste" className="inline-flex items-center gap-2 rounded-lg border border-[#FAF6EC]/35 bg-[#102B4D]/35 px-5 py-3.5 text-sm font-bold text-[#FAF6EC] outline-none backdrop-blur-sm transition-colors hover:bg-[#FAF6EC]/10 focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Découvrir notre manière de faire')}<ArrowDown className="size-4" /></Link>
+              <LocalizedLink href="/carte" className="inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19] outline-none transition-colors hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Voir la carte de saison')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></LocalizedLink>
+              <LocalizedLink href="#notre-geste" className="inline-flex items-center gap-2 rounded-lg border border-[#FAF6EC]/35 bg-[#102B4D]/35 px-5 py-3.5 text-sm font-bold text-[#FAF6EC] outline-none backdrop-blur-sm transition-colors hover:bg-[#FAF6EC]/10 focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Découvrir notre manière de faire')}<ArrowDown className="size-4" /></LocalizedLink>
             </div>
           </motion.div>
 
@@ -80,7 +80,7 @@ export function HistoryPageContent() {
             <h2 id="story-title" className="font-display mt-3 text-4xl leading-[0.98] font-semibold text-[#1E3A5F] text-balance sm:text-6xl">{tr('De la terre à l’assiette, sans raccourci.')}</h2>
             <p className="mt-7 text-base leading-8 text-[#241F19]/68">{tr('Nous suivons le goût avant les habitudes. Les légumes donnent le tempo, les sauces prennent leur temps et chaque assiette garde la mémoire du produit.')}</p>
             <p className="mt-5 border-s-2 border-[#C6A15B] ps-5 text-lg leading-8 text-[#1E3A5F]">{tr('Notre cuisine tutoie la tradition française, puis lui ouvre les fenêtres sur le présent.')}</p>
-            <Link href="/carte" className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-[#7C2438] underline decoration-[#C6A15B] decoration-2 underline-offset-8 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Goûter notre histoire')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
+            <LocalizedLink href="/carte" className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-[#7C2438] underline decoration-[#C6A15B] decoration-2 underline-offset-8 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Goûter notre histoire')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></LocalizedLink>
           </div>
         </motion.div>
       </section>
@@ -134,8 +134,8 @@ export function HistoryPageContent() {
             <h2 id="table-story-title" className="font-display mt-3 text-4xl leading-none font-semibold text-balance sm:text-6xl">{tr('Chaque table a son histoire.')}</h2>
             <p className="mt-5 max-w-lg text-sm leading-7 text-[#FAF6EC]/72 sm:text-base">{tr('Un dîner à deux, un déjeuner qui rassemble ou un moment à célébrer : nous préparons le décor, vous écrivez le souvenir.')}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/reservation" className="inline-flex items-center gap-2 rounded-lg bg-[#FAF6EC] px-5 py-3.5 text-sm font-bold text-[#7C2438] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Réserver une table')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
-              <Link href="/contact" className="inline-flex items-center gap-2 rounded-lg border border-[#FAF6EC]/35 bg-[#102B4D]/35 px-5 py-3.5 text-sm font-bold text-[#FAF6EC] outline-none backdrop-blur-sm hover:bg-[#FAF6EC]/10 focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Nous contacter')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></Link>
+              <LocalizedLink href="/reservation" className="inline-flex items-center gap-2 rounded-lg bg-[#FAF6EC] px-5 py-3.5 text-sm font-bold text-[#7C2438] outline-none transition-colors hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Réserver une table')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></LocalizedLink>
+              <LocalizedLink href="/contact" className="inline-flex items-center gap-2 rounded-lg border border-[#FAF6EC]/35 bg-[#102B4D]/35 px-5 py-3.5 text-sm font-bold text-[#FAF6EC] outline-none backdrop-blur-sm hover:bg-[#FAF6EC]/10 focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Nous contacter')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></LocalizedLink>
             </div>
           </div>
         </motion.div>

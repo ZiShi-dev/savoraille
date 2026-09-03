@@ -22,6 +22,11 @@
   NEXT_PUBLIC_BASE_PATH = "/demos/savoraille"
   NEXT_PUBLIC_SITE_URL = "https://vorzix.com/demos/savoraille"
 
+[[redirects]]
+  from = "/"
+  to = "/fr/"
+  status = 302
+
 [[headers]]
   for = "/*"
   [headers.values]

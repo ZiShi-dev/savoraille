@@ -2,18 +2,29 @@
 
 import * as Select from '@radix-ui/react-select';
 import { Check, ChevronDown, Languages } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { useI18n, type Locale } from './i18n-provider';
+import { localizedPath, stripLocaleFromPath, type Locale } from '@/lib/i18n-routing';
+
+import { useI18n } from './i18n-provider';
 
 export function LanguageSwitcher({ variant = 'light', compact = false }: { variant?: 'light' | 'dark'; compact?: boolean }) {
   const { locale, setLocale } = useI18n();
+  const router = useRouter();
+  const pathname = usePathname();
   const languages: Array<{ code: Locale; short: string; label: string; native: string }> = [
     { code: 'fr', short: 'FR', label: 'Français', native: 'Français' },
     { code: 'en', short: 'EN', label: 'English', native: 'English' },
     { code: 'ar', short: 'AR', label: 'Arabe', native: 'العربية' },
   ];
   const selected = languages.find((language) => language.code === locale) ?? languages[0]!;
+
+  const handleLocaleChange = (value: Locale) => {
+    setLocale(value);
+    const pathWithoutLocale = stripLocaleFromPath(pathname);
+    router.push(localizedPath(value, pathWithoutLocale));
+  };
 
   useEffect(() => () => {
     document.documentElement.removeAttribute('data-language-menu-open');
@@ -39,7 +50,7 @@ export function LanguageSwitcher({ variant = 'light', compact = false }: { varia
   const isDark = variant === 'dark';
 
   return (
-    <Select.Root value={locale} onValueChange={(value) => setLocale(value as Locale)} onOpenChange={handleOpenChange} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <Select.Root value={locale} onValueChange={(value) => handleLocaleChange(value as Locale)} onOpenChange={handleOpenChange} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <Select.Trigger className={`group inline-flex shrink-0 items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${
         compact ? 'size-10 justify-center gap-0 px-0' : 'h-10 gap-1.5 px-2.5'
       } ${

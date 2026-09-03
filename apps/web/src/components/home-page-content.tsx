@@ -4,7 +4,7 @@ import {
   ArrowRight, Bike, CalendarDays, Clock3,
   Phone, ShoppingBag,
 } from 'lucide-react';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 
 import { BrandSeal } from '@/components/brand-seal';
 import { HeroContent } from '@/components/hero-content';
@@ -59,7 +59,7 @@ export function HomePageContent() {
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2 self-start sm:self-auto">
-                <Link href="/carte" className="inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Découvrir la carte')}<ArrowRight className="size-4 rtl:rotate-180" /></Link>
+                <LocalizedLink href="/carte" className="inline-flex items-center gap-2 text-sm font-bold text-[#C6A15B] outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Découvrir la carte')}<ArrowRight className="size-4 rtl:rotate-180" /></LocalizedLink>
                 <a href="#selection-surprise" className="inline-flex items-center gap-2 text-sm font-semibold text-[#FAF6EC]/75 outline-none hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir les choix surprises')}<ArrowRight className="size-4 rtl:rotate-180" /></a>
               </div>
             </div>
@@ -84,7 +84,7 @@ export function HomePageContent() {
                     <p className="mt-7 text-xs font-bold tracking-[0.17em] text-[#C4703F] uppercase">{tr(service.eyebrow)}</p>
                     <h3 className="font-display mt-2 text-3xl font-semibold text-[#1E3A5F]">{tr(service.title)}</h3>
                     <p className="mt-3 leading-7 text-[#241F19]/65">{tr(service.description)}</p>
-                    <Link href={service.href} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#7C2438] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(service.action)}<ArrowRight className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" /></Link>
+                    <LocalizedLink href={service.href} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#7C2438] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(service.action)}<ArrowRight className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" /></LocalizedLink>
                   </article>
                 );
               })}
@@ -120,7 +120,7 @@ export function HomePageContent() {
                 <div className="mt-7 flex flex-wrap gap-x-8 gap-y-3 text-sm text-[#FAF6EC]/78"><span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />{tr('Mar–Dim · 12 h–23 h')}</span></div>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <Link href="/reservation" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-bold text-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><CalendarDays className="size-5" strokeWidth={1.8} />{tr('Faire une demande de réservation')}</Link>
+                <LocalizedLink href="/reservation" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#FAF6EC] px-6 py-4 font-bold text-[#7C2438] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><CalendarDays className="size-5" strokeWidth={1.8} />{tr('Faire une demande de réservation')}</LocalizedLink>
                 <a href="mailto:bonjour@savoraille.fr" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#FAF6EC]/40 px-6 py-4 font-bold text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:outline-none"><Phone className="size-5" strokeWidth={1.8} />{tr('Nous écrire')}</a>
               </div>
             </div>

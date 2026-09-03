@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowRight, Check, CircleDashed, ShoppingBag, Sparkles } from 'lucide-react';
-import Link from 'next/link';
+import { LocalizedLink } from './localized-link';
 import { useMemo } from 'react';
 
 import { useCart } from './cart-provider';
@@ -48,17 +48,17 @@ export function MealBuilder() {
         <nav className="-mx-6 mt-9 flex snap-x gap-2 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-5" aria-label={tr('Progression de votre menu')}>
           {sectionStates.map(({ section, count }) => {
             const completed = count > 0;
-            return <Link key={section.id} href={`/carte?section=${section.id}#menu-complet`} className="group flex min-w-40 snap-start items-center gap-3 rounded-xl border border-[#FAF6EC]/14 bg-white/[0.035] p-3 text-start outline-none transition-all hover:-translate-y-0.5 hover:border-[#C6A15B]/65 hover:bg-white/[0.075] focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:min-w-0 sm:flex-col sm:items-start">
+            return <LocalizedLink key={section.id} href={`/carte?section=${section.id}#menu-complet`} className="group flex min-w-40 snap-start items-center gap-3 rounded-xl border border-[#FAF6EC]/14 bg-white/[0.035] p-3 text-start outline-none transition-all hover:-translate-y-0.5 hover:border-[#C6A15B]/65 hover:bg-white/[0.075] focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:min-w-0 sm:flex-col sm:items-start">
               <span className={`grid size-8 shrink-0 place-items-center rounded-full ${completed ? 'bg-[#C4703F] text-white' : 'border border-[#C6A15B]/48 text-[#C6A15B]'}`}>{completed ? <Check className="size-4" /> : <CircleDashed className="size-4" />}</span>
               <span className="min-w-0 flex-1"><span className="block text-sm leading-tight font-bold">{tr(section.shortLabel)}</span><span className={`mt-1 block text-[0.68rem] ${completed ? 'text-[#DFA17A]' : 'text-[#FAF6EC]/42'}`}>{completed ? `${count} ${tr(count > 1 ? 'ajoutés' : 'ajouté')}` : tr('À compléter')}</span></span>
               <ArrowRight className="size-4 text-[#C6A15B]/65 transition-transform group-hover:translate-x-0.5 sm:mt-2 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5" />
-            </Link>;
+            </LocalizedLink>;
           })}
         </nav>
 
         <div className="mt-6 flex flex-col gap-3 rounded-xl border border-[#FAF6EC]/12 bg-white/[0.035] p-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="flex items-center gap-2 text-sm text-[#FAF6EC]/62"><ShoppingBag className="size-4 text-[#C6A15B]" /><span><strong className="text-[#FAF6EC]">{itemCount}</strong> {tr('articles dans votre commande')}</span></p>
-          <Link href="/commandes" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir ma commande')}<ArrowRight className="size-4 rtl:-scale-x-100" /></Link>
+          <LocalizedLink href="/commandes" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-5 py-3 text-sm font-bold text-[#FAF6EC] outline-none hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir ma commande')}<ArrowRight className="size-4 rtl:-scale-x-100" /></LocalizedLink>
         </div>
       </div>
     </section>
