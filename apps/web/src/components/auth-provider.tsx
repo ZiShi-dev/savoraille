@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSignOutOpen(false);
   };
   const error = (name: keyof AuthFields) => errors[name]?.message ? <span role="alert" className="mt-1.5 block text-xs font-semibold text-[#7C2438]">{tr(errors[name]?.message ?? '')}</span> : null;
-  const fieldClass = 'mt-2 h-12 w-full rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-all placeholder:text-[#241F19]/35 hover:border-[#C6A15B]/65 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/30';
+  const fieldClass = 'mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-all placeholder:text-[#241F19]/35 hover:border-[#C6A15B]/65 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/30';
   const title = intent === 'account' ? 'Bienvenue dans votre espace Savoraille.' : intent === 'reservation' ? 'Connectez-vous pour réserver votre table.' : 'Connectez-vous pour finaliser votre commande.';
   const description = intent === 'account' ? 'Retrouvez vos commandes et réservez plus rapidement depuis un seul espace.' : intent === 'reservation' ? 'Votre réservation est prête. Identifiez-vous pour la confirmer sans perdre les informations saisies.' : 'Votre commande est prête. Identifiez-vous pour la confirmer sans perdre votre panier.';
 

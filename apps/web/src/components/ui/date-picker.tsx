@@ -40,8 +40,8 @@ export function DatePicker({ value, onChange, label, locale, min }: { value: str
       if (nextOpen) setMonth(selected ?? minimum ?? new Date());
     }}>
       <Popover.Trigger asChild>
-        <button type="button" aria-label={label} className="mt-2 flex h-12 w-full items-center justify-between gap-3 rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-all hover:border-[#C6A15B]/65 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35">
-          <span className={selected ? '' : 'text-[#241F19]/38'}>{selected ? format(selected, 'PPP', { locale: dateLocale }) : label}</span>
+        <button type="button" aria-label={label} className="mt-2 flex h-12 w-full min-w-0 items-center justify-between gap-3 rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-all hover:border-[#C6A15B]/65 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35">
+          <span className={`min-w-0 truncate text-start ${selected ? '' : 'text-[#241F19]/38'}`}>{selected ? format(selected, 'PPP', { locale: dateLocale }) : label}</span>
           <CalendarDays className="size-4 shrink-0 text-[#C6A15B]" />
         </button>
       </Popover.Trigger>

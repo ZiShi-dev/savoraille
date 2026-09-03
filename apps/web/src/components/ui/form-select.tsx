@@ -11,8 +11,8 @@ type SelectOption = {
 export function FormSelect({ value, onChange, options, label, rtl = false }: { value: string; onChange: (value: string) => void; options: SelectOption[]; label: string; rtl?: boolean }) {
   return (
     <Select.Root value={value} onValueChange={onChange} dir={rtl ? 'rtl' : 'ltr'}>
-      <Select.Trigger aria-label={label} className="mt-2 flex h-12 w-full items-center justify-between gap-3 rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-all hover:border-[#C6A15B]/65 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35 data-[placeholder]:text-[#241F19]/38">
-        <Select.Value />
+      <Select.Trigger aria-label={label} className="mt-2 flex h-12 w-full min-w-0 items-center justify-between gap-3 rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-all hover:border-[#C6A15B]/65 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35 data-[placeholder]:text-[#241F19]/38">
+        <Select.Value className="min-w-0 truncate" />
         <Select.Icon><ChevronDown className="size-4 text-[#C6A15B]" /></Select.Icon>
       </Select.Trigger>
       <Select.Portal>

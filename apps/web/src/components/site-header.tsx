@@ -41,6 +41,11 @@ export function SiteHeader() {
   };
 
   useEffect(() => {
+    document.body.toggleAttribute('data-mobile-menu-open', mobileOpen);
+    return () => document.body.removeAttribute('data-mobile-menu-open');
+  }, [mobileOpen]);
+
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -233,7 +238,7 @@ export function SiteHeader() {
                   <Dialog.Overlay asChild>
                     <motion.button
                       type="button"
-                      className="fixed inset-0 z-50 bg-[#102B4D]/55 backdrop-blur-[2px] xl:hidden"
+                      className="fixed inset-0 z-[70] bg-[#102B4D]/55 backdrop-blur-[2px] xl:hidden"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -244,7 +249,7 @@ export function SiteHeader() {
                   <Dialog.Content asChild aria-describedby={undefined}>
                     <motion.aside
                       dir={isRtl ? 'rtl' : 'ltr'}
-                      className="fixed inset-y-0 end-0 z-50 flex w-full max-w-[min(100vw,22rem)] flex-col bg-[#FAF6EC] shadow-[-12px_0_40px_rgba(30,58,95,0.18)] outline-none xl:hidden"
+                      className="fixed inset-y-0 end-0 z-[70] flex w-full max-w-[min(100vw,22rem)] flex-col bg-[#FAF6EC] shadow-[-12px_0_40px_rgba(30,58,95,0.18)] outline-none xl:hidden"
                       initial={{ x: isRtl ? '-100%' : '100%' }}
                       animate={{ x: 0 }}
                       exit={{ x: isRtl ? '-100%' : '100%' }}

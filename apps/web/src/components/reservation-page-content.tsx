@@ -52,7 +52,7 @@ export function ReservationPageContent() {
   const reduceMotion = useReducedMotion();
   const today = localDateValue();
   const chosenReason = reasons.find((item) => item.id === reason);
-  const fieldClass = 'mt-2 h-12 w-full rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-colors placeholder:text-[#241F19]/38 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35';
+  const fieldClass = 'mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-colors placeholder:text-[#241F19]/38 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35';
   const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm<ReservationValues>({
     resolver: zodResolver(schema),
     defaultValues: { date: today, time: '20:00', guests: '2', name: '', phone: '', email: '', notes: '' },
@@ -129,8 +129,8 @@ export function ReservationPageContent() {
                 </div>
               </motion.div>
             ) : step === 'form' && chosenReason ? (
-              <motion.form key={`form-${reason}`} variants={variants} initial="enter" animate="center" exit="exit" transition={transition} onSubmit={handleSubmit(submit)} noValidate className="grid lg:grid-cols-[1fr_330px]">
-                <div className="p-5 sm:p-8">
+              <motion.form key={`form-${reason}`} variants={variants} initial="enter" animate="center" exit="exit" transition={transition} onSubmit={handleSubmit(submit)} noValidate className="grid min-w-0 lg:grid-cols-[1fr_330px]">
+                <div className="min-w-0 p-5 sm:p-8">
                   <div className="relative aspect-[16/8] min-h-44 overflow-hidden rounded-2xl border border-[#C6A15B]/35 bg-[#102B4D] sm:aspect-[16/5]">
                     <Image src={chosenReason.image} alt={tr(chosenReason.title)} fill priority sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/90 via-[#071C33]/20 to-transparent" />
@@ -146,14 +146,14 @@ export function ReservationPageContent() {
                     <button type="button" onClick={() => openPicker()} className="shrink-0 text-xs font-bold text-[#7C2438] underline decoration-[#C6A15B] underline-offset-4">{tr('Modifier')}</button>
                   </div>
 
-                  <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                    <label className="text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><CalendarDays className="size-4 text-[#C6A15B]" />{tr('Date')}</span><Controller name="date" control={control} render={({ field }) => <DatePicker value={field.value} onChange={field.onChange} label={tr('Date')} locale={locale} min={today} />} />{error('date')}</label>
-                    <label className="text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />{tr('Heure')}</span><Controller name="time" control={control} render={({ field }) => <FormSelect value={field.value} onChange={field.onChange} options={timeOptions} label={tr('Heure')} rtl={locale === 'ar'} />} />{error('time')}</label>
-                    <label className="text-sm font-bold text-[#1E3A5F] sm:col-span-2"><span className="flex items-center gap-2"><UsersRound className="size-4 text-[#C6A15B]" />{tr('Nombre de personnes')}</span><Controller name="guests" control={control} render={({ field }) => <FormSelect value={field.value} onChange={field.onChange} options={guestOptions} label={tr('Nombre de personnes')} rtl={locale === 'ar'} />} />{error('guests')}</label>
-                    <label className="text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><UserRound className="size-4 text-[#C6A15B]" />{tr('Votre nom')}</span><input {...register('name')} autoComplete="name" placeholder={tr('Nom et prénom')} className={fieldClass} />{error('name')}</label>
-                    <label className="text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><Phone className="size-4 text-[#C6A15B]" />{tr('Téléphone')}</span><input {...register('phone')} type="tel" autoComplete="tel" placeholder="+33 6 00 00 00 00" className={fieldClass} />{error('phone')}</label>
-                    <label className="text-sm font-bold text-[#1E3A5F] sm:col-span-2">{tr('Adresse e-mail')}<input {...register('email')} type="email" autoComplete="email" placeholder="vous@exemple.fr" className={fieldClass} />{error('email')}</label>
-                    <label className="text-sm font-bold text-[#1E3A5F] sm:col-span-2">{tr('Votre demande')}<textarea {...register('notes')} rows={4} placeholder={tr('Allergies, gâteau, emplacement souhaité ou autre attention…')} className="mt-2 w-full resize-none rounded-lg border border-[#1E3A5F]/14 bg-white px-4 py-3 text-sm outline-none focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35" /></label>
+                  <div className="mt-6 grid min-w-0 gap-4 sm:grid-cols-2">
+                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><CalendarDays className="size-4 text-[#C6A15B]" />{tr('Date')}</span><Controller name="date" control={control} render={({ field }) => <DatePicker value={field.value} onChange={field.onChange} label={tr('Date')} locale={locale} min={today} />} />{error('date')}</label>
+                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><Clock3 className="size-4 text-[#C6A15B]" />{tr('Heure')}</span><Controller name="time" control={control} render={({ field }) => <FormSelect value={field.value} onChange={field.onChange} options={timeOptions} label={tr('Heure')} rtl={locale === 'ar'} />} />{error('time')}</label>
+                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F] sm:col-span-2"><span className="flex items-center gap-2"><UsersRound className="size-4 text-[#C6A15B]" />{tr('Nombre de personnes')}</span><Controller name="guests" control={control} render={({ field }) => <FormSelect value={field.value} onChange={field.onChange} options={guestOptions} label={tr('Nombre de personnes')} rtl={locale === 'ar'} />} />{error('guests')}</label>
+                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><UserRound className="size-4 text-[#C6A15B]" />{tr('Votre nom')}</span><input {...register('name')} autoComplete="name" placeholder={tr('Nom et prénom')} className={fieldClass} />{error('name')}</label>
+                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><Phone className="size-4 text-[#C6A15B]" />{tr('Téléphone')}</span><input {...register('phone')} type="tel" autoComplete="tel" placeholder="+33 6 00 00 00 00" className={fieldClass} />{error('phone')}</label>
+                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F] sm:col-span-2">{tr('Adresse e-mail')}<input {...register('email')} type="email" autoComplete="email" placeholder="vous@exemple.fr" className={fieldClass} />{error('email')}</label>
+                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F] sm:col-span-2">{tr('Votre demande')}<textarea {...register('notes')} rows={4} placeholder={tr('Allergies, gâteau, emplacement souhaité ou autre attention…')} className="mt-2 w-full min-w-0 max-w-full resize-none rounded-lg border border-[#1E3A5F]/14 bg-white px-4 py-3 text-sm outline-none focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35" /></label>
                   </div>
                 </div>
 

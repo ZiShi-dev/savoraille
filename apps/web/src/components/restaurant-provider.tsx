@@ -26,9 +26,12 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = window.localStorage.getItem('savoraille-restaurant');
-    const dismissed = window.sessionStorage.getItem('savoraille-restaurant-dismissed');
-    if (saved && restaurants.some((restaurant) => restaurant.id === saved)) setSelectedId(saved);
-    else if (!dismissed) setOpen(true);
+    if (saved && restaurants.some((restaurant) => restaurant.id === saved)) {
+      setSelectedId(saved);
+    } else {
+      window.localStorage.removeItem('savoraille-restaurant');
+      setOpen(true);
+    }
     setReady(true);
   }, []);
 
@@ -66,7 +69,7 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   return (
     <RestaurantContext.Provider value={value}>
       {children}
-      <button type="button" onClick={() => setOpen(true)} aria-label={`${tr('Changer de restaurant')} · ${selectedRestaurant?.name ?? tr('Aucun restaurant sélectionné')}`} title={selectedRestaurant ? `${selectedRestaurant.name} · ${tr(selectedRestaurant.area)}` : tr('Choisir un restaurant')} className="group fixed bottom-20 end-5 z-[60] grid size-14 place-items-center rounded-full border border-[#C6A15B]/70 bg-[#7C2438] text-[#FAF6EC] shadow-[0_14px_35px_rgba(30,58,95,0.32)] outline-none transition-all hover:-translate-y-1 hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EC] sm:end-6 sm:size-16">
+      <button type="button" onClick={() => setOpen(true)} aria-label={`${tr('Changer de restaurant')} · ${selectedRestaurant?.name ?? tr('Aucun restaurant sélectionné')}`} title={selectedRestaurant ? `${selectedRestaurant.name} · ${tr(selectedRestaurant.area)}` : tr('Choisir un restaurant')} className="restaurant-locator-fab group fixed bottom-20 end-5 z-[55] grid size-14 place-items-center rounded-full border border-[#C6A15B]/70 bg-[#7C2438] text-[#FAF6EC] shadow-[0_14px_35px_rgba(30,58,95,0.32)] outline-none transition-all hover:-translate-y-1 hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EC] sm:end-6 sm:size-16">
         <span className="pointer-events-none absolute inset-1 rounded-full border border-[#FAF6EC]/15" />
         {!selectedRestaurant ? <span className="absolute inset-0 animate-ping rounded-full border border-[#C6A15B]/55 motion-reduce:animate-none" /> : null}
         <MapPin aria-hidden="true" className="relative size-6 transition-transform group-hover:scale-110 sm:size-7" strokeWidth={1.7} />
@@ -74,19 +77,16 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
       </button>
       <Dialog.Root open={open} onOpenChange={(nextOpen) => {
         setOpen(nextOpen);
-        if (!nextOpen) {
-          selectedCallback.current = null;
-          if (!selectedId) window.sessionStorage.setItem('savoraille-restaurant-dismissed', '1');
-        }
+        if (!nextOpen) selectedCallback.current = null;
       }}>
         <Dialog.Portal>
           <Dialog.Overlay className="savoraille-dialog-overlay fixed inset-0 z-[80] bg-[#071C33]/80 backdrop-blur-md" />
-          <Dialog.Content dir={locale === 'ar' ? 'rtl' : 'ltr'} className="savoraille-dialog-surface fixed inset-x-3 top-1/2 z-[90] max-h-[92svh] -translate-y-1/2 overflow-y-auto rounded-2xl border border-[#C6A15B]/40 bg-[#FAF6EC] shadow-[0_30px_100px_rgba(3,16,31,0.55)] outline-none sm:inset-x-6 lg:left-1/2 lg:right-auto lg:w-[min(1040px,calc(100vw-48px))] lg:-translate-x-1/2 rtl:lg:left-auto rtl:lg:right-1/2 rtl:lg:translate-x-1/2">
+          <Dialog.Content dir={locale === 'ar' ? 'rtl' : 'ltr'} className="savoraille-dialog-surface fixed inset-x-3 top-1/2 z-[90] w-[calc(100vw-24px)] max-h-[92svh] -translate-y-1/2 overflow-x-hidden overflow-y-auto rounded-2xl border border-[#C6A15B]/40 bg-[#FAF6EC] shadow-[0_30px_100px_rgba(3,16,31,0.55)] outline-none sm:inset-x-6 sm:w-[calc(100vw-48px)] lg:left-1/2 lg:right-auto lg:w-[min(1040px,calc(100vw-48px))] lg:-translate-x-1/2 rtl:lg:left-auto rtl:lg:right-1/2 rtl:lg:translate-x-1/2">
             <div className="relative overflow-hidden bg-[#102B4D] px-5 pb-7 pt-5 text-[#FAF6EC] sm:px-8 sm:pb-9 sm:pt-7">
               <div className="pointer-events-none absolute -end-20 -top-28 size-72 rounded-full border border-[#C6A15B]/22" />
               <div className="pointer-events-none absolute -end-10 -top-16 size-56 rounded-full border border-[#C6A15B]/28" />
               <div className="relative flex items-start justify-between gap-4">
-                <div className="flex items-center gap-4"><BrandSeal inverse className="size-16 shrink-0 sm:size-20" /><div><p className="font-script text-2xl text-[#C6A15B] sm:text-3xl">{tr('Bienvenue chez Savoraille')}</p><Dialog.Title className="font-display mt-1 text-3xl leading-none font-semibold sm:text-5xl">{tr('Choisissez votre restaurant.')}</Dialog.Title></div></div>
+                <div className="flex min-w-0 items-center gap-4"><BrandSeal inverse className="size-16 shrink-0 sm:size-20" /><div className="min-w-0"><p className="font-script text-2xl text-[#C6A15B] sm:text-3xl">{tr('Bienvenue chez Savoraille')}</p><Dialog.Title className="font-display mt-1 text-balance text-3xl leading-none font-semibold sm:text-5xl">{tr('Choisissez votre restaurant.')}</Dialog.Title></div></div>
                 <Dialog.Close asChild><button type="button" aria-label={tr('Fermer')} className="grid size-10 shrink-0 place-items-center rounded-full border border-[#FAF6EC]/18 bg-white/8 outline-none hover:bg-white/14 focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><X className="size-5" /></button></Dialog.Close>
               </div>
               <Dialog.Description className="relative mt-5 max-w-2xl text-sm leading-6 text-[#FAF6EC]/66 sm:ms-24 sm:text-base">{tr('Nous afficherons la carte, les horaires et les options de commande du restaurant le plus pratique pour vous.')}</Dialog.Description>

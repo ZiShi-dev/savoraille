@@ -50,6 +50,7 @@ html {
   scrollbar-gutter: stable;
   scrollbar-color: var(--c-or) var(--c-sevres);
   scrollbar-width: thin;
+  overflow-x: clip;
 }
 
 html::-webkit-scrollbar {
@@ -83,12 +84,29 @@ body[data-scroll-locked] {
 
 body {
   margin: 0;
+  max-width: 100%;
+  overflow-x: clip;
   background: var(--c-ivoire);
   color: var(--c-encre);
   font-family: var(--f-body);
   font-weight: 400;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
+}
+
+form label,
+.form-field {
+  min-width: 0;
+}
+
+input,
+textarea,
+select {
+  max-width: 100%;
+}
+
+body[data-mobile-menu-open] .restaurant-locator-fab {
+  display: none;
 }
 
 body.portfolio-demo {
