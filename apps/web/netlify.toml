@@ -1,4 +1,0 @@
-[build]
-  base = "apps/web"
-  command = "pnpm build:portfolio"
-  publish = "out"

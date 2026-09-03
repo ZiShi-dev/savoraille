@@ -1,6 +1,6 @@
 'use client';
 
-import { Instagram } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import Link from 'next/link';
 
 import { BrandSeal } from './brand-seal';
@@ -18,7 +18,22 @@ export function SiteFooter() {
           <div><p className="font-display text-4xl font-semibold">Savoraille</p><p className="font-script mt-1 text-2xl text-[#C6A15B]">{tr('La merveille des saveurs')}</p></div>
         </Link>
         <div><p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">{tr('Nous trouver')}</p><p className="mt-4 text-sm leading-7 text-[#FAF6EC]/70">{tr('Votre adresse')}<br />{tr('Votre ville, France')}</p></div>
-        <div><p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">{tr('Nous suivre')}</p><a href="https://vorzix.com" target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm text-[#FAF6EC]/75 hover:text-[#FAF6EC]"><Instagram className="size-5" />VORZIX</a></div>
+        <div>
+          <p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">
+            {siteConfig.portfolioMode ? tr('Réalisation') : tr('Nous suivre')}
+          </p>
+          {siteConfig.portfolioMode ? (
+            <a
+              href={siteConfig.vorzixUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 inline-flex items-center gap-2 text-sm text-[#FAF6EC]/75 hover:text-[#FAF6EC]"
+            >
+              <Globe className="size-5" aria-hidden />
+              VORZIX
+            </a>
+          ) : null}
+        </div>
       </div>
       <div className="mx-auto flex max-w-[1200px] flex-col gap-3 pt-6 text-xs text-[#FAF6EC]/50 sm:flex-row sm:items-center sm:justify-between">
         <p>© 2026 Savoraille. {tr('Tous droits réservés.')}</p>
