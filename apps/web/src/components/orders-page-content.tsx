@@ -25,7 +25,7 @@ export function OrdersPageContent() {
   const completedSections = sectionStates.filter(({ count }) => count > 0).length;
 
   return (
-    <main className="min-h-[75svh] bg-[#FAF6EC] px-6 pb-20 pt-32 text-[#241F19] sm:pt-36">
+    <main id="contenu-principal" className="min-h-[75svh] bg-[#FAF6EC] px-6 pb-20 pt-32 text-[#241F19] sm:pt-36">
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col gap-5 border-b border-[#C6A15B]/45 pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div><p className="font-script text-3xl text-[#7C2438]">{tr('Votre panier sent déjà bon.')}</p><h1 className="font-display mt-2 text-5xl leading-none font-semibold text-[#1E3A5F] sm:text-6xl">{tr('Ma commande')}</h1><p className="mt-4 text-sm text-[#241F19]/60">{itemCount} {tr('articles sélectionnés')}</p></div>

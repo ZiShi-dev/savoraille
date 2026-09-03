@@ -7,9 +7,9 @@
   --c-or: #c6a15b;
   --c-terre: #c4703f;
   --c-encre: #241f19;
-  --f-display: "Cormorant Garamond", Georgia, serif;
-  --f-body: "Manrope", system-ui, sans-serif;
-  --f-script: "Parisienne", cursive;
+  --f-display: var(--font-cormorant), Georgia, serif;
+  --f-body: var(--font-manrope), system-ui, sans-serif;
+  --f-script: var(--font-parisienne), cursive;
   --r-card: 16px;
   --r-btn: 8px;
   --shadow: 0 8px 24px rgba(30, 58, 95, 0.12);
@@ -24,14 +24,14 @@
 }
 
 html[lang='ar'] body {
-  font-family: "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+  font-family: var(--font-noto-sans-arabic), Tahoma, Arial, sans-serif;
   letter-spacing: 0;
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
 html[lang='ar'] .font-display,
 html[lang='ar'] .font-script {
-  font-family: "Noto Naskh Arabic", "Noto Sans Arabic", serif;
+  font-family: var(--font-noto-naskh-arabic), var(--font-noto-sans-arabic), serif;
   font-weight: 600;
   letter-spacing: 0;
   line-height: 1.15;

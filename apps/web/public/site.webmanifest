@@ -1,0 +1,18 @@
+{
+  "name": "Savoraille",
+  "short_name": "Savoraille",
+  "description": "La merveille des saveurs — restaurant français",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1E3A5F",
+  "theme_color": "#1E3A5F",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "images/savoraille-dining-room-3d.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

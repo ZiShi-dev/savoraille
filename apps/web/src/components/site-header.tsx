@@ -207,7 +207,11 @@ export function SiteHeader() {
           >
             <ShoppingBag aria-hidden="true" className="size-[1.15rem]" strokeWidth={1.8} />
             {itemCount > 0 ? (
-              <span className="absolute -top-0.5 -end-0.5 grid min-w-4 place-items-center rounded-full bg-[#7C2438] px-1 py-0.5 text-[0.58rem] font-bold text-[#FAF6EC]">
+              <span
+                className="absolute -top-0.5 -end-0.5 grid min-w-4 place-items-center rounded-full bg-[#7C2438] px-1 py-0.5 text-[0.58rem] font-bold text-[#FAF6EC]"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 {itemCount}
               </span>
             ) : null}

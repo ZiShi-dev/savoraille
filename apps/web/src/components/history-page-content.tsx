@@ -32,7 +32,7 @@ export function HistoryPageContent() {
   const { tr } = useI18n();
 
   return (
-    <main className="overflow-hidden bg-[#FAF6EC] pt-20 text-[#241F19]">
+    <main id="contenu-principal" className="overflow-hidden bg-[#FAF6EC] pt-20 text-[#241F19]">
       <section className="relative isolate min-h-[680px] overflow-hidden bg-[#102B4D] text-[#FAF6EC] sm:min-h-[760px]">
         <AppImage src="/images/savoraille-dining-room-3d.png" alt={tr('La salle Savoraille, préparée pour le service du soir')} fill priority sizes="100vw" className="object-cover object-center" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,25,45,.92)_0%,rgba(7,25,45,.74)_48%,rgba(7,25,45,.26)_100%)] rtl:bg-[linear-gradient(270deg,rgba(7,25,45,.92)_0%,rgba(7,25,45,.74)_48%,rgba(7,25,45,.26)_100%)]" />

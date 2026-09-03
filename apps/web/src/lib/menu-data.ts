@@ -1,12 +1,12 @@
 const images = {
-  aperitif: 'https://images.unsplash.com/photo-1576006144029-e42bb7166c76?auto=format&fit=crop&w=1600&q=82',
-  entree: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1600&q=82',
-  volaille: 'https://images.unsplash.com/photo-1616401616927-3c81de22dfa8?auto=format&fit=crop&w=1600&q=82',
-  poisson: 'https://images.unsplash.com/photo-1776097633704-6666ffafc58d?auto=format&fit=crop&w=1600&q=82',
-  vegetal: 'https://images.unsplash.com/photo-1470338950318-40320a722782?auto=format&fit=crop&w=1600&q=82',
-  dessert: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1600&q=82',
-  boisson: 'https://images.unsplash.com/photo-1677825949218-608c76ed1fbf?auto=format&fit=crop&w=1600&q=82',
-  agneau: 'https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&w=1600&q=82',
+  aperitif: '/images/menu/aperitif.jpg',
+  entree: '/images/menu/entree.jpg',
+  volaille: '/images/menu/volaille.jpg',
+  poisson: '/images/menu/poisson.jpg',
+  vegetal: '/images/menu/vegetal.jpg',
+  dessert: '/images/menu/dessert.jpg',
+  boisson: '/images/menu/boisson.jpg',
+  agneau: '/images/menu/agneau.jpg',
 } as const;
 
 export type MenuItem = {

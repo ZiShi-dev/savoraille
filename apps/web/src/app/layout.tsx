@@ -1,21 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
-import '@fontsource/cormorant-garamond/600.css';
-import '@fontsource/cormorant-garamond/600-italic.css';
-import '@fontsource/cormorant-garamond/700.css';
-import '@fontsource/manrope/400.css';
-import '@fontsource/manrope/500.css';
-import '@fontsource/manrope/600.css';
-import '@fontsource/manrope/700.css';
-import '@fontsource/noto-naskh-arabic/arabic-600.css';
-import '@fontsource/noto-naskh-arabic/arabic-700.css';
-import '@fontsource/noto-sans-arabic/arabic-400.css';
-import '@fontsource/noto-sans-arabic/arabic-500.css';
-import '@fontsource/noto-sans-arabic/arabic-600.css';
-import '@fontsource/noto-sans-arabic/arabic-700.css';
-import '@fontsource/parisienne/400.css';
-
 import './globals.css';
 
 import { AuthProvider } from '@/components/auth-provider';
@@ -24,6 +9,7 @@ import { I18nProvider } from '@/components/i18n-provider';
 import { PortfolioBanner } from '@/components/portfolio-banner';
 import { RestaurantProvider } from '@/components/restaurant-provider';
 import { SkipLink } from '@/components/skip-link';
+import { fontVariables } from '@/lib/fonts';
 import { siteConfig, withBasePath } from '@/lib/site-config';
 
 export const metadata: Metadata = {
@@ -36,6 +22,7 @@ export const metadata: Metadata = {
   keywords: ['restaurant', 'français', 'réservation', 'commande en ligne', 'démo', 'VORZIX'],
   authors: [{ name: 'VORZIX', url: siteConfig.vorzixUrl }],
   creator: 'VORZIX',
+  manifest: withBasePath('/site.webmanifest'),
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
@@ -51,12 +38,17 @@ export const metadata: Metadata = {
     description: 'Site vitrine restaurant moderne, conçu par VORZIX.',
     images: [withBasePath('/images/savoraille-dining-room-3d.png')],
   },
-  robots: { index: true, follow: true },
+  robots: siteConfig.portfolioMode ? { index: false, follow: false } : { index: true, follow: true },
 };
+
+const localeSyncScript = `(function(){try{var l=localStorage.getItem('savoraille-locale');if(l==='ar'){document.documentElement.lang='ar';document.documentElement.dir='rtl';}else if(l==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}}catch(e){}})();`;
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr" className={fontVariables} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: localeSyncScript }} />
+      </head>
       <body className={siteConfig.portfolioMode ? 'portfolio-demo' : undefined}>
         <I18nProvider>
           <AuthProvider>

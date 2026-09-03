@@ -220,7 +220,7 @@ export function SummerMenuExperience({ showDiscovery = true, standalone = false 
                             {active ? <motion.span layoutId="menu-active" className="absolute inset-y-0 start-0 w-1 bg-[#C6A15B]" /> : null}
                             <span className="flex items-center gap-4">
                               <span className={`relative size-12 shrink-0 overflow-hidden rounded-md border sm:size-14 ${active ? 'border-[#C6A15B]/65' : 'border-[#1E3A5F]/12'}`}>
-                                <AppImage src={item.image} alt="" fill loading="lazy" sizes="56px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                                <AppImage src={item.image} alt={tr(item.name)} fill loading="lazy" sizes="56px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                                 <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/70 via-transparent to-transparent" />
                                 <span className="font-display absolute bottom-1 start-1.5 text-xs font-semibold tabular-nums text-[#FAF6EC]">{String(itemNumber).padStart(2, '0')}</span>
                               </span>

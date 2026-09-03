@@ -6,11 +6,12 @@ import { ScrollToTop } from '@/components/scroll-to-top';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SummerMenuExperience } from '@/components/summer-menu-experience';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata('/carte/', {
   title: 'La carte',
   description: 'Découvrez la carte de saison et les sélections surprises de Savoraille.',
-};
+});
 
 export default function MenuPage() {
   return (
