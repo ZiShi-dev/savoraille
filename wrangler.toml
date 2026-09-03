@@ -1,12 +1,12 @@
 # Cloudflare Pages (site statique Next.js)
 #
-# Dashboard → Builds :
-#   Build command     : pnpm build:netlify
-#   Build output      : apps/web/out
-#   Deploy command    : (VIDE — ne pas mettre "npx wrangler deploy")
-#   Root directory    : (vide)
+# Dashboard → Settings → Builds :
+#   Build command      : pnpm build:netlify
+#   Build output       : apps/web/out
+#   Deploy command     : pnpm deploy:cloudflare
+#   (NE PAS utiliser   : npx wrangler deploy)
 #
-# Variables (Environment variables) :
+# Environment variables :
 #   NODE_VERSION=22
 #   NEXT_PUBLIC_STATIC_EXPORT=true
 #   NEXT_PUBLIC_PORTFOLIO_MODE=true

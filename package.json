@@ -12,11 +12,15 @@
     "build:web": "pnpm --filter @savoraill/web build",
     "build:netlify": "pnpm --filter @savoraill/web build:netlify",
     "build:web:portfolio": "pnpm build:netlify",
+    "deploy:cloudflare": "wrangler pages deploy apps/web/out --project-name=savoraille",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
     "infra:logs": "docker compose logs -f"
+  },
+  "devDependencies": {
+    "wrangler": "^4.128.0"
   }
 }
