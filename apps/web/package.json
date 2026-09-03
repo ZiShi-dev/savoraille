@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:portfolio": "next build",
+    "build:netlify": "next build",
+    "build:portfolio": "pnpm build:netlify",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"

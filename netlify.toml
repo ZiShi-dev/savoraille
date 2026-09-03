@@ -1,9 +1,23 @@
-# Base directory Netlify UI : laisser vide (racine du repo).
-# Publish directory : apps/web/out
+# Netlify — monorepo Savoraille
+# UI Netlify : base directory vide (racine repo), publish = apps/web/out
+# Ne pas dupliquer NEXT_PUBLIC_* dans l’UI : tout est défini ici.
 
 [build]
-  command = "corepack enable && pnpm install --frozen-lockfile && NEXT_PUBLIC_STATIC_EXPORT=true NEXT_PUBLIC_PORTFOLIO_MODE=true NEXT_PUBLIC_BASE_PATH= NEXT_PUBLIC_VORZIX_URL=https://vorzix.com NEXT_PUBLIC_SITE_URL=\"$URL\" pnpm build:web:portfolio"
+  command = "corepack enable && pnpm install --frozen-lockfile && NEXT_PUBLIC_SITE_URL=\"$URL\" pnpm build:netlify"
   publish = "apps/web/out"
 
 [build.environment]
   NODE_VERSION = "22"
+  NEXT_PUBLIC_STATIC_EXPORT = "true"
+  NEXT_PUBLIC_PORTFOLIO_MODE = "true"
+  NEXT_PUBLIC_BASE_PATH = ""
+  NEXT_PUBLIC_VORZIX_URL = "https://vorzix.com"
+
+# Production (branche main → savoraille.netlify.app)
+[context.production.environment]
+  NEXT_PUBLIC_BASE_PATH = ""
+
+# Déploiement sous-chemin vorzix.com (branche `vorzix`)
+[context.branch.vorzix.environment]
+  NEXT_PUBLIC_BASE_PATH = "/demos/savoraille"
+  NEXT_PUBLIC_SITE_URL = "https://vorzix.com/demos/savoraille"

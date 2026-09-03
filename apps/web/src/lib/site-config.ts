@@ -9,7 +9,7 @@ export const siteConfig = {
   basePath: normalizeBasePath(process.env.NEXT_PUBLIC_BASE_PATH),
   portfolioMode: process.env.NEXT_PUBLIC_PORTFOLIO_MODE === 'true',
   vorzixUrl: process.env.NEXT_PUBLIC_VORZIX_URL ?? 'https://vorzix.com',
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://vorzix.com/demos/savoraille',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://savoraille.netlify.app',
   staticExport: process.env.NEXT_PUBLIC_STATIC_EXPORT === 'true',
 } as const;
 
