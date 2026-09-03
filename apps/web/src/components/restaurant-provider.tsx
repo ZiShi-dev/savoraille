@@ -28,9 +28,8 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
     const saved = window.localStorage.getItem('savoraille-restaurant');
     if (saved && restaurants.some((restaurant) => restaurant.id === saved)) {
       setSelectedId(saved);
-    } else {
+    } else if (saved) {
       window.localStorage.removeItem('savoraille-restaurant');
-      setOpen(true);
     }
     setReady(true);
   }, []);
