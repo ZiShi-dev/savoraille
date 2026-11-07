@@ -899,10 +899,6 @@ export function I18nProvider({ children, initialLocale = defaultLocale }: { chil
   const [locale, setLocale] = useState<Locale>(initialLocale);
 
   useEffect(() => {
-    setLocale(initialLocale);
-  }, [initialLocale]);
-
-  useEffect(() => {
     window.localStorage.setItem('savoraille-locale', locale);
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';

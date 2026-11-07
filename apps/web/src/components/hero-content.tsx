@@ -6,15 +6,16 @@ import { LocalizedLink } from './localized-link';
 import { useI18n } from './i18n-provider';
 
 export function HeroContent() {
-  const { tr } = useI18n();
+  const { locale, tr } = useI18n();
+  const arabic = locale === 'ar';
 
   return (
-    <div className="max-w-3xl rounded-[28px] bg-[#102B4D] px-6 py-8 sm:px-8 sm:py-10">
+    <div className={`rounded-[28px] bg-[#102B4D] px-6 py-8 sm:px-8 sm:py-10 ${arabic ? 'max-w-4xl' : 'max-w-3xl'}`}>
       <p data-motion-child className="font-script text-3xl text-[#C6A15B] sm:text-4xl">{tr('La merveille des saveurs')}</p>
 
-      <h1 data-motion-child className="font-display mt-5 text-[clamp(3.2rem,6vw,6rem)] leading-[0.88] font-semibold tracking-[-0.045em] text-[#FAF6EC]">
+      <h1 data-motion-child className={`font-display mt-5 font-semibold text-[#FAF6EC] ${arabic ? 'text-[clamp(2.35rem,4.4vw,3.6rem)] leading-[1.35] tracking-normal' : 'text-[clamp(3.2rem,6vw,6rem)] leading-[0.88] tracking-[-0.045em]'}`}>
         <span className="block">{tr('Trois adresses,')}</span>
-        <span className="block italic text-[#E4DDD0]">{tr('une carte de saison.')}</span>
+        <span className={`block text-[#E4DDD0] ${arabic ? '' : 'italic'}`}>{tr('une carte de saison.')}</span>
       </h1>
 
       <p data-motion-child className="mt-7 max-w-xl text-base leading-7 text-[#E4DDD0] sm:text-lg">

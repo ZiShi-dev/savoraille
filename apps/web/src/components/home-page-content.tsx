@@ -54,7 +54,7 @@ export function HomePageContent() {
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,43,77,0.55)_0%,rgba(16,43,77,0.15)_55%,transparent_100%)]" />
           </div>
 
-          <div data-motion="hero" className="relative z-10 mx-auto flex min-h-[calc(100svh-var(--site-header-offset))] max-w-[1200px] items-center pt-[var(--site-header-offset)]">
+          <div data-motion="hero" className="relative z-10 mx-auto flex min-h-[calc(100svh-var(--site-header-offset))] max-w-[1200px] items-center justify-start pt-[var(--site-header-offset)] rtl:justify-end">
             <HeroContent />
           </div>
         </section>
