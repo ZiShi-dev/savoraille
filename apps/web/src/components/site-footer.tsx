@@ -1,57 +1,94 @@
 'use client';
 
-import { Globe } from 'lucide-react';
+import { ArrowRight, ArrowUp, Globe, Mail } from 'lucide-react';
 import { LocalizedLink } from './localized-link';
 
 import { BrandSeal } from './brand-seal';
 import { useI18n } from './i18n-provider';
+import { restaurants } from './restaurant-data';
 import { siteConfig } from '@/lib/site-config';
+
+const footerLinks = [
+  { label: 'La carte', href: '/carte' },
+  { label: 'Réservation', href: '/reservation' },
+  { label: 'Notre histoire', href: '/histoire' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Mes commandes', href: '/commandes' },
+];
+
+const footerHeading = 'text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase';
+const footerLink = 'text-sm text-[#FAF6EC]/70 outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]';
 
 export function SiteFooter() {
   const { tr } = useI18n();
 
   return (
-    <footer className="bg-[#1E3A5F] px-6 py-14 text-[#FAF6EC]">
-      <div className="mx-auto grid max-w-[1200px] gap-10 border-b border-[#C6A15B]/30 pb-12 md:grid-cols-[1.4fr_1fr_1fr]">
-        <LocalizedLink href="/#accueil" className="flex w-fit items-center gap-5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
-          <BrandSeal inverse className="size-24 shrink-0" />
-          <div><p className="font-display text-4xl font-semibold">Savoraille</p><p className="font-script mt-1 text-2xl text-[#C6A15B]">{tr('La merveille des saveurs')}</p></div>
-        </LocalizedLink>
-        <div><p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">{tr('Nous trouver')}</p><p className="mt-4 text-sm leading-7 text-[#FAF6EC]/70">{tr('Votre adresse')}<br />{tr('Votre ville, France')}</p></div>
-        <div>
-          <p className="text-xs font-bold tracking-[0.18em] text-[#C6A15B] uppercase">
-            {siteConfig.portfolioMode ? tr('Réalisation') : tr('Nous suivre')}
-          </p>
-          {siteConfig.portfolioMode ? (
-            <a
-              href={siteConfig.vorzixUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-2 text-sm text-[#FAF6EC]/75 hover:text-[#FAF6EC]"
-            >
-              <Globe className="size-5" aria-hidden />
-              VORZIX
-            </a>
-          ) : null}
+    <footer className="bg-[#1E3A5F] px-6 pt-16 pb-8 text-[#FAF6EC] sm:pt-20">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="flex flex-col gap-8 border-b border-[#C6A15B]/30 pb-12 md:flex-row md:items-end md:justify-between">
+          <LocalizedLink href="/#accueil" className="flex w-fit items-center gap-5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+            <BrandSeal inverse className="size-20 shrink-0 sm:size-24" />
+            <span>
+              <span className="font-display block text-5xl leading-none font-semibold sm:text-6xl">Savoraille</span>
+              <span className="font-script mt-1 block text-2xl text-[#C6A15B]">{tr('La merveille des saveurs')}</span>
+            </span>
+          </LocalizedLink>
+          <LocalizedLink href="/reservation" className="inline-flex w-fit items-center gap-2 rounded-full bg-[#FAF6EC] px-6 py-3.5 text-sm font-bold text-[#1E3A5F] outline-none transition-[background-color,transform] duration-150 hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E3A5F] active:scale-[0.97]">
+            {tr('Réserver une table')}<ArrowRight className="size-4 rtl:rotate-180" />
+          </LocalizedLink>
         </div>
-      </div>
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-3 pt-6 text-xs text-[#FAF6EC]/50 sm:flex-row sm:items-center sm:justify-between">
-        <p>© 2026 Savoraille. {tr('Tous droits réservés.')}</p>
-        <div className="flex flex-col gap-2 sm:items-end">
-          <p>{tr('Restaurant français moderne.')}</p>
-          {siteConfig.portfolioMode ? (
-            <p>
-              {tr('Site d’entreprise')} ·{' '}
-              <a
-                href={siteConfig.vorzixUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
-              >
-                VORZIX
-              </a>
-            </p>
-          ) : null}
+
+        <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1fr_2fr_1fr]">
+          <nav aria-label={tr('Plan du site')}>
+            <p className={footerHeading}>{tr('Plan du site')}</p>
+            <ul className="mt-5 space-y-3">
+              {footerLinks.map((link) => (
+                <li key={link.href}><LocalizedLink href={link.href} className={footerLink}>{tr(link.label)}</LocalizedLink></li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="sm:col-span-2 lg:col-span-1">
+            <p className={footerHeading}>{tr('Nous trouver')}</p>
+            <ul className="mt-5 grid gap-6 sm:grid-cols-3">
+              {restaurants.map((restaurant) => (
+                <li key={restaurant.id} className="text-sm leading-6">
+                  <span className="font-display block text-2xl font-semibold text-[#FAF6EC]">{restaurant.city}</span>
+                  <span className="block text-[#FAF6EC]/70">{tr(restaurant.address)}</span>
+                  <span className="block text-[#FAF6EC]/45">{tr(restaurant.hours)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="sm:col-start-2 sm:row-start-1 lg:col-start-auto lg:row-start-auto">
+            <p className={footerHeading}>{tr('Contact')}</p>
+            <ul className="mt-5 space-y-3">
+              <li>
+                <a href="mailto:bonjour@savoraille.fr" className={`${footerLink} inline-flex items-center gap-2`}><Mail aria-hidden="true" className="size-4 text-[#C6A15B]" />bonjour@savoraille.fr</a>
+              </li>
+              {siteConfig.portfolioMode ? (
+                <li>
+                  <a href={siteConfig.vorzixUrl} target="_blank" rel="noreferrer" className={`${footerLink} inline-flex items-center gap-2`}><Globe aria-hidden="true" className="size-4 text-[#C6A15B]" />{tr('Réalisation')} · VORZIX</a>
+                </li>
+              ) : null}
+            </ul>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4 border-t border-[#FAF6EC]/10 pt-6 text-xs text-[#FAF6EC]/50 sm:flex-row sm:items-center sm:justify-between">
+          <p>© 2026 Savoraille. {tr('Tous droits réservés.')} {tr('Cuisine française, trois adresses.')}</p>
+          <div className="flex items-center gap-5">
+            {siteConfig.portfolioMode ? (
+              <p>
+                {tr('Site d’entreprise')} ·{' '}
+                <a href={siteConfig.vorzixUrl} target="_blank" rel="noreferrer" className="font-semibold text-[#C6A15B] outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">VORZIX</a>
+              </p>
+            ) : null}
+            <LocalizedLink href="/#accueil" className="inline-flex items-center gap-1.5 text-[#FAF6EC]/60 outline-none transition-colors hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+              {tr('Haut de page')}<ArrowUp aria-hidden="true" className="size-3.5" />
+            </LocalizedLink>
+          </div>
         </div>
       </div>
     </footer>

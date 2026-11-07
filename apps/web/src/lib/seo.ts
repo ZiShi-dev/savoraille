@@ -24,7 +24,7 @@ const pageCopy: Record<PageKey, Record<Locale, { title: string; description: str
   home: {
     fr: {
       title: 'Savoraille — La merveille des saveurs',
-      description: 'Restaurant français : carte de saison, réservation en ligne et commande à emporter chez Savoraille.',
+      description: 'Cuisine française de saison à Paris, Lyon et Bordeaux. Réservation et commande sur place.',
     },
     en: {
       title: 'Savoraille — A world of wonderful flavours',
@@ -36,9 +36,9 @@ const pageCopy: Record<PageKey, Record<Locale, { title: string; description: str
     },
   },
   carte: {
-    fr: { title: 'La carte', description: 'Découvrez la carte de saison et les sélections surprises de Savoraille.' },
-    en: { title: 'Menu', description: 'Discover Savoraille’s seasonal menu and surprise selections.' },
-    ar: { title: 'قائمة الطعام', description: 'اكتشفوا قائمة سافوراي الموسمية والاختيارات المفاجئة.' },
+    fr: { title: 'La carte', description: 'Volaille fermière, lieu jaune, potimarron, agneau. La carte de Savoraille, à Paris, Lyon et Bordeaux.' },
+    en: { title: 'Menu', description: 'Farm chicken, pollock, pumpkin, lamb. The Savoraille menu in Paris, Lyon and Bordeaux.' },
+    ar: { title: 'قائمة الطعام', description: 'دجاج بلدي، سمك، يقطين، لحم غنم. قائمة سافوراي في باريس وليون وبوردو.' },
   },
   reservation: {
     fr: { title: 'Réservation', description: 'Réservez votre table chez Savoraille : déjeuner, dîner, moment à deux ou événement privé.' },
@@ -51,9 +51,9 @@ const pageCopy: Record<PageKey, Record<Locale, { title: string; description: str
     ar: { title: 'طلبي', description: 'اطّلعوا على أطباقكم وكمياتكم وإجمالي طلب سافوراي.' },
   },
   histoire: {
-    fr: { title: 'Notre histoire', description: 'Découvrez l’histoire, les valeurs et la cuisine française vivante de Savoraille.' },
-    en: { title: 'Our story', description: 'Discover Savoraille’s story, values and vibrant French cooking.' },
-    ar: { title: 'قصتنا', description: 'اكتشفوا قصة سافوراي وقيمها ومطبخها الفرنسي الحي.' },
+    fr: { title: 'Notre histoire', description: 'Trois adresses : Le Marais, la Presqu’île, les Chartrons. Mardi au dimanche, de 12 h à 23 h.' },
+    en: { title: 'Our story', description: 'Three addresses: Le Marais, Presqu’île, Les Chartrons. Tuesday to Sunday, noon to 11 pm.' },
+    ar: { title: 'قصتنا', description: 'ثلاثة عناوين: لو ماراي، وبرزكيه، ولي شارترون. من الثلاثاء إلى الأحد، من 12 إلى 23.' },
   },
   contact: {
     fr: { title: 'Contact', description: 'Contactez Savoraille pour une réservation, une question ou un événement privé.' },

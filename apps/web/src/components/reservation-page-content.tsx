@@ -1,8 +1,10 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, BriefcaseBusiness, CalendarDays, Check, Clock3, Heart, MapPin, Phone, Sparkles, UserRound, UsersRound, UtensilsCrossed } from 'lucide-react';
+import { GsapStepPanel } from '@/components/gsap-step-panel';
+import { GsapSuccessBadge } from '@/components/gsap-success-badge';
+import { prefersReducedMotion } from '@/lib/gsap-register';
+import { ArrowLeft, ArrowRight, BriefcaseBusiness, CalendarDays, Check, Clock3, Heart, MapPin, Phone, UserRound, Users, UsersRound, UtensilsCrossed } from 'lucide-react';
 import { AppImage } from './app-image';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -18,10 +20,10 @@ type ReservationReason = 'dinner' | 'romantic' | 'business' | 'private';
 type ReservationStep = 'reason' | 'form' | 'done';
 
 const reasons = [
-  { id: 'dinner' as const, icon: UtensilsCrossed, title: 'Un déjeuner ou un dîner', description: 'Pour savourer la carte et simplement prendre le temps.', image: '/images/reservations/dinner.png' },
-  { id: 'romantic' as const, icon: Heart, title: 'Un moment à deux', description: 'Une table plus intime pour une occasion qui compte.', image: '/images/reservations/romantic.png' },
-  { id: 'business' as const, icon: BriefcaseBusiness, title: 'Un repas professionnel', description: 'Un cadre calme et un service adapté à votre rythme.', image: '/images/reservations/business.png' },
-  { id: 'private' as const, icon: Sparkles, title: 'Un événement privé', description: 'Un moment sur mesure pour votre groupe et vos envies.', image: '/images/reservations/private-event.png' },
+  { id: 'dinner' as const, icon: UtensilsCrossed, title: 'Un déjeuner ou un dîner', description: 'La carte, à table.', image: '/images/reservations/dinner.png' },
+  { id: 'romantic' as const, icon: Heart, title: 'Un moment à deux', description: 'Une table à l’écart.', image: '/images/reservations/romantic.png' },
+  { id: 'business' as const, icon: BriefcaseBusiness, title: 'Un repas professionnel', description: 'Salle calme, service à l’heure.', image: '/images/reservations/business.png' },
+  { id: 'private' as const, icon: Users, title: 'Un événement privé', description: 'Un groupe, une salle à part.', image: '/images/reservations/private-event.png' },
 ];
 
 const schema = z.object({
@@ -49,7 +51,6 @@ export function ReservationPageContent() {
   const [reason, setReason] = useState<ReservationReason | null>(null);
   const [reference, setReference] = useState('');
   const flowRef = useRef<HTMLDivElement>(null);
-  const reduceMotion = useReducedMotion();
   const today = localDateValue();
   const chosenReason = reasons.find((item) => item.id === reason);
   const fieldClass = 'mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-colors placeholder:text-[#241F19]/38 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35';
@@ -58,12 +59,7 @@ export function ReservationPageContent() {
     defaultValues: { date: today, time: '20:00', guests: '2', name: '', phone: '', email: '', notes: '' },
   });
   const values = watch();
-  const transition = { duration: reduceMotion ? 0 : 0.36, ease: [0.22, 1, 0.36, 1] as const };
-  const variants = {
-    enter: reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.99 },
-    center: { opacity: 1, y: 0, scale: 1 },
-    exit: reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12, scale: 0.99 },
-  };
+  const stepKey = step === 'form' && reason ? `form-${reason}` : step;
   const error = (name: keyof ReservationValues) => errors[name]?.message ? <span role="alert" className="mt-1.5 block text-xs font-semibold text-[#7C2438]">{tr(errors[name]?.message ?? '')}</span> : null;
   const timeOptions = ['12:00', '12:30', '13:00', '13:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'].map((time) => ({ value: time, label: time }));
   const guestOptions = Array.from({ length: 12 }, (_, index) => ({ value: String(index + 1), label: String(index + 1) }));
@@ -71,7 +67,7 @@ export function ReservationPageContent() {
   const chooseReason = (nextReason: ReservationReason) => {
     setReason(nextReason);
     setStep('form');
-    window.setTimeout(() => flowRef.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }), 80);
+    window.setTimeout(() => flowRef.current?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' }), 80);
   };
   const submit = () => requireAuth('reservation', () => {
     setReference(`RSV-${Date.now().toString().slice(-6)}`);
@@ -87,49 +83,47 @@ export function ReservationPageContent() {
   return (
     <section className="min-h-screen bg-[#FAF6EC] px-4 pb-20 pt-32 text-[#241F19] sm:px-6 sm:pb-24 sm:pt-36">
       <div className="mx-auto max-w-[1180px]">
-        <div className="relative overflow-hidden rounded-3xl bg-[#102B4D] px-5 py-9 text-[#FAF6EC] shadow-[0_20px_60px_rgba(30,58,95,0.2)] sm:px-10 sm:py-12 lg:px-14">
-          <div className="pointer-events-none absolute -end-20 -top-28 size-80 rounded-full border border-[#C6A15B]/18" />
-          <div className="pointer-events-none absolute -end-8 -top-16 size-60 rounded-full border border-[#C6A15B]/24" />
+        <div data-motion="reveal" className="relative overflow-hidden rounded-3xl bg-[#102B4D] px-5 py-9 text-[#FAF6EC] shadow-[0_20px_60px_rgba(30,58,95,0.2)] sm:px-10 sm:py-12 lg:px-14">
           <div className="relative max-w-3xl">
-            <p className="font-script text-3xl text-[#C6A15B] sm:text-4xl">{tr('Votre table vous attend')}</p>
-            <h1 className="font-display mt-3 text-4xl leading-[0.95] font-semibold sm:text-6xl lg:text-7xl">{tr('Quel plaisir vous ferait envie aujourd’hui ?')}</h1>
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-[#FAF6EC]/68 sm:text-base">{tr('Dites-nous ce que vous souhaitez célébrer ou partager. Nous adapterons la suite de votre réservation.')}</p>
+            <p className="font-script text-3xl text-[#C6A15B] sm:text-4xl">{tr('Réserver')}</p>
+            <h1 className="font-display mt-3 text-4xl leading-[0.95] font-semibold sm:text-6xl lg:text-7xl">{tr('Une table, à quelle heure ?')}</h1>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-[#FAF6EC]/68 sm:text-base">{tr('Date, heure, nombre de couverts. La demande reste sur cet appareil.')}</p>
           </div>
         </div>
 
-        <div ref={flowRef} className="mt-6 scroll-mt-28 overflow-hidden rounded-3xl border border-[#1E3A5F]/12 bg-[#FFFDFC] shadow-[0_16px_50px_rgba(30,58,95,0.11)] sm:mt-8">
+        <div ref={flowRef} data-motion="reveal" className="mt-6 scroll-mt-28 overflow-hidden rounded-3xl border border-[#1E3A5F]/12 bg-[#FFFDFC] shadow-[0_16px_50px_rgba(30,58,95,0.11)] sm:mt-8">
           <div className="flex items-center justify-between gap-4 border-b border-[#1E3A5F]/10 px-5 py-4 sm:px-8">
             <div>
               <p className="text-[0.65rem] font-bold tracking-[0.14em] text-[#C4703F] uppercase">{step === 'reason' ? `${tr('Étape')} 1 / 2` : step === 'form' ? `${tr('Étape')} 2 / 2` : tr('Demande préparée')}</p>
-              <p className="font-display mt-1 text-2xl font-semibold text-[#1E3A5F]">{tr(step === 'reason' ? 'Pourquoi souhaitez-vous réserver ?' : step === 'form' ? 'Complétez votre demande.' : 'Votre demande est prête.')}</p>
+              <p className="font-display mt-1 text-2xl font-semibold text-[#1E3A5F]">{tr(step === 'reason' ? 'L’occasion.' : step === 'form' ? 'Vos coordonnées.' : 'C’est noté ici.')}</p>
             </div>
             {step === 'form' ? <button type="button" onClick={() => setStep('reason')} className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#1E3A5F]/12 px-3 py-2.5 text-xs font-bold text-[#1E3A5F] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour')}</button> : null}
           </div>
 
-          <AnimatePresence initial={false} mode="wait">
             {step === 'reason' ? (
-              <motion.div key="reasons" variants={variants} initial="enter" animate="center" exit="exit" transition={transition} className="p-5 sm:p-8">
-                <p className="max-w-2xl text-sm leading-6 text-[#241F19]/60">{tr('Choisissez l’occasion qui ressemble le mieux à votre venue.')}</p>
+              <GsapStepPanel stepKey={stepKey} className="p-5 sm:p-8">
+                <p className="max-w-2xl text-sm leading-6 text-[#241F19]/60">{tr('Quatre cas. Le plus proche de votre venue.')}</p>
                 <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   {reasons.map((item) => {
                     const Icon = item.icon;
-                    return <button key={item.id} type="button" onClick={() => chooseReason(item.id)} className="group flex min-h-[22rem] flex-col overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white text-start shadow-[0_8px_24px_rgba(30,58,95,0.08)] outline-none transition-all hover:-translate-y-1 hover:border-[#C6A15B] hover:shadow-[0_16px_36px_rgba(30,58,95,0.16)] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+                    return <button key={item.id} type="button" onClick={() => chooseReason(item.id)} className="group flex min-h-[22rem] flex-col overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white text-start shadow-[0_8px_24px_rgba(30,58,95,0.08)] outline-none transition-all hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
                       <span className="relative block aspect-[16/10] w-full overflow-hidden bg-[#102B4D]">
-                        <AppImage src={item.image} alt={tr(item.title)} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                        <AppImage src={item.image} alt={tr(item.title)} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
                         <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/58 via-transparent to-transparent" />
                         <span className="absolute bottom-3 end-3 grid size-11 place-items-center rounded-full border border-[#FAF6EC]/35 bg-[#1E3A5F]/88 text-[#C6A15B] shadow-lg backdrop-blur-md"><Icon className="size-5" strokeWidth={1.7} /></span>
                       </span>
                       <span className="flex flex-1 flex-col p-5">
                         <span className="font-display block text-2xl leading-tight font-semibold text-[#1E3A5F]">{tr(item.title)}</span>
                         <span className="mt-2 block text-xs leading-5 text-[#241F19]/55">{tr(item.description)}</span>
-                        <span className="mt-auto pt-5 text-xs font-bold text-[#7C2438]">{tr('Choisir')} <ArrowRight className="ms-1 inline size-3.5 transition-transform group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" /></span>
+                        <span className="mt-auto pt-5 text-xs font-bold text-[#7C2438]">{tr('Choisir')} <ArrowRight className="ms-1 inline size-3.5 rtl:-scale-x-100" /></span>
                       </span>
                     </button>;
                   })}
                 </div>
-              </motion.div>
+              </GsapStepPanel>
             ) : step === 'form' && chosenReason ? (
-              <motion.form key={`form-${reason}`} variants={variants} initial="enter" animate="center" exit="exit" transition={transition} onSubmit={handleSubmit(submit)} noValidate className="grid min-w-0 lg:grid-cols-[1fr_330px]">
+              <GsapStepPanel stepKey={stepKey} className="contents">
+              <form onSubmit={handleSubmit(submit)} noValidate className="grid min-w-0 lg:grid-cols-[1fr_330px]">
                 <div className="min-w-0 p-5 sm:p-8">
                   <div className="relative aspect-[16/8] min-h-44 overflow-hidden rounded-2xl border border-[#C6A15B]/35 bg-[#102B4D] sm:aspect-[16/5]">
                     <AppImage src={chosenReason.image} alt={tr(chosenReason.title)} fill priority sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
@@ -167,19 +161,19 @@ export function ReservationPageContent() {
                   </dl>
                   <div className="gold-divider gold-divider-dark mt-6" />
                   <button type="submit" disabled={!selectedRestaurant} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-5 py-4 text-sm font-bold text-white outline-none hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:cursor-not-allowed disabled:opacity-45">{tr('Envoyer ma demande')}<ArrowRight className="size-4 rtl:-scale-x-100" /></button>
-                  <p className="mt-3 text-center text-[0.68rem] leading-5 text-[#FAF6EC]/45">{tr('Prototype local · aucune réservation ne sera transmise.')}</p>
+                  <p className="mt-3 text-center text-[0.68rem] leading-5 text-[#FAF6EC]/45">{tr('La demande reste sur cet appareil.')}</p>
                 </aside>
-              </motion.form>
+              </form>
+              </GsapStepPanel>
             ) : (
-              <motion.div key="done" variants={variants} initial="enter" animate="center" exit="exit" transition={transition} className="grid place-items-center px-5 py-14 text-center sm:py-20">
-                <motion.span initial={reduceMotion ? undefined : { scale: 0.65, rotate: -8 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 250, damping: 18 }} className="grid size-20 place-items-center rounded-full bg-[#C4703F] text-white shadow-[0_12px_32px_rgba(196,112,63,0.3)]"><Check className="size-9" /></motion.span>
-                <h2 className="font-display mt-6 text-4xl font-semibold text-[#1E3A5F] sm:text-5xl">{tr('Votre demande est prête.')}</h2>
-                <p className="mt-3 max-w-lg text-sm leading-7 text-[#241F19]/60">{tr('Notre équipe vous recontactera pour confirmer la disponibilité et préparer votre table.')}</p>
+              <GsapStepPanel stepKey={stepKey} className="grid place-items-center px-5 py-14 text-center sm:py-20">
+                <GsapSuccessBadge id={reference} className="grid size-20 place-items-center rounded-full bg-[#C4703F] text-white shadow-[0_12px_32px_rgba(196,112,63,0.3)]"><Check className="size-9" /></GsapSuccessBadge>
+                <h2 className="font-display mt-6 text-4xl font-semibold text-[#1E3A5F] sm:text-5xl">{tr('C’est noté ici.')}</h2>
+                <p className="mt-3 max-w-lg text-sm leading-7 text-[#241F19]/60">{tr('Rien n’est envoyé au restaurant.')}</p>
                 <p className="mt-5 rounded-full bg-[#1E3A5F]/7 px-4 py-2 text-xs font-bold tracking-[0.12em] text-[#1E3A5F]">{tr('Référence')} · {reference}</p>
                 <button type="button" onClick={restart} className="mt-7 rounded-lg bg-[#1E3A5F] px-6 py-4 text-sm font-bold text-[#FAF6EC] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Faire une autre demande')}</button>
-              </motion.div>
+              </GsapStepPanel>
             )}
-          </AnimatePresence>
         </div>
       </div>
     </section>

@@ -2,90 +2,92 @@
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
-import { menuSections } from './summer-menu-experience';
+import { menuItems } from '@/lib/menu-data';
 
-export type CartMenu = { id: string; name: string };
 export type CartCustomization = {
   optionIds: string[];
   optionLabels: string[];
   unitSupplement: number;
 };
-export type CartLine = { menuId: string; itemId: string; quantity: number; customization?: CartCustomization };
-
-type PersistedCart = {
-  version: 2 | 3;
-  menus: CartMenu[];
-  lines: CartLine[];
-  activeMenuId: string;
-};
+export type CartLine = { itemId: string; quantity: number; customization?: CartCustomization };
 
 type CartValue = {
-  menus: CartMenu[];
-  activeMenuId: string;
   lines: CartLine[];
   itemCount: number;
   total: number;
-  setActiveMenu: (menuId: string) => void;
-  createMenu: (name: string) => string;
-  renameMenu: (menuId: string, name: string) => void;
-  deleteMenu: (menuId: string) => void;
-  addItem: (itemId: string, quantity?: number, menuId?: string, customization?: CartCustomization) => void;
-  setQuantity: (menuId: string, itemId: string, quantity: number) => void;
-  removeItem: (menuId: string, itemId: string) => void;
+  addItem: (itemId: string, quantity?: number, customization?: CartCustomization) => void;
+  setQuantity: (itemId: string, quantity: number, optionIds?: string[]) => void;
+  removeItem: (itemId: string, optionIds?: string[]) => void;
   clearCart: () => void;
 };
 
-const DEFAULT_MENU: CartMenu = { id: 'menu-default', name: 'Mon menu' };
 const CartContext = createContext<CartValue | null>(null);
-const prices = new Map(menuSections.flatMap((section) => section.items.map((item) => [item.id, Number.parseFloat(item.price)])));
+const prices = new Map(menuItems.map((item) => [item.id, Number.parseFloat(item.price)]));
 
-function validLine(line: Partial<CartLine>): line is CartLine {
-  return typeof line.menuId === 'string' && prices.has(line.itemId ?? '') && Number.isInteger(line.quantity) && (line.quantity ?? 0) > 0;
+function optionKey(optionIds?: string[]) {
+  return (optionIds ?? []).slice().sort().join('|');
 }
 
-function sanitizeLine(line: CartLine): CartLine {
-  const customization = line.customization;
-  if (!customization || !Array.isArray(customization.optionIds) || !Array.isArray(customization.optionLabels)) return { menuId: line.menuId, itemId: line.itemId, quantity: line.quantity };
-  const unitSupplement = Number.isFinite(customization.unitSupplement) && customization.unitSupplement >= 0 ? customization.unitSupplement : 0;
+function lineKey(line: Pick<CartLine, 'itemId' | 'customization'>) {
+  return `${line.itemId}::${optionKey(line.customization?.optionIds)}`;
+}
+
+function validQuantity(quantity: unknown): quantity is number {
+  return Number.isInteger(quantity) && (quantity as number) > 0;
+}
+
+function sanitizeCustomization(value: unknown): CartCustomization | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  const customization = value as Partial<CartCustomization>;
+  if (!Array.isArray(customization.optionIds) || !Array.isArray(customization.optionLabels)) return undefined;
+  const unitSupplement = Number.isFinite(customization.unitSupplement) && (customization.unitSupplement ?? 0) >= 0 ? customization.unitSupplement ?? 0 : 0;
   return {
-    menuId: line.menuId,
-    itemId: line.itemId,
-    quantity: line.quantity,
-    customization: {
-      optionIds: customization.optionIds.filter((value): value is string => typeof value === 'string'),
-      optionLabels: customization.optionLabels.filter((value): value is string => typeof value === 'string'),
-      unitSupplement,
-    },
+    optionIds: customization.optionIds.filter((entry): entry is string => typeof entry === 'string'),
+    optionLabels: customization.optionLabels.filter((entry): entry is string => typeof entry === 'string'),
+    unitSupplement,
   };
 }
 
+function toLine(value: unknown): CartLine | null {
+  if (!value || typeof value !== 'object') return null;
+  const line = value as { itemId?: unknown; quantity?: unknown; customization?: unknown };
+  if (typeof line.itemId !== 'string' || !prices.has(line.itemId) || !validQuantity(line.quantity)) return null;
+  const customization = sanitizeCustomization(line.customization);
+  return customization ? { itemId: line.itemId, quantity: line.quantity, customization } : { itemId: line.itemId, quantity: line.quantity };
+}
+
+function mergeLines(lines: CartLine[]) {
+  const merged: CartLine[] = [];
+  for (const line of lines) {
+    const existing = merged.find((candidate) => lineKey(candidate) === lineKey(line));
+    if (existing) existing.quantity += line.quantity;
+    else merged.push({ ...line });
+  }
+  return merged;
+}
+
+function readSavedLines(raw: string) {
+  const parsed = JSON.parse(raw) as unknown;
+  const source = Array.isArray(parsed)
+    ? parsed
+    : parsed && typeof parsed === 'object' && Array.isArray((parsed as { lines?: unknown }).lines)
+      ? (parsed as { lines: unknown[] }).lines
+      : [];
+  return mergeLines(source.flatMap((line) => {
+    const next = toLine(line);
+    return next ? [next] : [];
+  }));
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [menus, setMenus] = useState<CartMenu[]>([DEFAULT_MENU]);
-  const [activeMenuId, setActiveMenuId] = useState(DEFAULT_MENU.id);
   const [lines, setLines] = useState<CartLine[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem('savoraille-cart');
-      if (saved) {
-        const parsed = JSON.parse(saved) as PersistedCart | { itemId: string; quantity: number }[];
-        if (Array.isArray(parsed)) {
-          setMenus([DEFAULT_MENU]);
-          setActiveMenuId(DEFAULT_MENU.id);
-          setLines(parsed.map((line) => ({ ...line, menuId: DEFAULT_MENU.id })).filter(validLine));
-        } else if ((parsed.version === 2 || parsed.version === 3) && Array.isArray(parsed.menus) && parsed.menus.length > 0) {
-          const restoredMenus = parsed.menus.filter((menu) => typeof menu.id === 'string' && typeof menu.name === 'string' && menu.name.trim());
-          const safeMenus = restoredMenus.length > 0 ? restoredMenus : [DEFAULT_MENU];
-          const menuIds = new Set(safeMenus.map((menu) => menu.id));
-          setMenus(safeMenus);
-          setActiveMenuId(menuIds.has(parsed.activeMenuId) ? parsed.activeMenuId : safeMenus[0]!.id);
-          setLines(parsed.lines.filter((line) => menuIds.has(line.menuId)).filter(validLine).map(sanitizeLine));
-        }
-      }
+      setLines(saved ? readSavedLines(saved) : []);
     } catch {
-      setMenus([DEFAULT_MENU]);
-      setActiveMenuId(DEFAULT_MENU.id);
       setLines([]);
     }
     setReady(true);
@@ -93,49 +95,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!ready) return;
-    const persisted: PersistedCart = { version: 3, menus, lines, activeMenuId };
-    window.localStorage.setItem('savoraille-cart', JSON.stringify(persisted));
-  }, [activeMenuId, lines, menus, ready]);
+    window.localStorage.setItem('savoraille-cart', JSON.stringify({ version: 4, lines }));
+  }, [lines, ready]);
 
   const value = useMemo<CartValue>(() => ({
-    menus,
-    activeMenuId,
     lines,
     itemCount: lines.reduce((sum, line) => sum + line.quantity, 0),
     total: lines.reduce((sum, line) => sum + ((prices.get(line.itemId) ?? 0) + (line.customization?.unitSupplement ?? 0)) * line.quantity, 0),
-    setActiveMenu: (menuId) => {
-      if (menus.some((menu) => menu.id === menuId)) setActiveMenuId(menuId);
-    },
-    createMenu: (name) => {
-      const id = `menu-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-      const cleanName = name.trim() || `Menu ${menus.length + 1}`;
-      setMenus((current) => [...current, { id, name: cleanName }]);
-      setActiveMenuId(id);
-      return id;
-    },
-    renameMenu: (menuId, name) => {
-      const cleanName = name.trim();
-      if (cleanName) setMenus((current) => current.map((menu) => menu.id === menuId ? { ...menu, name: cleanName } : menu));
-    },
-    deleteMenu: (menuId) => setMenus((current) => {
-      if (current.length <= 1 || !current.some((menu) => menu.id === menuId)) return current;
-      const remaining = current.filter((menu) => menu.id !== menuId);
-      setLines((currentLines) => currentLines.filter((line) => line.menuId !== menuId));
-      setActiveMenuId((currentActiveId) => currentActiveId === menuId ? remaining[0]!.id : currentActiveId);
-      return remaining;
-    }),
-    addItem: (itemId, quantity = 1, menuId = activeMenuId, customization) => setLines((current) => {
-      const existing = current.find((line) => line.menuId === menuId && line.itemId === itemId);
+    addItem: (itemId, quantity = 1, customization) => setLines((current) => {
+      if (!prices.has(itemId) || quantity <= 0) return current;
+      const next = customization ? { itemId, quantity, customization } : { itemId, quantity };
+      const existing = current.find((line) => lineKey(line) === lineKey(next));
       return existing
-        ? current.map((line) => line.menuId === menuId && line.itemId === itemId ? { ...line, quantity: line.quantity + quantity, customization } : line)
-        : [...current, { menuId, itemId, quantity, customization }];
+        ? current.map((line) => lineKey(line) === lineKey(next) ? { ...line, quantity: line.quantity + quantity, customization } : line)
+        : [...current, next];
     }),
-    setQuantity: (menuId, itemId, quantity) => setLines((current) => quantity <= 0
-      ? current.filter((line) => !(line.menuId === menuId && line.itemId === itemId))
-      : current.map((line) => line.menuId === menuId && line.itemId === itemId ? { ...line, quantity } : line)),
-    removeItem: (menuId, itemId) => setLines((current) => current.filter((line) => !(line.menuId === menuId && line.itemId === itemId))),
+    setQuantity: (itemId, quantity, optionIds) => setLines((current) => {
+      const key = `${itemId}::${optionKey(optionIds)}`;
+      return quantity <= 0
+        ? current.filter((line) => lineKey(line) !== key)
+        : current.map((line) => lineKey(line) === key ? { ...line, quantity } : line);
+    }),
+    removeItem: (itemId, optionIds) => setLines((current) => current.filter((line) => lineKey(line) !== `${itemId}::${optionKey(optionIds)}`)),
     clearCart: () => setLines([]),
-  }), [activeMenuId, lines, menus]);
+  }), [lines]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

@@ -68,10 +68,10 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   return (
     <RestaurantContext.Provider value={value}>
       {children}
-      <button type="button" onClick={() => setOpen(true)} aria-label={`${tr('Changer de restaurant')} · ${selectedRestaurant?.name ?? tr('Aucun restaurant sélectionné')}`} title={selectedRestaurant ? `${selectedRestaurant.name} · ${tr(selectedRestaurant.area)}` : tr('Choisir un restaurant')} className="restaurant-locator-fab group fixed bottom-20 end-5 z-[55] grid size-14 place-items-center rounded-full border border-[#C6A15B]/70 bg-[#7C2438] text-[#FAF6EC] shadow-[0_14px_35px_rgba(30,58,95,0.32)] outline-none transition-all hover:-translate-y-1 hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EC] sm:end-6 sm:size-16">
+      <button type="button" onClick={() => setOpen(true)} aria-label={`${tr('Changer de restaurant')} · ${selectedRestaurant?.name ?? tr('Aucun restaurant sélectionné')}`} title={selectedRestaurant ? `${selectedRestaurant.name} · ${tr(selectedRestaurant.area)}` : tr('Choisir un restaurant')} className="restaurant-locator-fab fixed bottom-20 end-5 z-[55] grid size-14 place-items-center rounded-full border border-[#C6A15B]/70 bg-[#7C2438] text-[#FAF6EC] shadow-[0_14px_35px_rgba(30,58,95,0.32)] outline-none transition-colors hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EC] sm:end-6 sm:size-16">
         <span className="pointer-events-none absolute inset-1 rounded-full border border-[#FAF6EC]/15" />
         {!selectedRestaurant ? <span className="absolute inset-0 animate-ping rounded-full border border-[#C6A15B]/55 motion-reduce:animate-none" /> : null}
-        <MapPin aria-hidden="true" className="relative size-6 transition-transform group-hover:scale-110 sm:size-7" strokeWidth={1.7} />
+        <MapPin aria-hidden="true" className="relative size-6 group-hover:scale-110 sm:size-7" strokeWidth={1.7} />
         <span className={`absolute end-1 top-1 size-3 rounded-full border-2 border-[#7C2438] ${selectedRestaurant ? 'bg-[#C4703F]' : 'bg-[#C6A15B]'}`} />
       </button>
       <Dialog.Root open={open} onOpenChange={(nextOpen) => {
@@ -85,10 +85,10 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
               <div className="pointer-events-none absolute -end-20 -top-28 size-72 rounded-full border border-[#C6A15B]/22" />
               <div className="pointer-events-none absolute -end-10 -top-16 size-56 rounded-full border border-[#C6A15B]/28" />
               <div className="relative flex items-start justify-between gap-4">
-                <div className="flex min-w-0 items-center gap-4"><BrandSeal inverse className="size-16 shrink-0 sm:size-20" /><div className="min-w-0"><p className="font-script text-2xl text-[#C6A15B] sm:text-3xl">{tr('Bienvenue chez Savoraille')}</p><Dialog.Title className="font-display mt-1 text-balance text-3xl leading-none font-semibold sm:text-5xl">{tr('Choisissez votre restaurant.')}</Dialog.Title></div></div>
+                <div className="flex min-w-0 items-center gap-4"><BrandSeal inverse className="size-16 shrink-0 sm:size-20" /><div className="min-w-0"><p className="font-script text-2xl text-[#C6A15B] sm:text-3xl">{tr('Paris · Lyon · Bordeaux')}</p><Dialog.Title className="font-display mt-1 text-balance text-3xl leading-none font-semibold sm:text-5xl">{tr('Choisissez votre restaurant.')}</Dialog.Title></div></div>
                 <Dialog.Close asChild><button type="button" aria-label={tr('Fermer')} className="grid size-10 shrink-0 place-items-center rounded-full border border-[#FAF6EC]/18 bg-white/8 outline-none hover:bg-white/14 focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><X className="size-5" /></button></Dialog.Close>
               </div>
-              <Dialog.Description className="relative mt-5 max-w-2xl text-sm leading-6 text-[#FAF6EC]/66 sm:ms-24 sm:text-base">{tr('Nous afficherons la carte, les horaires et les options de commande du restaurant le plus pratique pour vous.')}</Dialog.Description>
+              <Dialog.Description className="relative mt-5 max-w-2xl text-sm leading-6 text-[#FAF6EC]/66 sm:ms-24 sm:text-base">{tr('La carte, les horaires et la livraison dépendent de l’adresse.')}</Dialog.Description>
             </div>
 
             <div className="p-4 sm:p-7">

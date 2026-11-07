@@ -51,6 +51,7 @@ html {
   scrollbar-color: var(--c-or) var(--c-sevres);
   scrollbar-width: thin;
   overflow-x: clip;
+  overscroll-behavior: none;
 }
 
 html::-webkit-scrollbar {
@@ -103,10 +104,17 @@ input,
 textarea,
 select {
   max-width: 100%;
+  font-size: 16px;
 }
 
 body[data-mobile-menu-open] .restaurant-locator-fab {
   display: none;
+}
+
+@media (max-width: 1023px) {
+  body[data-dish-bar] .restaurant-locator-fab {
+    bottom: calc(6rem + env(safe-area-inset-bottom));
+  }
 }
 
 body.portfolio-demo {
@@ -140,7 +148,12 @@ html:has(body.portfolio-demo) {
 .gold-divider-dark { background: var(--c-sevres); }
 
 button,
-a { -webkit-tap-highlight-color: transparent; }
+a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+button { user-select: none; }
+button:active { transform: scale(0.98); }
 a { text-decoration: none; }
 
 ::selection {
@@ -173,7 +186,7 @@ a { text-decoration: none; }
 }
 
 .savoraille-dialog-overlay[data-state='closed'] {
-  animation: savoraille-overlay-out 190ms ease-in forwards;
+  animation: savoraille-overlay-out 190ms ease-out forwards;
 }
 
 .savoraille-dialog-surface[data-state='open'] {
@@ -181,7 +194,7 @@ a { text-decoration: none; }
 }
 
 .savoraille-dialog-surface[data-state='closed'] {
-  animation: savoraille-dialog-out 190ms ease-in forwards;
+  animation: savoraille-dialog-out 190ms ease-out forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const copy = getPageCopy('home', locale as Locale);
   return pageMetadata(locale as Locale, '/', {
-    title: copy.title,
+    title: { absolute: copy.title },
     description: copy.description,
   });
 }

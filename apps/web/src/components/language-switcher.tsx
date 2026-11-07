@@ -66,7 +66,7 @@ export function LanguageSwitcher({ variant = 'light', compact = false }: { varia
           <span className={`hidden max-w-20 truncate text-xs font-semibold 2xl:inline ${isDark ? 'text-[#FAF6EC]/55' : 'text-[#1E3A5F]/55'}`}>{selected.native}</span>
         ) : null}
         {!compact ? (
-          <Select.Icon asChild><ChevronDown aria-hidden="true" className={`size-3.5 transition-transform group-data-[state=open]:rotate-180 ${isDark ? 'text-[#FAF6EC]/45' : 'text-[#1E3A5F]/45'}`} /></Select.Icon>
+          <Select.Icon asChild><ChevronDown aria-hidden="true" className={`size-3.5 group-data-[state=open]:rotate-180 ${isDark ? 'text-[#FAF6EC]/45' : 'text-[#1E3A5F]/45'}`} /></Select.Icon>
         ) : null}
       </Select.Trigger>
 

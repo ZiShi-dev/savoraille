@@ -2,8 +2,9 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Check, Eye, EyeOff, LockKeyhole, LogOut, Mail, ShieldCheck, Sparkles, UserPlus, UserRound, X } from 'lucide-react';
+import { GsapStepPanel } from '@/components/gsap-step-panel';
+import { prefersReducedMotion } from '@/lib/gsap-register';
+import { ArrowLeft, ArrowRight, Check, Eye, EyeOff, LockKeyhole, LogOut, Mail, ShieldCheck, UserPlus, UserRound, X } from 'lucide-react';
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -48,7 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const pendingAction = useRef<(() => void) | null>(null);
-  const reduceMotion = useReducedMotion();
   const schema = useMemo(() => mode === 'signup' ? signUpSchema : signInSchema, [mode]);
   const { register, handleSubmit, reset, formState: { errors } } = useForm<AuthFields>({ resolver: zodResolver(schema), defaultValues: { name: '', email: '', password: '', confirmPassword: '' } });
 
@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const resume = pendingAction.current;
     pendingAction.current = null;
     setOpen(false);
-    window.setTimeout(() => resume?.(), reduceMotion ? 0 : 260);
+    window.setTimeout(() => resume?.(), prefersReducedMotion() ? 0 : 260);
   };
   const close = () => {
     setOpen(false);
@@ -126,18 +126,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               <Dialog.Description className="relative mt-3 text-sm leading-6 text-[#FAF6EC]/65">{tr(description)}</Dialog.Description>
             </div>
 
-            <AnimatePresence mode="wait" initial={false}>
               {mode === 'choice' ? (
-                <motion.div key="choice" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="p-5 sm:p-7">
+                <GsapStepPanel stepKey="choice" className="p-5 sm:p-7">
                   <p className="text-xs font-bold tracking-[0.14em] text-[#C4703F] uppercase">{tr('Choisissez comment continuer')}</p>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    <button type="button" onClick={() => changeMode('signin')} className="group rounded-2xl border border-[#1E3A5F]/12 bg-white p-5 text-start outline-none transition-all hover:-translate-y-0.5 hover:border-[#C6A15B] hover:shadow-[0_12px_30px_rgba(30,58,95,0.1)] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><span className="grid size-11 place-items-center rounded-full bg-[#1E3A5F] text-[#C6A15B]"><UserRound className="size-5" /></span><span className="font-display mt-5 block text-2xl font-semibold text-[#1E3A5F]">{tr('Se connecter')}</span><span className="mt-2 block text-xs leading-5 text-[#241F19]/52">{tr('J’ai déjà un compte Savoraille.')}</span><span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#7C2438]">{tr('Continuer')}<ArrowRight className="size-3.5 rtl:-scale-x-100" /></span></button>
-                    <button type="button" onClick={() => changeMode('signup')} className="group rounded-2xl border border-[#C6A15B]/45 bg-[#FFFDF7] p-5 text-start outline-none transition-all hover:-translate-y-0.5 hover:border-[#C6A15B] hover:shadow-[0_12px_30px_rgba(30,58,95,0.1)] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><span className="grid size-11 place-items-center rounded-full bg-[#7C2438] text-white"><UserPlus className="size-5" /></span><span className="font-display mt-5 block text-2xl font-semibold text-[#1E3A5F]">{tr('Créer un compte')}</span><span className="mt-2 block text-xs leading-5 text-[#241F19]/52">{tr('Je découvre Savoraille pour la première fois.')}</span><span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#7C2438]">{tr('S’inscrire')}<ArrowRight className="size-3.5 rtl:-scale-x-100" /></span></button>
+                    <button type="button" onClick={() => changeMode('signin')} className="group rounded-2xl border border-[#1E3A5F]/12 bg-white p-5 text-start outline-none transition-all hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><span className="grid size-11 place-items-center rounded-full bg-[#1E3A5F] text-[#C6A15B]"><UserRound className="size-5" /></span><span className="font-display mt-5 block text-2xl font-semibold text-[#1E3A5F]">{tr('Se connecter')}</span><span className="mt-2 block text-xs leading-5 text-[#241F19]/52">{tr('J’ai déjà un compte Savoraille.')}</span><span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#7C2438]">{tr('Continuer')}<ArrowRight className="size-3.5 rtl:-scale-x-100" /></span></button>
+                    <button type="button" onClick={() => changeMode('signup')} className="group rounded-2xl border border-[#C6A15B]/45 bg-[#FFFDF7] p-5 text-start outline-none transition-all hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><span className="grid size-11 place-items-center rounded-full bg-[#7C2438] text-white"><UserPlus className="size-5" /></span><span className="font-display mt-5 block text-2xl font-semibold text-[#1E3A5F]">{tr('Créer un compte')}</span><span className="mt-2 block text-xs leading-5 text-[#241F19]/52">{tr('Je découvre Savoraille pour la première fois.')}</span><span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#7C2438]">{tr('S’inscrire')}<ArrowRight className="size-3.5 rtl:-scale-x-100" /></span></button>
                   </div>
-                  <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#C6A15B]/25 bg-[#C6A15B]/8 p-4"><Sparkles className="mt-0.5 size-4 shrink-0 text-[#7C2438]" /><p className="text-xs leading-5 text-[#241F19]/58">{tr('Après cette étape, vous reprendrez automatiquement votre confirmation.')}</p></div>
-                </motion.div>
+                  <p className="mt-5 text-xs leading-5 text-[#241F19]/58">{tr('Après cette étape, vous reprendrez automatiquement votre confirmation.')}</p>
+                </GsapStepPanel>
               ) : (
-                <motion.form key={mode} initial={{ opacity: 0, x: locale === 'ar' ? -16 : 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: locale === 'ar' ? 12 : -12 }} onSubmit={handleSubmit(authenticate)} noValidate className="p-5 sm:p-7">
+                <GsapStepPanel stepKey={mode} fromX={locale === 'ar' ? -16 : 16} className="contents">
+                <form onSubmit={handleSubmit(authenticate)} noValidate className="p-5 sm:p-7">
                   <button type="button" onClick={() => changeMode('choice')} className="inline-flex items-center gap-2 text-xs font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour')}</button>
                   <h2 className="font-display mt-5 text-3xl font-semibold text-[#1E3A5F]">{tr(mode === 'signup' ? 'Créer votre compte' : 'Bon retour chez Savoraille.')}</h2>
                   {mode === 'signup' ? <label className="mt-5 block text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><UserRound className="size-4 text-[#C6A15B]" />{tr('Nom et prénom')}</span><input {...register('name')} autoComplete="name" placeholder={tr('Votre nom')} className={fieldClass} />{error('name')}</label> : null}
@@ -163,10 +163,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     {error('confirmPassword')}
                   </div> : null}
                   <button type="submit" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-5 py-4 text-sm font-bold text-white outline-none hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(mode === 'signup' ? 'Créer mon compte et continuer' : 'Me connecter et continuer')}<ArrowRight className="size-4 rtl:-scale-x-100" /></button>
-                  <p className="mt-3 text-center text-[0.68rem] leading-5 text-[#241F19]/42">{tr('Prototype local : aucune donnée d’authentification n’est transmise.')}</p>
-                </motion.form>
+                  <p className="mt-3 text-center text-[0.68rem] leading-5 text-[#241F19]/42">{tr('Le compte reste sur cet appareil.')}</p>
+                </form>
+                </GsapStepPanel>
               )}
-            </AnimatePresence>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>

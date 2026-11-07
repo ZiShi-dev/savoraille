@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, Sparkles } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 import { useI18n } from './i18n-provider';
@@ -21,10 +21,7 @@ export function PortfolioBanner() {
           <ArrowLeft aria-hidden="true" className="size-3 shrink-0 rtl:rotate-180" />
           <span className="truncate">VORZIX</span>
         </Link>
-        <p className="hidden items-center gap-1.5 text-[#FAF6EC]/58 sm:inline-flex">
-          <Sparkles aria-hidden="true" className="size-3 text-[#C6A15B]" />
-          {tr('Démo interactive · Restaurant')}
-        </p>
+        <p className="hidden text-[#FAF6EC]/58 sm:inline">{tr('Démo interactive · Restaurant')}</p>
         <span className="truncate text-[#C6A15B]">{tr('Site d’entreprise')}</span>
       </div>
     </div>

@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
+import type { Metadata, Viewport } from 'next';
+import { Suspense, type ReactNode } from 'react';
 
 import './globals.css';
 
@@ -8,9 +8,18 @@ import { CartProvider } from '@/components/cart-provider';
 import { I18nProvider } from '@/components/i18n-provider';
 import { PortfolioBanner } from '@/components/portfolio-banner';
 import { RestaurantProvider } from '@/components/restaurant-provider';
+import { ScrollToTop } from '@/components/scroll-to-top';
+import { SiteMotion } from '@/components/site-motion';
 import { SkipLink } from '@/components/skip-link';
 import { fontVariables } from '@/lib/fonts';
 import { siteConfig, withBasePath } from '@/lib/site-config';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#1E3A5F',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
@@ -49,9 +58,12 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           <AuthProvider>
             <RestaurantProvider>
               <CartProvider>
+                <Suspense fallback={null}>
+                  <ScrollToTop />
+                </Suspense>
                 <SkipLink />
                 <PortfolioBanner />
-                {children}
+                <SiteMotion>{children}</SiteMotion>
               </CartProvider>
             </RestaurantProvider>
           </AuthProvider>

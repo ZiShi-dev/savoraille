@@ -1,11 +1,14 @@
 'use client';
 
 import * as Dialog from '@radix-ui/react-dialog';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useGSAP } from '@gsap/react';
 import { CalendarDays, LogIn, LogOut, Menu, ShoppingBag, UserPlus, UserRound, X } from 'lucide-react';
 import { LocalizedLink } from './localized-link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import { enterFade, slideDrawer } from '@/lib/site-motion';
+import { ensureGsapPlugins } from '@/lib/gsap-register';
 
 import { BrandSeal } from './brand-seal';
 import { useAuth } from './auth-provider';
@@ -15,6 +18,8 @@ import { LanguageSwitcher } from './language-switcher';
 import { stripLocaleFromPath } from '@/lib/i18n-routing';
 import { siteConfig } from '@/lib/site-config';
 
+ensureGsapPlugins();
+
 const navigation = [
   { label: 'Accueil', href: '/#accueil', sectionId: 'accueil' },
   { label: 'La carte', href: '/carte', sectionId: null },
@@ -23,6 +28,8 @@ const navigation = [
 ];
 
 export function SiteHeader() {
+  const mobileOverlayRef = useRef<HTMLButtonElement>(null);
+  const mobileAsideRef = useRef<HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('/#accueil');
   const [scrolled, setScrolled] = useState(false);
@@ -32,8 +39,9 @@ export function SiteHeader() {
   const pathname = usePathname();
   const barePath = stripLocaleFromPath(pathname).replace(/\/$/, '') || '/';
   const isRtl = locale === 'ar';
-  const onDarkHero = barePath === '/' || barePath === '/carte';
-  const isTransparent = onDarkHero && !scrolled;
+  const darkHeroPage = barePath === '/' || barePath === '/histoire' || barePath === '/contact';
+  const blendsWithPage = !scrolled && (darkHeroPage || barePath === '/carte' || barePath.startsWith('/commander/'));
+  const isTransparent = blendsWithPage && darkHeroPage;
 
   const openMobileAuth = (mode: 'signin' | 'signup') => {
     setMobileOpen(false);
@@ -44,6 +52,12 @@ export function SiteHeader() {
     document.body.toggleAttribute('data-mobile-menu-open', mobileOpen);
     return () => document.body.removeAttribute('data-mobile-menu-open');
   }, [mobileOpen]);
+
+  useGSAP(() => {
+    if (!mobileOpen) return;
+    if (mobileOverlayRef.current) enterFade(mobileOverlayRef.current);
+    if (mobileAsideRef.current) slideDrawer(mobileAsideRef.current, isRtl ? '-100%' : '100%');
+  }, { dependencies: [mobileOpen, isRtl], revertOnUpdate: true });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -101,7 +115,7 @@ export function SiteHeader() {
     <header
       dir={isRtl ? 'rtl' : 'ltr'}
       className={`fixed inset-x-0 z-50 transition-[background-color,box-shadow,border-color,top] duration-300 ${siteConfig.portfolioMode ? 'top-8' : 'top-0'} ${
-        isTransparent
+        blendsWithPage
           ? 'border-b border-transparent bg-transparent'
           : 'border-b border-[#C6A15B]/28 bg-[#FAF6EC]/95 shadow-[0_8px_30px_rgba(30,58,95,0.08)] backdrop-blur-xl'
       }`}
@@ -112,7 +126,7 @@ export function SiteHeader() {
           className="group flex min-w-0 items-center gap-2.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:gap-3"
           aria-label={`Savoraille · ${tr('Accueil')}`}
         >
-          <BrandSeal inverse={isTransparent} className="size-10 shrink-0 transition-transform duration-300 group-hover:scale-[1.03] sm:size-11 lg:size-12" />
+          <BrandSeal inverse={isTransparent} className="size-10 shrink-0 sm:size-11 lg:size-12" />
           <span className="hidden min-w-0 md:block">
             <span className={`font-display block text-lg leading-none font-semibold sm:text-xl ${isTransparent ? 'text-[#FAF6EC]' : 'text-[#1E3A5F]'}`}>Savoraille</span>
             <span className={`font-script mt-0.5 block text-[0.7rem] leading-none sm:text-xs ${isTransparent ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{tr('La merveille des saveurs')}</span>
@@ -133,7 +147,7 @@ export function SiteHeader() {
                     {tr(item.label)}
                     <span
                       aria-hidden="true"
-                      className={`absolute inset-x-0 -bottom-0.5 mx-auto h-px origin-center bg-[#C6A15B] transition-transform duration-300 ${active ? 'scale-x-100' : 'scale-x-0'}`}
+                      className={`absolute inset-x-0 -bottom-0.5 mx-auto h-px origin-center bg-[#C6A15B] transition-transform duration-200 ${active ? 'scale-x-100' : 'scale-x-0'}`}
                     />
                   </LocalizedLink>
                 </li>
@@ -239,28 +253,21 @@ export function SiteHeader() {
               </button>
             </Dialog.Trigger>
 
-            <AnimatePresence>
-              {mobileOpen ? (
-                <Dialog.Portal forceMount>
+                <Dialog.Portal>
                   <Dialog.Overlay asChild>
-                    <motion.button
+                    <button
+                      ref={mobileOverlayRef}
                       type="button"
                       className="fixed inset-0 z-[70] bg-[#102B4D]/55 backdrop-blur-[2px] xl:hidden"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
                       aria-label={tr('Fermer le menu')}
                       onClick={() => setMobileOpen(false)}
                     />
                   </Dialog.Overlay>
                   <Dialog.Content asChild aria-describedby={undefined}>
-                    <motion.aside
+                    <aside
+                      ref={mobileAsideRef}
                       dir={isRtl ? 'rtl' : 'ltr'}
                       className="fixed inset-y-0 end-0 z-[70] flex w-full max-w-[min(100vw,22rem)] flex-col bg-[#FAF6EC] shadow-[-12px_0_40px_rgba(30,58,95,0.18)] outline-none xl:hidden"
-                      initial={{ x: isRtl ? '-100%' : '100%' }}
-                      animate={{ x: 0 }}
-                      exit={{ x: isRtl ? '-100%' : '100%' }}
-                      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                     >
                       <div className="flex items-center justify-between border-b border-[#1E3A5F]/10 px-5 py-4">
                         <Dialog.Title className="flex items-center gap-3">
@@ -366,11 +373,9 @@ export function SiteHeader() {
                           </LocalizedLink>
                         </Dialog.Close>
                       </div>
-                    </motion.aside>
+                    </aside>
                   </Dialog.Content>
                 </Dialog.Portal>
-              ) : null}
-            </AnimatePresence>
           </Dialog.Root>
         </div>
       </div>

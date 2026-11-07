@@ -1,60 +1,138 @@
 'use client';
 
-import { ArrowLeft, ArrowRight, Check, CircleDashed, Info, Minus, Plus, ShoppingBag, SlidersHorizontal, Sparkles } from 'lucide-react';
-import { AppImage } from './app-image';
-import { LocalizedLink } from './localized-link';
-import { useState } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ensureGsapPlugins } from '@/lib/gsap-register';
+import { ArrowLeft, Check, Minus, Plus } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
+import { AppImage } from './app-image';
 import { useCart, type CartCustomization } from './cart-provider';
 import { getDishAllergens, getDishExtras } from './dish-customizations';
 import { useI18n } from './i18n-provider';
-import { MenuAssignmentDialog } from './menu-assignment-dialog';
-import { menuItems, menuSections } from './summer-menu-experience';
+import { LocalizedLink } from './localized-link';
+import { menuItems, menuSections } from '@/lib/menu-data';
+
+ensureGsapPlugins();
+
+function ingredientsOf(detail: string) {
+  return detail.replace(/\.$/, '').split(/,\s*/).filter(Boolean);
+}
+
+function Leader() {
+  return <span aria-hidden="true" className="mx-3 min-w-6 flex-1 translate-y-[-0.3em] border-b border-dotted border-[#1E3A5F]/30" />;
+}
 
 export function OrderDetailContent({ itemId }: { itemId: string }) {
   const { locale, tr } = useI18n();
-  const { lines, activeMenuId, itemCount, total } = useCart();
+  const { addItem, itemCount, total } = useCart();
+  const rootRef = useRef<HTMLDivElement>(null);
   const item = menuItems.find((candidate) => candidate.id === itemId);
   const itemSection = menuSections.find((section) => section.items.some((candidate) => candidate.id === itemId));
   const [quantity, setQuantity] = useState(1);
   const [selectedExtraIds, setSelectedExtraIds] = useState<string[]>([]);
-  const [activeSection, setActiveSection] = useState(itemSection?.id ?? menuSections[0]?.id ?? 'aperitifs');
   const [added, setAdded] = useState(false);
-  const [suggestionAdded, setSuggestionAdded] = useState<string | null>(null);
-  const [pendingAdd, setPendingAdd] = useState<{ itemId: string; itemName: string; quantity: number; kind: 'main' | 'suggestion'; customization?: CartCustomization } | null>(null);
+
+  useEffect(() => {
+    document.body.setAttribute('data-dish-bar', '');
+    return () => document.body.removeAttribute('data-dish-bar');
+  }, []);
+
+  useGSAP(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const motion = gsap.matchMedia();
+    motion.add(
+      {
+        motion: '(prefers-reduced-motion: no-preference)',
+        hover: '(hover: hover) and (prefers-reduced-motion: no-preference)',
+      },
+      (context) => {
+        const { motion: canMove, hover } = context.conditions as { motion: boolean; hover: boolean };
+        if (!canMove) return;
+
+        gsap.timeline({ defaults: { ease: 'power3.out' } })
+          .fromTo('[data-reveal-photo]', { clipPath: 'inset(0 0 100% 0 round 1.5rem)' }, { clipPath: 'inset(0 0 0% 0 round 1.5rem)', duration: 0.9 })
+          .fromTo('[data-reveal]', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.07 }, '-=0.55');
+
+        const heroPhoto = root.querySelector('[data-hero-photo]');
+        if (heroPhoto) {
+          gsap.fromTo(heroPhoto, { scale: 1.06 }, {
+            scale: 1,
+            ease: 'none',
+            scrollTrigger: { trigger: '[data-reveal-photo]', start: 'top 70%', end: 'bottom top', scrub: 0.45 },
+          });
+        }
+
+        const siblings = gsap.utils.toArray<HTMLElement>('[data-sibling]', root);
+        if (siblings.length) {
+          gsap.set(siblings, { y: 28, autoAlpha: 0 });
+          ScrollTrigger.batch(siblings, {
+            start: 'top 90%',
+            once: true,
+            interval: 0.08,
+            onEnter: (batch) => gsap.to(batch, { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.08, ease: 'power3.out', overwrite: 'auto' }),
+          });
+        }
+
+        if (!hover) return;
+        const photoOf = (event: Event) => (event.target as Element | null)?.closest('[data-sibling]')?.querySelector('[data-photo]') ?? null;
+        const onOver = (event: Event) => {
+          const photo = photoOf(event);
+          if (photo) gsap.to(photo, { scale: 1.045, duration: 0.55, ease: 'power2.out', overwrite: 'auto' });
+        };
+        const onOut = (event: Event) => {
+          const card = (event.target as Element | null)?.closest('[data-sibling]');
+          const related = (event as PointerEvent).relatedTarget;
+          if (card && related instanceof Node && card.contains(related)) return;
+          const photo = card?.querySelector('[data-photo]');
+          if (photo) gsap.to(photo, { scale: 1, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
+        };
+        root.addEventListener('pointerover', onOver);
+        root.addEventListener('pointerout', onOut);
+        return () => {
+          root.removeEventListener('pointerover', onOver);
+          root.removeEventListener('pointerout', onOut);
+        };
+      },
+    );
+
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener('load', refresh);
+    const timer = window.setTimeout(refresh, 400);
+    return () => {
+      window.removeEventListener('load', refresh);
+      window.clearTimeout(timer);
+      motion.revert();
+    };
+  }, { scope: rootRef, dependencies: [itemId], revertOnUpdate: true });
 
   const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value);
 
-  if (!item || !itemSection) {
-    return <main className="grid min-h-[70svh] place-items-center bg-[#FAF6EC] px-6 pt-28 text-center"><div><h1 className="font-display text-5xl font-semibold text-[#1E3A5F]">{tr('Plat introuvable')}</h1><LocalizedLink href="/carte" className="mt-6 inline-flex rounded-lg bg-[#1E3A5F] px-5 py-3 font-bold text-[#FAF6EC]">{tr('Retour à la carte')}</LocalizedLink></div></main>;
+  if (!item) {
+    return <div className="grid min-h-[70svh] place-items-center bg-[#FAF6EC] px-6 pt-28 text-center"><div><h1 className="font-display text-5xl font-semibold text-[#1E3A5F]">{tr('Plat introuvable')}</h1><LocalizedLink href="/carte" className="mt-6 inline-flex rounded-full bg-[#1E3A5F] px-5 py-3 font-bold text-[#FAF6EC]">{tr('Retour à la carte')}</LocalizedLink></div></div>;
   }
 
   const unitPrice = Number.parseFloat(item.price);
-  const extras = getDishExtras(itemSection.id);
-  const allergens = getDishAllergens(itemSection.id);
+  const extras = getDishExtras(itemSection?.id ?? '');
+  const allergens = getDishAllergens(itemSection?.id ?? '');
+  const ingredients = ingredientsOf(tr(item.detail));
   const selectedExtras = extras.filter((extra) => selectedExtraIds.includes(extra.id));
   const supplementTotal = selectedExtras.reduce((sum, extra) => sum + extra.price, 0);
-  const activeLines = lines.filter((line) => line.menuId === activeMenuId);
-  const sectionStates = menuSections.map((section) => ({
-    section,
-    count: activeLines.filter((line) => section.items.some((candidate) => candidate.id === line.itemId)).reduce((sum, line) => sum + line.quantity, 0),
-  }));
-  const completedSections = sectionStates.filter(({ count }) => count > 0).length;
-  const activeState = sectionStates.find(({ section }) => section.id === activeSection) ?? sectionStates[0]!;
-  const suggestions = activeState.section.items.filter((candidate) => candidate.id !== item.id).slice(0, 3);
+  const lineTotal = (unitPrice + supplementTotal) * quantity;
+  const siblings = (itemSection?.items ?? []).filter((candidate) => candidate.id !== item.id).slice(0, 3);
+  const position = (itemSection?.items.findIndex((candidate) => candidate.id === item.id) ?? 0) + 1;
 
   const addCurrentItem = () => {
-    setPendingAdd({
-      itemId: item.id,
-      itemName: item.name,
-      quantity,
-      kind: 'main',
-      customization: selectedExtras.length > 0 ? {
-        optionIds: selectedExtras.map((extra) => extra.id),
-        optionLabels: selectedExtras.map((extra) => extra.label),
-        unitSupplement: supplementTotal,
-      } : undefined,
-    });
+    const customization: CartCustomization | undefined = selectedExtras.length > 0 ? {
+      optionIds: selectedExtras.map((extra) => extra.id),
+      optionLabels: selectedExtras.map((extra) => extra.label),
+      unitSupplement: supplementTotal,
+    } : undefined;
+    addItem(item.id, quantity, customization);
+    setAdded(true);
   };
 
   const toggleExtra = (extraId: string) => {
@@ -62,103 +140,138 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
     setAdded(false);
   };
 
-  const addSuggestion = (suggestionId: string) => {
-    const suggestion = menuItems.find((candidate) => candidate.id === suggestionId);
-    if (suggestion) setPendingAdd({ itemId: suggestion.id, itemName: suggestion.name, quantity: 1, kind: 'suggestion' });
+  const changeQuantity = (delta: number) => {
+    setQuantity((current) => Math.max(1, current + delta));
+    setAdded(false);
   };
 
-  return (
-    <main className="bg-[#FAF6EC] pt-28 text-[#241F19]">
-      <section className="px-6 pb-14 pt-6 sm:pb-20" aria-labelledby="dish-title">
-        <div className="mx-auto max-w-[1200px]">
-          <LocalizedLink href="/carte" className="inline-flex items-center gap-2 rounded-lg text-sm font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour à la carte')}</LocalizedLink>
-          <div className="mt-6 grid overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white shadow-[0_18px_50px_rgba(30,58,95,0.14)] lg:grid-cols-[1.08fr_0.92fr]">
-            <div className="relative min-h-[360px] overflow-hidden sm:min-h-[520px]">
-              <AppImage src={item.image} alt={tr(item.name)} fill priority sizes="(min-width:1024px) 55vw, 100vw" className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102B4D]/70 via-transparent to-transparent" />
-              <span className="absolute bottom-5 start-5 rounded-full border border-[#C6A15B]/55 bg-[#102B4D]/85 px-4 py-2 text-xs font-bold tracking-[0.1em] text-[#C6A15B] uppercase backdrop-blur-md">{tr(itemSection.shortLabel)}</span>
-            </div>
-            <div className="flex flex-col p-6 sm:p-9 lg:p-10">
-              <div className="flex items-start justify-between gap-5">
-                <div><p className="text-xs font-bold tracking-[0.16em] text-[#C4703F] uppercase">{tr(item.eyebrow)}</p><h1 id="dish-title" className="font-display mt-2 text-4xl leading-none font-semibold text-[#1E3A5F] sm:text-5xl">{tr(item.name)}</h1></div>
-                <span className="shrink-0 rounded-full bg-[#7C2438] px-4 py-2 text-lg font-bold text-[#FAF6EC]">{item.price}</span>
-              </div>
-              <p className="mt-6 text-base leading-8 text-[#241F19]/68">{tr(item.detail)}</p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                <span className="rounded-full border border-[#1E3A5F]/12 bg-[#FAF6EC] px-3 py-1.5 text-xs font-bold text-[#1E3A5F]">{tr('Préparé à la minute')}</span>
-                <span className="rounded-full border border-[#C4703F]/20 bg-[#C4703F]/8 px-3 py-1.5 text-xs font-bold text-[#8C4829]">{tr('Cuisine de saison')}</span>
-              </div>
+  const stepper = (
+    <div className="flex items-center rounded-full border border-[#1E3A5F]/15 bg-white p-1">
+      <button type="button" onClick={() => changeQuantity(-1)} disabled={quantity === 1} aria-label={tr('Diminuer la quantité')} className="grid size-10 place-items-center rounded-full text-[#1E3A5F] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:opacity-35"><Minus className="size-4" /></button>
+      <span className="min-w-8 text-center font-bold tabular-nums text-[#1E3A5F]" aria-live="polite">{quantity}</span>
+      <button type="button" onClick={() => changeQuantity(1)} aria-label={tr('Augmenter la quantité')} className="grid size-10 place-items-center rounded-full text-[#1E3A5F] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Plus className="size-4" /></button>
+    </div>
+  );
 
-              <div className="mt-7 rounded-2xl border border-[#C6A15B]/35 bg-[#FAF6EC] p-4 sm:p-5">
-                <div className="flex items-start gap-3">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[#1E3A5F] text-[#C6A15B]"><SlidersHorizontal className="size-4" /></span>
-                  <div><h2 className="font-display text-2xl leading-none font-semibold text-[#1E3A5F]">{tr('Personnalisez votre assiette')}</h2><p className="mt-1.5 text-sm leading-6 text-[#241F19]/58">{tr('Cochez les suppléments que vous souhaitez ajouter.')}</p></div>
-                </div>
-                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+  const addButton = (
+    <button type="button" onClick={addCurrentItem} className={`inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold text-[#FAF6EC] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EC] ${added ? 'bg-[#1E3A5F]' : 'bg-[#7C2438] hover:bg-[#681d2f]'}`}>
+      <span aria-live="polite" className="inline-flex items-center gap-2">
+        {added ? <Check className="size-4" /> : null}
+        {added ? tr('Ajouté à votre commande') : <>{tr('Ajouter')} · <span className="tabular-nums">{money(lineTotal)}</span></>}
+      </span>
+    </button>
+  );
+
+  return (
+    <div ref={rootRef} data-gsap-custom className="bg-[#FAF6EC] pb-32 text-[#241F19] lg:pb-24">
+      <div className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 sm:pt-28">
+        <nav aria-label={tr('La carte')} className="flex items-center gap-2 text-sm text-[#241F19]/55">
+          <LocalizedLink href="/carte" className="inline-flex items-center gap-1.5 rounded-full font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('La carte')}</LocalizedLink>
+          {itemSection ? <><span aria-hidden="true">/</span><span>{tr(itemSection.shortLabel)}</span></> : null}
+        </nav>
+
+        <div className="mt-5 grid gap-8 lg:mt-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <div data-reveal-photo className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-[#1E3A5F] sm:aspect-[5/4] lg:aspect-[4/5]">
+              <div data-hero-photo className="absolute inset-0 will-change-transform">
+                <AppImage src={item.image} alt={tr(item.name)} fill priority sizes="(min-width:1024px) 55vw, 100vw" className="object-cover" />
+              </div>
+              {itemSection ? (
+                <span className="font-display absolute end-5 top-5 rounded-full bg-[#FAF6EC]/92 px-3 py-1 text-sm text-[#1E3A5F]">
+                  {String(position).padStart(2, '0')} / {String(itemSection.items.length).padStart(2, '0')}
+                </span>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="min-w-0">
+            <p data-reveal className="font-script text-3xl text-[#7C2438]">{tr(itemSection?.subtitle ?? item.eyebrow)}</p>
+            <div data-reveal className="mt-1 flex items-end">
+              <h1 id="dish-title" className="font-display text-4xl leading-[0.95] font-semibold text-[#1E3A5F] sm:text-6xl">{tr(item.name)}</h1>
+              <Leader />
+              <p className="font-display shrink-0 text-3xl font-semibold text-[#7C2438] sm:text-4xl">{item.price}</p>
+            </div>
+
+            <section data-reveal className="mt-10" aria-labelledby="dish-ingredients">
+              <h2 id="dish-ingredients" className="text-[0.68rem] font-bold tracking-[0.18em] text-[#C4703F] uppercase">{tr('Dans l’assiette')}</h2>
+              <ol className="mt-4 grid gap-px overflow-hidden rounded-2xl border border-[#1E3A5F]/10 bg-[#1E3A5F]/10 sm:grid-cols-2">
+                {ingredients.map((ingredient, index) => (
+                  <li key={ingredient} className="flex items-baseline gap-3 bg-[#FAF6EC] px-4 py-3.5">
+                    <span className="font-display text-sm text-[#C6A15B] tabular-nums">{String(index + 1).padStart(2, '0')}</span>
+                    <span className="font-display text-xl text-[#1E3A5F] first-letter:uppercase">{ingredient}</span>
+                  </li>
+                ))}
+              </ol>
+              {allergens.length > 0 ? (
+                <p className="mt-4 text-sm leading-6 text-[#241F19]/60"><span className="font-bold text-[#7C2438]">{tr('Allergènes')} :</span> {allergens.map((allergen) => tr(allergen)).join(', ')}. {tr('Informez notre équipe de toute allergie.')}</p>
+              ) : null}
+            </section>
+
+            {extras.length > 0 ? (
+              <fieldset data-reveal className="mt-10">
+                <legend className="text-[0.68rem] font-bold tracking-[0.18em] text-[#C4703F] uppercase">{tr('Suppléments')}</legend>
+                <div className="mt-3 divide-y divide-[#1E3A5F]/10 border-y border-[#1E3A5F]/10">
                   {extras.map((extra) => {
                     const selected = selectedExtraIds.includes(extra.id);
                     return (
-                      <label key={extra.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 outline-none transition-all has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#C6A15B] ${selected ? 'border-[#C6A15B] bg-white shadow-[0_6px_18px_rgba(30,58,95,0.08)]' : 'border-[#1E3A5F]/10 bg-white/55 hover:border-[#C6A15B]/60'}`}>
+                      <label key={extra.id} className="flex min-h-14 cursor-pointer items-center gap-3 py-2 outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#C6A15B]">
                         <input type="checkbox" checked={selected} onChange={() => toggleExtra(extra.id)} className="sr-only" />
-                        <span className={`grid size-6 shrink-0 place-items-center rounded-md border ${selected ? 'border-[#1E3A5F] bg-[#1E3A5F] text-[#FAF6EC]' : 'border-[#1E3A5F]/25 bg-white text-transparent'}`}><Check className="size-3.5" /></span>
-                        <span className="min-w-0 flex-1 text-sm font-bold text-[#1E3A5F]">{tr(extra.label)}</span>
-                        <span className="shrink-0 text-xs font-bold text-[#7C2438]">{extra.price === 0 ? tr('Offert') : `+${money(extra.price)}`}</span>
+                        <span className={`grid size-6 shrink-0 place-items-center rounded-full border transition-colors ${selected ? 'border-[#7C2438] bg-[#7C2438] text-[#FAF6EC]' : 'border-[#1E3A5F]/30 text-transparent'}`}><Check className="size-3.5" /></span>
+                        <span className={`font-display text-xl ${selected ? 'text-[#7C2438]' : 'text-[#1E3A5F]'}`}>{tr(extra.label)}</span>
+                        <Leader />
+                        <span className="shrink-0 text-sm font-bold text-[#241F19]/70 tabular-nums">{extra.price === 0 ? tr('Offert') : `+${money(extra.price)}`}</span>
                       </label>
                     );
                   })}
                 </div>
-                {selectedExtras.length > 0 && <div className="mt-4 flex items-center justify-between gap-3 rounded-xl bg-[#1E3A5F] px-4 py-3 text-sm text-[#FAF6EC]"><span><strong>{selectedExtras.length}</strong> {tr(selectedExtras.length === 1 ? 'supplément choisi' : 'suppléments choisis')}</span><strong className="text-[#C6A15B]">+{money(supplementTotal)} {tr('par assiette')}</strong></div>}
-              </div>
+              </fieldset>
+            ) : null}
 
-              {allergens.length > 0 && <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#7C2438]/16 bg-[#7C2438]/[0.045] p-4"><Info className="mt-0.5 size-4 shrink-0 text-[#7C2438]" /><div><p className="text-xs font-bold text-[#7C2438]">{tr('Allergènes')}</p><p className="mt-1 text-xs leading-5 text-[#241F19]/58">{allergens.map((allergen) => tr(allergen)).join(' · ')}. {tr('Informez notre équipe de toute allergie.')}</p></div></div>}
-
-              <div className="gold-divider my-7" aria-hidden="true" />
-              <p className="text-xs font-bold tracking-[0.15em] text-[#1E3A5F]/55 uppercase">{tr('Quantité')}</p>
-              <div className="mt-3 flex items-center justify-between gap-4">
-                <div className="flex items-center rounded-lg border border-[#1E3A5F]/15 bg-[#FAF6EC] p-1">
-                  <button type="button" onClick={() => { setQuantity((current) => Math.max(1, current - 1)); setAdded(false); }} aria-label={tr('Diminuer la quantité')} className="grid size-11 place-items-center rounded-md text-[#1E3A5F] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Minus className="size-4" /></button>
-                  <span className="min-w-10 text-center font-bold tabular-nums text-[#1E3A5F]" aria-live="polite">{quantity}</span>
-                  <button type="button" onClick={() => { setQuantity((current) => current + 1); setAdded(false); }} aria-label={tr('Augmenter la quantité')} className="grid size-11 place-items-center rounded-md text-[#1E3A5F] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Plus className="size-4" /></button>
-                </div>
-                <p className="text-end"><span className="block text-xs text-[#241F19]/50">{supplementTotal > 0 ? `${tr('Plat et suppléments')} · ${tr('Sous-total')}` : tr('Sous-total')}</span><span className="font-display text-3xl font-bold text-[#7C2438]">{money((unitPrice + supplementTotal) * quantity)}</span></p>
+            <div data-reveal className="mt-10 hidden rounded-3xl bg-[#1E3A5F] p-6 text-[#FAF6EC] lg:block">
+              <div className="flex items-baseline justify-between gap-4">
+                <p className="text-sm text-[#FAF6EC]/65">{supplementTotal > 0 ? `${quantity} × (${item.price} + ${money(supplementTotal)})` : `${quantity} × ${item.price}`}</p>
+                <p className="font-display text-3xl font-semibold text-[#C6A15B] tabular-nums">{money(lineTotal)}</p>
               </div>
-              <button type="button" onClick={addCurrentItem} className={`mt-6 inline-flex items-center justify-center gap-2 rounded-lg px-6 py-4 font-bold text-[#FAF6EC] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 ${added ? 'bg-[#C4703F]' : 'bg-[#7C2438] hover:bg-[#681d2f]'}`}><span aria-live="polite" className="inline-flex items-center gap-2">{added ? <Check className="size-5" /> : <ShoppingBag className="size-5" />}{tr(added ? 'Ajouté à votre commande' : 'Ajouter à ma commande')}</span></button>
-              <div className="mt-auto pt-7 text-sm text-[#241F19]/60"><span className="font-bold text-[#1E3A5F]">{itemCount}</span> {tr('articles dans votre commande')} · <span className="font-bold text-[#7C2438]">{money(total)}</span><LocalizedLink href="/commandes" className="ms-3 font-bold text-[#1E3A5F] underline decoration-[#C6A15B] underline-offset-4">{tr('Voir ma commande')}</LocalizedLink></div>
+              <div className="mt-5 flex items-center gap-3">{stepper}{addButton}</div>
+              <p className="mt-4 text-sm text-[#FAF6EC]/60">
+                <span className="tabular-nums">{itemCount}</span> {tr(itemCount <= 1 ? 'article dans votre commande' : 'articles dans votre commande')} · <span className="tabular-nums">{money(total)}</span>
+                <LocalizedLink href="/commandes" className="ms-3 font-bold text-[#FAF6EC] underline decoration-[#C6A15B] underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir ma commande')}</LocalizedLink>
+              </p>
             </div>
           </div>
         </div>
-      </section>
 
-      <section className="relative overflow-hidden bg-[#102B4D] px-6 py-12 text-[#FAF6EC] sm:py-16" aria-labelledby="suggestions-title">
-        <div className="pointer-events-none absolute -end-24 -top-28 size-80 rounded-full border border-[#C6A15B]/18" />
-        <div className="pointer-events-none absolute -end-10 -top-16 size-56 rounded-full border border-[#C6A15B]/22" />
-        <div className="mx-auto max-w-[1200px]">
-          <div className="relative grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
-            <div><div className="flex items-center gap-3 text-[#C6A15B]"><Sparkles className="size-4" /><p className="text-xs font-bold tracking-[0.16em] uppercase">{tr('Pour compléter votre repas')}</p></div><h2 id="suggestions-title" className="font-display mt-2 text-3xl leading-none font-semibold sm:text-4xl">{tr('Ajoutez une envie à votre menu.')}</h2></div>
-            <div className="flex w-fit items-center gap-3 rounded-xl border border-[#C6A15B]/28 bg-white/[0.055] px-4 py-3"><div className="grid size-12 place-items-center rounded-full p-[3px]" style={{ background: `conic-gradient(#C6A15B ${completedSections / menuSections.length * 360}deg, rgba(250,246,236,0.12) 0deg)` }} role="img" aria-label={`${completedSections} / ${menuSections.length} ${tr('catégories complétées')}`}><div className="grid size-full place-items-center rounded-full bg-[#102B4D]"><p className="font-display text-lg font-bold text-[#C6A15B]">{completedSections}<span className="text-[0.65rem] text-[#FAF6EC]/45">/{menuSections.length}</span></p></div></div><div><p className="text-xs font-bold text-[#C6A15B]">{tr('Progression de votre menu')}</p><p className="mt-0.5 text-xs text-[#FAF6EC]/48">{tr(completedSections === menuSections.length ? 'Votre menu est complet.' : 'À compléter')}</p></div></div>
-          </div>
+        {siblings.length > 0 && itemSection ? (
+          <section className="mt-20 border-t border-[#C6A15B]/40 pt-10" aria-labelledby="dish-siblings">
+            <div className="flex items-baseline justify-between gap-4">
+              <h2 id="dish-siblings" className="font-display text-3xl font-semibold text-[#1E3A5F] sm:text-4xl">{tr(itemSection.label)}</h2>
+              <LocalizedLink href="/carte" className="shrink-0 text-sm font-bold text-[#7C2438] underline decoration-[#C6A15B] underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Toute la carte')}</LocalizedLink>
+            </div>
+            <ul className="mt-6 grid gap-6 sm:grid-cols-3">
+              {siblings.map((sibling) => (
+                <li key={sibling.id} data-sibling>
+                  <LocalizedLink href={`/commander/${sibling.id}`} className="block rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-[#1E3A5F]">
+                      <div data-photo className="absolute inset-0">
+                        <AppImage src={sibling.image} alt="" fill sizes="(min-width:640px) 33vw, 100vw" className="object-cover" />
+                      </div>
+                    </div>
+                    <div className="mt-3 flex items-baseline">
+                      <span className="font-display text-xl text-[#1E3A5F]">{tr(sibling.name)}</span>
+                      <Leader />
+                      <span className="font-display shrink-0 text-lg text-[#7C2438]">{sibling.price}</span>
+                    </div>
+                  </LocalizedLink>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+      </div>
 
-          <div className="-mx-6 mt-6 flex gap-2 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0" role="tablist" aria-label={tr('Catégories de suggestions')}>
-            {sectionStates.map(({ section, count }) => {
-              const selected = activeSection === section.id;
-              return <button key={section.id} type="button" role="tab" aria-selected={selected} onClick={() => setActiveSection(section.id)} className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2.5 text-xs font-bold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${selected ? 'border-[#C6A15B] bg-[#C6A15B] text-[#241F19]' : 'border-[#FAF6EC]/18 text-[#FAF6EC]/72 hover:bg-white/8'}`}>{count > 0 ? <Check className="size-3.5 text-[#C4703F]" /> : <CircleDashed className="size-3.5" />}{tr(section.shortLabel)}</button>;
-            })}
-          </div>
-
-          <div className="-mx-6 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0" aria-live="polite">
-            {suggestions.map((suggestion) => (
-              <article key={suggestion.id} className="grid min-w-[86%] snap-center grid-cols-[88px_1fr_auto] items-center gap-3 rounded-xl border border-[#FAF6EC]/14 bg-white/[0.055] p-3 sm:min-w-0">
-                <LocalizedLink href={`/commander/${suggestion.id}`} className="relative aspect-square overflow-hidden rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><AppImage src={suggestion.image} alt={tr(suggestion.name)} fill sizes="88px" className="object-cover" /></LocalizedLink>
-                <div className="min-w-0"><p className="truncate text-[0.65rem] font-bold tracking-[0.1em] text-[#C6A15B] uppercase">{tr(suggestion.eyebrow)}</p><LocalizedLink href={`/commander/${suggestion.id}`} className="font-display mt-1 block text-lg leading-tight font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(suggestion.name)}</LocalizedLink><p className="mt-1 text-sm font-bold text-[#DFA17A]">{suggestion.price}</p></div>
-                <button type="button" onClick={() => addSuggestion(suggestion.id)} aria-label={`${tr('Ajouter')} ${tr(suggestion.name)}`} className={`grid size-10 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${suggestionAdded === suggestion.id ? 'bg-[#C4703F] text-white' : 'bg-[#7C2438] text-white hover:bg-[#681d2f]'}`}>{suggestionAdded === suggestion.id ? <Check className="size-4" /> : <Plus className="size-4" />}</button>
-              </article>
-            ))}
-          </div>
-
-          <div className="relative mt-6 flex flex-col gap-3 border-t border-[#C6A15B]/22 pt-5 sm:flex-row sm:items-center sm:justify-between"><p className="text-sm text-[#FAF6EC]/55">{tr('Repérez en un regard ce qui est déjà choisi et ce qu’il vous reste à découvrir.')}</p><LocalizedLink href="/carte#composer-menu" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#C6A15B]/55 px-5 py-3 text-sm font-bold text-[#C6A15B] outline-none hover:bg-[#C6A15B] hover:text-[#241F19] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Compléter mon menu')}<ArrowRight className="size-4 rtl:-scale-x-100" /></LocalizedLink></div>
-        </div>
-      </section>
-      <MenuAssignmentDialog open={!!pendingAdd} onOpenChange={(open) => { if (!open) setPendingAdd(null); }} itemId={pendingAdd?.itemId ?? null} itemName={pendingAdd?.itemName} quantity={pendingAdd?.quantity} customization={pendingAdd?.customization} onAdded={() => { if (pendingAdd?.kind === 'main') setAdded(true); else if (pendingAdd) setSuggestionAdded(pendingAdd.itemId); }} />
-    </main>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#C6A15B]/35 bg-[#FAF6EC]/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-md lg:hidden">
+        <div className="mx-auto flex max-w-xl items-center gap-3">{stepper}{addButton}</div>
+      </div>
+    </div>
   );
 }
