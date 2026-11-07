@@ -115,7 +115,7 @@ body[data-mobile-menu-open] .restaurant-locator-fab {
 
 @media (max-width: 1023px) {
   body[data-dish-bar] .restaurant-locator-fab {
-    bottom: calc(6rem + env(safe-area-inset-bottom));
+    display: none;
   }
 }
 

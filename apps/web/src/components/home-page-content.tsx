@@ -36,7 +36,7 @@ export function HomePageContent() {
     <>
       <SiteHeader />
       <main id="contenu-principal">
-        <section id="accueil" className="tone-dark relative min-h-[100svh] overflow-hidden bg-[#102B4D] px-6 pb-16">
+        <section id="accueil" className="tone-dark relative min-h-[100svh] overflow-hidden bg-[#102B4D] px-6 sm:pb-16">
           <div className="absolute inset-x-0 bottom-0 top-[var(--site-header-offset)]">
             <AppImage src="/images/savoraille-dining-room.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
             <video
@@ -54,7 +54,7 @@ export function HomePageContent() {
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,43,77,0.55)_0%,rgba(16,43,77,0.15)_55%,transparent_100%)]" />
           </div>
 
-          <div data-motion="hero" className="relative z-10 mx-auto flex min-h-[calc(100svh-var(--site-header-offset))] max-w-[1200px] items-center justify-start pt-[var(--site-header-offset)] rtl:justify-end">
+          <div data-motion="hero" className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1200px] items-end justify-start pt-[var(--site-header-offset)] sm:min-h-[calc(100svh-var(--site-header-offset))] sm:items-center rtl:justify-end">
             <HeroContent />
           </div>
         </section>

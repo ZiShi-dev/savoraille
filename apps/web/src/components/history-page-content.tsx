@@ -26,12 +26,12 @@ export function HistoryPageContent() {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,43,77,0.45)_0%,transparent_60%)]" />
         </div>
 
-        <div className="relative mx-auto flex min-h-[100svh] max-w-[1200px] items-end px-6 pt-[var(--site-header-offset)] pb-16 sm:pb-20">
-          <div data-motion="hero" className="max-w-3xl rounded-[28px] bg-[#102B4D] px-6 py-8 sm:px-8">
-            <p data-motion-child className="font-script text-3xl text-[#C6A15B] sm:text-4xl">{tr('La maison')}</p>
-            <h1 data-motion-child className="font-display mt-2 max-w-[850px] text-5xl leading-[0.92] font-semibold text-balance sm:text-7xl">{tr('Trois salles, une carte.')}</h1>
-            <p data-motion-child className="mt-6 max-w-2xl text-base leading-8 text-[#E4DDD0] sm:text-lg">{tr('Le Marais, la Presqu’île, les Chartrons. Du mardi au dimanche, de 12 h à 23 h. Lyon ne livre pas.')}</p>
-            <div data-motion-child className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <div className="relative mx-auto flex min-h-[100svh] max-w-[1200px] items-end px-6 pt-[var(--site-header-offset)] sm:pb-20">
+          <div data-motion="hero" className="-mx-6 w-[calc(100%+3rem)] rounded-t-[28px] bg-[#102B4D] px-6 pt-7 pb-[max(1.75rem,env(safe-area-inset-bottom))] sm:mx-0 sm:w-auto sm:max-w-3xl sm:rounded-[28px] sm:px-8 sm:py-8">
+            <p data-motion-child className="font-script text-2xl text-[#C6A15B] sm:text-4xl">{tr('La maison')}</p>
+            <h1 data-motion-child className="font-display mt-2 max-w-[850px] text-[2.6rem] leading-[0.92] font-semibold text-balance sm:text-7xl">{tr('Trois salles, une carte.')}</h1>
+            <p data-motion-child className="mt-4 max-w-2xl text-base leading-7 text-[#E4DDD0] sm:mt-6 sm:text-lg sm:leading-8">{tr('Le Marais, la Presqu’île, les Chartrons. Du mardi au dimanche, de 12 h à 23 h. Lyon ne livre pas.')}</p>
+            <div data-motion-child className="mt-6 flex flex-col gap-3 pe-16 sm:mt-8 sm:flex-row sm:pe-0">
               <LocalizedLink href="/reservation" className="btn btn-primary">
                 <span>{tr('Réserver une table')}</span><ArrowRight className="size-4 rtl:rotate-180" />
               </LocalizedLink>

@@ -68,10 +68,10 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
   return (
     <RestaurantContext.Provider value={value}>
       {children}
-      <button type="button" onClick={() => setOpen(true)} aria-label={`${tr('Changer de restaurant')} · ${selectedRestaurant?.name ?? tr('Aucun restaurant sélectionné')}`} title={selectedRestaurant ? `${selectedRestaurant.name} · ${tr(selectedRestaurant.area)}` : tr('Choisir un restaurant')} className="restaurant-locator-fab tone-dark fixed inset-x-0 bottom-0 z-[55] flex h-14 items-center justify-center gap-2 bg-[#7C2438] px-4 text-sm font-bold text-[#FAF6EC] sm:inset-x-auto sm:end-6 sm:bottom-6 sm:size-16 sm:rounded-full sm:border sm:border-[#C6A15B]/70 sm:px-0 sm:shadow-[0_14px_35px_rgba(30,58,95,0.32)]">
-        <span className="pointer-events-none absolute inset-1 hidden rounded-full border border-[#FAF6EC]/15 sm:block" />
-        <MapPin aria-hidden="true" className="relative size-5 sm:size-7" strokeWidth={1.7} />
-        <span className="sm:sr-only">{selectedRestaurant?.city ?? tr('Nos adresses')}</span>
+      <button type="button" onClick={() => setOpen(true)} aria-label={`${tr('Changer de restaurant')} · ${selectedRestaurant?.name ?? tr('Aucun restaurant sélectionné')}`} title={selectedRestaurant ? `${selectedRestaurant.name} · ${tr(selectedRestaurant.area)}` : tr('Choisir un restaurant')} className="restaurant-locator-fab tone-dark fixed end-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[55] grid size-14 place-items-center rounded-full border border-[#C6A15B]/70 bg-[#7C2438] text-[#FAF6EC] shadow-[0_14px_35px_rgba(30,58,95,0.32)] sm:end-6 sm:bottom-6 sm:size-16">
+        <span className="pointer-events-none absolute inset-1 rounded-full border border-[#FAF6EC]/15" />
+        <MapPin aria-hidden="true" className="relative size-6 sm:size-7" strokeWidth={1.7} />
+        <span className="sr-only">{selectedRestaurant?.city ?? tr('Nos adresses')}</span>
       </button>
       <Dialog.Root open={open} onOpenChange={(nextOpen) => {
         setOpen(nextOpen);
