@@ -1,30 +1,59 @@
 'use client';
 
+import { useGSAP } from '@gsap/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
-import { GsapStepPanel } from '@/components/gsap-step-panel';
-import { prefersReducedMotion } from '@/lib/gsap-register';
-import { ArrowLeft, ArrowRight, Check, Eye, EyeOff, LockKeyhole, LogOut, Mail, ShieldCheck, UserPlus, UserRound, X } from 'lucide-react';
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { ensureGsapPlugins, prefersReducedMotion } from '@/lib/gsap-register';
+import { ArrowRight, Check, Eye, EyeOff, LockKeyhole, LogOut, Mail, ShieldCheck, UserRound, X } from 'lucide-react';
+import gsap from 'gsap';
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useI18n } from './i18n-provider';
 
 type AuthIntent = 'account' | 'order' | 'reservation';
-type AuthMode = 'choice' | 'signin' | 'signup';
+type AuthMode = 'signin' | 'signup';
 type AuthUser = { name: string; email: string };
 type AuthFields = { name?: string; email: string; password: string; confirmPassword?: string };
 type AuthContextValue = {
   user: AuthUser | null;
   isAuthenticated: boolean;
-  openAuth: (mode?: Exclude<AuthMode, 'choice'>) => void;
+  openAuth: (mode?: AuthMode) => void;
   requireAuth: (intent: AuthIntent, onAuthenticated: () => void) => void;
   signOut: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 const STORAGE_KEY = 'savoraille-auth-user';
+
+ensureGsapPlugins();
+
+function AuthFormMotion({ mode, locale, children }: { mode: AuthMode; locale: string; children: ReactNode }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const seenRef = useRef(false);
+
+  useGSAP(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const instant = prefersReducedMotion() || !seenRef.current;
+    seenRef.current = true;
+    const tab = root.querySelector<HTMLButtonElement>('[role="tab"][aria-selected="true"]');
+    const pill = root.querySelector<HTMLElement>('[data-auth-pill]');
+    if (tab && pill) {
+      gsap.to(pill, { x: tab.offsetLeft, width: tab.offsetWidth, duration: instant ? 0 : 0.5, ease: 'power3.out', overwrite: 'auto' });
+    }
+    const extras = gsap.utils.toArray<HTMLElement>('[data-auth-extra]', root);
+    const showSignup = mode === 'signup';
+    if (instant) gsap.set(extras, { height: showSignup ? 'auto' : 0, autoAlpha: showSignup ? 1 : 0 });
+    else if (showSignup) gsap.fromTo(extras, { height: 0, autoAlpha: 0 }, { height: 'auto', autoAlpha: 1, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
+    else gsap.to(extras, { height: 0, autoAlpha: 0, duration: 0.35, ease: 'power2.inOut', overwrite: 'auto' });
+    const heading = root.querySelector<HTMLElement>('[data-auth-heading]');
+    if (heading && !instant) gsap.fromTo(heading, { y: 10, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
+  }, { scope: rootRef, dependencies: [mode, locale] });
+
+  return <div ref={rootRef}>{children}</div>;
+}
 
 const signInSchema = z.object({
   email: z.string().trim().email('Indiquez une adresse e-mail valide.'),
@@ -44,13 +73,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
   const [signOutOpen, setSignOutOpen] = useState(false);
-  const [mode, setMode] = useState<AuthMode>('choice');
+  const [mode, setMode] = useState<AuthMode>('signin');
   const [intent, setIntent] = useState<AuthIntent>('order');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const pendingAction = useRef<(() => void) | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const pillRef = useRef<HTMLSpanElement>(null);
+  const signinTabRef = useRef<HTMLButtonElement>(null);
+  const signupTabRef = useRef<HTMLButtonElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const nameWrapRef = useRef<HTMLDivElement>(null);
+  const confirmWrapRef = useRef<HTMLDivElement>(null);
   const schema = useMemo(() => mode === 'signup' ? signUpSchema : signInSchema, [mode]);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<AuthFields>({ resolver: zodResolver(schema), defaultValues: { name: '', email: '', password: '', confirmPassword: '' } });
+  const { register, handleSubmit, reset, clearErrors, formState: { errors } } = useForm<AuthFields>({ resolver: zodResolver(schema), defaultValues: { name: '', email: '', password: '', confirmPassword: '' } });
 
   useEffect(() => {
     try {
@@ -67,12 +103,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [ready, user]);
 
   const changeMode = (nextMode: AuthMode) => {
+    if (nextMode === mode) return;
     setMode(nextMode);
     setPasswordVisible(false);
     setConfirmationVisible(false);
-    reset({ name: '', email: '', password: '', confirmPassword: '' });
+    clearErrors();
   };
-  const openAuth = (nextMode: Exclude<AuthMode, 'choice'> = 'signin') => {
+  const openAuth = (nextMode: AuthMode = 'signin') => {
     setIntent('account');
     pendingAction.current = null;
     changeMode(nextMode);
@@ -82,7 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (user) { onAuthenticated(); return; }
     setIntent(nextIntent);
     pendingAction.current = onAuthenticated;
-    changeMode('choice');
+    changeMode('signin');
     setOpen(true);
   };
   const authenticate = (values: AuthFields) => {
@@ -96,7 +133,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const close = () => {
     setOpen(false);
     pendingAction.current = null;
-    window.setTimeout(() => changeMode('choice'), 220);
+    window.setTimeout(() => {
+      setMode('signin');
+      setPasswordVisible(false);
+      setConfirmationVisible(false);
+      reset({ name: '', email: '', password: '', confirmPassword: '' });
+    }, 220);
+  };
+  const onTabKey = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+    event.preventDefault();
+    const order: AuthMode[] = locale === 'ar' ? ['signup', 'signin'] : ['signin', 'signup'];
+    const index = order.indexOf(mode);
+    const nextMode = order[(index + (event.key === 'ArrowRight' ? 1 : -1) + order.length) % order.length] ?? mode;
+    changeMode(nextMode);
+    (nextMode === 'signin' ? signinTabRef : signupTabRef).current?.focus();
   };
   const confirmSignOut = () => {
     setUser(null);
@@ -126,33 +177,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               <Dialog.Description className="relative mt-3 text-sm leading-6 text-[#FAF6EC]/65">{tr(description)}</Dialog.Description>
             </div>
 
-              {mode === 'choice' ? (
-                <GsapStepPanel stepKey="choice" className="p-5 sm:p-7">
-                  <p className="text-xs font-bold tracking-[0.14em] text-[#C4703F] uppercase">{tr('Choisissez comment continuer')}</p>
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    <button type="button" onClick={() => changeMode('signin')} className="group rounded-2xl border border-[#1E3A5F]/12 bg-white p-5 text-start outline-none transition-all hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><span className="grid size-11 place-items-center rounded-full bg-[#1E3A5F] text-[#C6A15B]"><UserRound className="size-5" /></span><span className="font-display mt-5 block text-2xl font-semibold text-[#1E3A5F]">{tr('Se connecter')}</span><span className="mt-2 block text-xs leading-5 text-[#241F19]/52">{tr('J’ai déjà un compte Savoraille.')}</span><span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#7C2438]">{tr('Continuer')}<ArrowRight className="size-3.5 rtl:-scale-x-100" /></span></button>
-                    <button type="button" onClick={() => changeMode('signup')} className="group rounded-2xl border border-[#C6A15B]/45 bg-[#FFFDF7] p-5 text-start outline-none transition-all hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><span className="grid size-11 place-items-center rounded-full bg-[#7C2438] text-white"><UserPlus className="size-5" /></span><span className="font-display mt-5 block text-2xl font-semibold text-[#1E3A5F]">{tr('Créer un compte')}</span><span className="mt-2 block text-xs leading-5 text-[#241F19]/52">{tr('Je découvre Savoraille pour la première fois.')}</span><span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#7C2438]">{tr('S’inscrire')}<ArrowRight className="size-3.5 rtl:-scale-x-100" /></span></button>
+            <AuthFormMotion mode={mode} locale={locale}>
+            <form onSubmit={handleSubmit(authenticate)} noValidate className="p-5 sm:p-7">
+              <div ref={trackRef} role="tablist" aria-label={tr('Espace client')} onKeyDown={onTabKey} className="relative grid grid-cols-2 rounded-full bg-[#1E3A5F]/8 p-1">
+                <span ref={pillRef} data-auth-pill aria-hidden="true" className="pointer-events-none absolute top-1 bottom-1 left-0 rounded-full bg-[#1E3A5F]" />
+                <button ref={signinTabRef} type="button" role="tab" id="auth-tab-signin" aria-selected={mode === 'signin'} aria-controls="auth-panel" tabIndex={mode === 'signin' ? 0 : -1} onClick={() => changeMode('signin')} className={`relative z-10 rounded-full px-3 py-2.5 text-sm font-bold outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-[#C6A15B] active:scale-[0.98] ${mode === 'signin' ? 'text-[#FAF6EC]' : 'text-[#1E3A5F]'}`}>{tr('Se connecter')}</button>
+                <button ref={signupTabRef} type="button" role="tab" id="auth-tab-signup" aria-selected={mode === 'signup'} aria-controls="auth-panel" tabIndex={mode === 'signup' ? 0 : -1} onClick={() => changeMode('signup')} className={`relative z-10 rounded-full px-3 py-2.5 text-sm font-bold outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-[#C6A15B] active:scale-[0.98] ${mode === 'signup' ? 'text-[#FAF6EC]' : 'text-[#1E3A5F]'}`}>{tr('Créer un compte')}</button>
+              </div>
+
+              <div role="tabpanel" id="auth-panel" aria-labelledby={mode === 'signin' ? 'auth-tab-signin' : 'auth-tab-signup'}>
+                <h2 ref={headingRef} data-auth-heading className="font-display mt-6 text-3xl font-semibold text-[#1E3A5F]">{tr(mode === 'signup' ? 'Créer votre compte' : 'Bon retour chez Savoraille.')}</h2>
+
+                <div ref={nameWrapRef} data-auth-extra inert={mode !== 'signup'} className="overflow-hidden">
+                  <label className="block pt-5 text-sm font-bold text-[#1E3A5F]">
+                    <span className="flex items-center gap-2"><UserRound className="size-4 text-[#C6A15B]" />{tr('Nom et prénom')}</span>
+                    <input {...register('name')} autoComplete="name" placeholder={tr('Votre nom')} className={fieldClass} />
+                    {error('name')}
+                  </label>
+                </div>
+
+                <label className="mt-5 block text-sm font-bold text-[#1E3A5F]">
+                  <span className="flex items-center gap-2"><Mail className="size-4 text-[#C6A15B]" />{tr('Adresse e-mail')}</span>
+                  <input {...register('email')} type="email" autoComplete="email" placeholder="vous@exemple.fr" className={fieldClass} />
+                  {error('email')}
+                </label>
+
+                <div className="mt-5 text-sm font-bold text-[#1E3A5F]">
+                  <label htmlFor="auth-password" className="flex items-center gap-2"><LockKeyhole className="size-4 text-[#C6A15B]" />{tr('Mot de passe')}</label>
+                  <div className="relative">
+                    <input id="auth-password" {...register('password')} type={passwordVisible ? 'text' : 'password'} autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} placeholder="••••••••" className={`${fieldClass} pe-12`} />
+                    <button type="button" onClick={() => setPasswordVisible((visible) => !visible)} className="absolute end-1.5 top-[calc(50%+0.25rem)] grid size-9 -translate-y-1/2 place-items-center rounded-lg text-[#1E3A5F]/55 outline-none transition-colors hover:bg-[#1E3A5F]/7 hover:text-[#1E3A5F] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr(passwordVisible ? 'Masquer le mot de passe' : 'Afficher le mot de passe')} aria-pressed={passwordVisible}>
+                      {passwordVisible ? <EyeOff aria-hidden="true" className="size-4.5" /> : <Eye aria-hidden="true" className="size-4.5" />}
+                    </button>
                   </div>
-                  <p className="mt-5 text-xs leading-5 text-[#241F19]/58">{tr('Après cette étape, vous reprendrez automatiquement votre confirmation.')}</p>
-                </GsapStepPanel>
-              ) : (
-                <GsapStepPanel stepKey={mode} fromX={locale === 'ar' ? -16 : 16} className="contents">
-                <form onSubmit={handleSubmit(authenticate)} noValidate className="p-5 sm:p-7">
-                  <button type="button" onClick={() => changeMode('choice')} className="inline-flex items-center gap-2 text-xs font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour')}</button>
-                  <h2 className="font-display mt-5 text-3xl font-semibold text-[#1E3A5F]">{tr(mode === 'signup' ? 'Créer votre compte' : 'Bon retour chez Savoraille.')}</h2>
-                  {mode === 'signup' ? <label className="mt-5 block text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><UserRound className="size-4 text-[#C6A15B]" />{tr('Nom et prénom')}</span><input {...register('name')} autoComplete="name" placeholder={tr('Votre nom')} className={fieldClass} />{error('name')}</label> : null}
-                  <label className="mt-5 block text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><Mail className="size-4 text-[#C6A15B]" />{tr('Adresse e-mail')}</span><input {...register('email')} type="email" autoComplete="email" placeholder="vous@exemple.fr" className={fieldClass} />{error('email')}</label>
-                  <div className="mt-5 text-sm font-bold text-[#1E3A5F]">
-                    <label htmlFor="auth-password" className="flex items-center gap-2"><LockKeyhole className="size-4 text-[#C6A15B]" />{tr('Mot de passe')}</label>
-                    <div className="relative">
-                      <input id="auth-password" {...register('password')} type={passwordVisible ? 'text' : 'password'} autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} placeholder="••••••••" className={`${fieldClass} pe-12`} />
-                      <button type="button" onClick={() => setPasswordVisible((visible) => !visible)} className="absolute end-1.5 top-[calc(50%+0.25rem)] grid size-9 -translate-y-1/2 place-items-center rounded-lg text-[#1E3A5F]/55 outline-none transition-colors hover:bg-[#1E3A5F]/7 hover:text-[#1E3A5F] focus-visible:ring-2 focus-visible:ring-[#C6A15B]" aria-label={tr(passwordVisible ? 'Masquer le mot de passe' : 'Afficher le mot de passe')} aria-pressed={passwordVisible}>
-                        {passwordVisible ? <EyeOff aria-hidden="true" className="size-4.5" /> : <Eye aria-hidden="true" className="size-4.5" />}
-                      </button>
-                    </div>
-                    {error('password')}
-                  </div>
-                  {mode === 'signup' ? <div className="mt-5 text-sm font-bold text-[#1E3A5F]">
+                  {error('password')}
+                </div>
+
+                <div ref={confirmWrapRef} data-auth-extra inert={mode !== 'signup'} className="overflow-hidden">
+                  <div className="pt-5 text-sm font-bold text-[#1E3A5F]">
                     <label htmlFor="auth-confirm-password" className="flex items-center gap-2"><Check className="size-4 text-[#C6A15B]" />{tr('Confirmer le mot de passe')}</label>
                     <div className="relative">
                       <input id="auth-confirm-password" {...register('confirmPassword')} type={confirmationVisible ? 'text' : 'password'} autoComplete="new-password" placeholder="••••••••" className={`${fieldClass} pe-12`} />
@@ -161,12 +223,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                       </button>
                     </div>
                     {error('confirmPassword')}
-                  </div> : null}
-                  <button type="submit" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-5 py-4 text-sm font-bold text-white outline-none hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr(mode === 'signup' ? 'Créer mon compte et continuer' : 'Me connecter et continuer')}<ArrowRight className="size-4 rtl:-scale-x-100" /></button>
-                  <p className="mt-3 text-center text-[0.68rem] leading-5 text-[#241F19]/42">{tr('Le compte reste sur cet appareil.')}</p>
-                </form>
-                </GsapStepPanel>
-              )}
+                  </div>
+                </div>
+
+                <button type="submit" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#7C2438] px-5 py-4 text-sm font-bold text-white outline-none transition-[background-color,transform] duration-150 hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] active:scale-[0.97]">{tr(mode === 'signup' ? 'Créer mon compte et continuer' : 'Me connecter et continuer')}<ArrowRight className="size-4 rtl:-scale-x-100" /></button>
+                <p className="mt-4 text-center text-sm text-[#241F19]/60">
+                  {tr(mode === 'signin' ? 'Je découvre Savoraille pour la première fois.' : 'J’ai déjà un compte Savoraille.')}{' '}
+                  <button type="button" onClick={() => changeMode(mode === 'signin' ? 'signup' : 'signin')} className="font-bold text-[#7C2438] underline decoration-[#C6A15B] decoration-2 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+                    {tr(mode === 'signin' ? 'Créer un compte' : 'Se connecter')}
+                  </button>
+                </p>
+                <p className="mt-3 text-center text-[0.68rem] leading-5 text-[#241F19]/42">{tr('Le compte reste sur cet appareil.')}</p>
+              </div>
+            </form>
+            </AuthFormMotion>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
