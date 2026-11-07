@@ -16,7 +16,7 @@ export function PortfolioBanner() {
       <div className="mx-auto flex h-8 max-w-[1280px] items-center justify-between gap-3 px-4 text-[0.62rem] font-semibold tracking-[0.12em] uppercase sm:px-6">
         <Link
           href={siteConfig.vorzixUrl}
-          className="inline-flex min-w-0 items-center gap-1.5 text-[#FAF6EC]/72 outline-none transition-colors hover:text-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
+          className="inline-flex min-w-0 items-center gap-1.5 text-[#FAF6EC]/72  transition-colors hover:text-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#7C2438]"
         >
           <ArrowLeft aria-hidden="true" className="size-3 shrink-0 rtl:rotate-180" />
           <span className="truncate">VORZIX</span>

@@ -2,8 +2,7 @@
 
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ensureGsapPlugins } from '@/lib/gsap-register';
+import { ensureGsapPlugins, prefersReducedMotion } from '@/lib/gsap-register';
 import { ArrowLeft, Check, Minus, Plus } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -43,70 +42,12 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
     const root = rootRef.current;
     if (!root) return;
 
-    const motion = gsap.matchMedia();
-    motion.add(
-      {
-        motion: '(prefers-reduced-motion: no-preference)',
-        hover: '(hover: hover) and (prefers-reduced-motion: no-preference)',
-      },
-      (context) => {
-        const { motion: canMove, hover } = context.conditions as { motion: boolean; hover: boolean };
-        if (!canMove) return;
-
-        gsap.timeline({ defaults: { ease: 'power3.out' } })
-          .fromTo('[data-reveal-photo]', { clipPath: 'inset(0 0 100% 0 round 1.5rem)' }, { clipPath: 'inset(0 0 0% 0 round 1.5rem)', duration: 0.9 })
-          .fromTo('[data-reveal]', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.07 }, '-=0.55');
-
-        const heroPhoto = root.querySelector('[data-hero-photo]');
-        if (heroPhoto) {
-          gsap.fromTo(heroPhoto, { scale: 1.06 }, {
-            scale: 1,
-            ease: 'none',
-            scrollTrigger: { trigger: '[data-reveal-photo]', start: 'top 70%', end: 'bottom top', scrub: 0.45 },
-          });
-        }
-
-        const siblings = gsap.utils.toArray<HTMLElement>('[data-sibling]', root);
-        if (siblings.length) {
-          gsap.set(siblings, { y: 28, autoAlpha: 0 });
-          ScrollTrigger.batch(siblings, {
-            start: 'top 90%',
-            once: true,
-            interval: 0.08,
-            onEnter: (batch) => gsap.to(batch, { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.08, ease: 'power3.out', overwrite: 'auto' }),
-          });
-        }
-
-        if (!hover) return;
-        const photoOf = (event: Event) => (event.target as Element | null)?.closest('[data-sibling]')?.querySelector('[data-photo]') ?? null;
-        const onOver = (event: Event) => {
-          const photo = photoOf(event);
-          if (photo) gsap.to(photo, { scale: 1.045, duration: 0.55, ease: 'power2.out', overwrite: 'auto' });
-        };
-        const onOut = (event: Event) => {
-          const card = (event.target as Element | null)?.closest('[data-sibling]');
-          const related = (event as PointerEvent).relatedTarget;
-          if (card && related instanceof Node && card.contains(related)) return;
-          const photo = card?.querySelector('[data-photo]');
-          if (photo) gsap.to(photo, { scale: 1, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
-        };
-        root.addEventListener('pointerover', onOver);
-        root.addEventListener('pointerout', onOut);
-        return () => {
-          root.removeEventListener('pointerover', onOver);
-          root.removeEventListener('pointerout', onOut);
-        };
-      },
-    );
-
-    const refresh = () => ScrollTrigger.refresh();
-    window.addEventListener('load', refresh);
-    const timer = window.setTimeout(refresh, 400);
-    return () => {
-      window.removeEventListener('load', refresh);
-      window.clearTimeout(timer);
-      motion.revert();
-    };
+    if (prefersReducedMotion()) return;
+    const ease = 'cubic-bezier(0.23, 1, 0.32, 1)';
+    const copy = gsap.utils.toArray<HTMLElement>('[data-reveal]', root).filter((el) => !el.querySelector('a, button'));
+    gsap.timeline({ defaults: { ease } })
+      .fromTo('[data-reveal-photo]', { clipPath: 'inset(0 0 100% 0 round 1.5rem)' }, { clipPath: 'inset(0 0 0% 0 round 1.5rem)', duration: 0.4 })
+      .fromTo(copy, { y: 8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.4, stagger: 0.04 }, 0);
   }, { scope: rootRef, dependencies: [itemId], revertOnUpdate: true });
 
   const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value);
@@ -147,14 +88,14 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
 
   const stepper = (
     <div className="flex items-center rounded-full border border-[#1E3A5F]/15 bg-white p-1">
-      <button type="button" onClick={() => changeQuantity(-1)} disabled={quantity === 1} aria-label={tr('Diminuer la quantité')} className="grid size-10 place-items-center rounded-full text-[#1E3A5F] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:opacity-35"><Minus className="size-4" /></button>
+      <button type="button" onClick={() => changeQuantity(-1)} disabled={quantity === 1} aria-label={tr('Diminuer la quantité')} className="grid size-10 place-items-center rounded-full text-[#1E3A5F]  hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#7C2438] disabled:opacity-35"><Minus className="size-4" /></button>
       <span className="min-w-8 text-center font-bold tabular-nums text-[#1E3A5F]" aria-live="polite">{quantity}</span>
-      <button type="button" onClick={() => changeQuantity(1)} aria-label={tr('Augmenter la quantité')} className="grid size-10 place-items-center rounded-full text-[#1E3A5F] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><Plus className="size-4" /></button>
+      <button type="button" onClick={() => changeQuantity(1)} aria-label={tr('Augmenter la quantité')} className="grid size-10 place-items-center rounded-full text-[#1E3A5F]  hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#7C2438]"><Plus className="size-4" /></button>
     </div>
   );
 
   const addButton = (
-    <button type="button" onClick={addCurrentItem} className={`inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold text-[#FAF6EC] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EC] ${added ? 'bg-[#1E3A5F]' : 'bg-[#7C2438] hover:bg-[#681d2f]'}`}>
+    <button type="button" onClick={addCurrentItem} className={`inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold text-[#FAF6EC]  transition-colors focus-visible:ring-2 focus-visible:ring-[#7C2438] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF6EC] ${added ? 'bg-[#1E3A5F]' : 'bg-[#7C2438] hover:bg-[#681d2f]'}`}>
       <span aria-live="polite" className="inline-flex items-center gap-2">
         {added ? <Check className="size-4" /> : null}
         {added ? tr('Ajouté à votre commande') : <>{tr('Ajouter')} · <span className="tabular-nums">{money(lineTotal)}</span></>}
@@ -166,7 +107,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
     <div ref={rootRef} data-gsap-custom className="bg-[#FAF6EC] pb-32 text-[#241F19] lg:pb-24">
       <div className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 sm:pt-28">
         <nav aria-label={tr('La carte')} className="flex items-center gap-2 text-sm text-[#241F19]/55">
-          <LocalizedLink href="/carte" className="inline-flex items-center gap-1.5 rounded-full font-bold text-[#1E3A5F] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('La carte')}</LocalizedLink>
+          <LocalizedLink href="/carte" className="inline-flex items-center gap-1.5 rounded-full font-bold text-[#1E3A5F]  focus-visible:ring-2 focus-visible:ring-[#7C2438]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('La carte')}</LocalizedLink>
           {itemSection ? <><span aria-hidden="true">/</span><span>{tr(itemSection.shortLabel)}</span></> : null}
         </nav>
 
@@ -214,7 +155,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
                   {extras.map((extra) => {
                     const selected = selectedExtraIds.includes(extra.id);
                     return (
-                      <label key={extra.id} className="flex min-h-14 cursor-pointer items-center gap-3 py-2 outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#C6A15B]">
+                      <label key={extra.id} className="flex min-h-14 cursor-pointer items-center gap-3 py-2  has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#C6A15B]">
                         <input type="checkbox" checked={selected} onChange={() => toggleExtra(extra.id)} className="sr-only" />
                         <span className={`grid size-6 shrink-0 place-items-center rounded-full border transition-colors ${selected ? 'border-[#7C2438] bg-[#7C2438] text-[#FAF6EC]' : 'border-[#1E3A5F]/30 text-transparent'}`}><Check className="size-3.5" /></span>
                         <span className={`font-display text-xl ${selected ? 'text-[#7C2438]' : 'text-[#1E3A5F]'}`}>{tr(extra.label)}</span>
@@ -235,7 +176,7 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
               <div className="mt-5 flex items-center gap-3">{stepper}{addButton}</div>
               <p className="mt-4 text-sm text-[#FAF6EC]/60">
                 <span className="tabular-nums">{itemCount}</span> {tr(itemCount <= 1 ? 'article dans votre commande' : 'articles dans votre commande')} · <span className="tabular-nums">{money(total)}</span>
-                <LocalizedLink href="/commandes" className="ms-3 font-bold text-[#FAF6EC] underline decoration-[#C6A15B] underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Voir ma commande')}</LocalizedLink>
+                <LocalizedLink href="/commandes" className="ms-3 font-bold text-[#FAF6EC] underline decoration-[#C6A15B] underline-offset-4  focus-visible:ring-2 focus-visible:ring-[#7C2438]">{tr('Voir ma commande')}</LocalizedLink>
               </p>
             </div>
           </div>
@@ -245,12 +186,12 @@ export function OrderDetailContent({ itemId }: { itemId: string }) {
           <section className="mt-20 border-t border-[#C6A15B]/40 pt-10" aria-labelledby="dish-siblings">
             <div className="flex items-baseline justify-between gap-4">
               <h2 id="dish-siblings" className="font-display text-3xl font-semibold text-[#1E3A5F] sm:text-4xl">{tr(itemSection.label)}</h2>
-              <LocalizedLink href="/carte" className="shrink-0 text-sm font-bold text-[#7C2438] underline decoration-[#C6A15B] underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Toute la carte')}</LocalizedLink>
+              <LocalizedLink href="/carte" className="shrink-0 text-sm font-bold text-[#7C2438] underline decoration-[#C6A15B] underline-offset-4  focus-visible:ring-2 focus-visible:ring-[#7C2438]">{tr('Toute la carte')}</LocalizedLink>
             </div>
             <ul className="mt-6 grid gap-6 sm:grid-cols-3">
               {siblings.map((sibling) => (
                 <li key={sibling.id} data-sibling>
-                  <LocalizedLink href={`/commander/${sibling.id}`} className="block rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+                  <LocalizedLink href={`/commander/${sibling.id}`} className="block rounded-3xl  focus-visible:ring-2 focus-visible:ring-[#7C2438]">
                     <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-[#1E3A5F]">
                       <div data-photo className="absolute inset-0">
                         <AppImage src={sibling.image} alt="" fill sizes="(min-width:640px) 33vw, 100vw" className="object-cover" />

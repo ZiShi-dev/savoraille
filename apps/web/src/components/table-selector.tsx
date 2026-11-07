@@ -45,7 +45,7 @@ export function TableSelector({ guests, value, onChange }: { guests: number; val
       </div>
 
       <div className="relative mt-5 aspect-[16/9] overflow-hidden rounded-2xl border border-[#C6A15B]/40 bg-[#102B4D] shadow-[0_18px_45px_rgba(30,58,95,0.2)]">
-        <AppImage src="/images/savoraille-dining-room-3d.png" alt={tr('Vue 3D de la salle Savoraille et de ses tables')} fill priority sizes="(max-width: 768px) 100vw, 900px" className="object-cover" />
+        <AppImage src="/images/savoraille-dining-room.jpg" alt={tr('La salle et ses tables.')} fill priority sizes="(max-width: 768px) 100vw, 900px" className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#071C33]/24 via-transparent to-[#071C33]/8" />
         {tables.map((table) => {
           const tooSmall = table.seats < guests;
@@ -61,7 +61,7 @@ export function TableSelector({ guests, value, onChange }: { guests: number; val
               aria-pressed={active}
               aria-label={`${tr('Table')} ${table.id.slice(1)}, ${table.seats} ${tr('places')}, ${status}`}
               style={{ left: `${table.x}%`, top: `${table.y}%` }}
-              className={`group absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-lg border px-1.5 py-1 text-center shadow-[0_5px_16px_rgba(3,16,31,0.38)] outline-none backdrop-blur-md transition-all focus-visible:ring-2 focus-visible:ring-[#FAF6EC] sm:px-2.5 sm:py-1.5 ${active ? 'scale-110 border-[#FAF6EC] bg-[#C6A15B] text-[#241F19]' : table.status === 'reserved' ? 'cursor-not-allowed border-[#FAF6EC]/35 bg-[#7C2438]/92 text-white opacity-90' : tooSmall ? 'cursor-not-allowed border-white/25 bg-[#241F19]/75 text-white opacity-65' : 'border-[#FAF6EC]/50 bg-[#C4703F]/94 text-white hover:z-20 hover:scale-110'}`}
+              className={`group absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-lg border px-1.5 py-1 text-center shadow-[0_5px_16px_rgba(3,16,31,0.38)]  backdrop-blur-md transition-[transform,background-color,border-color,color,box-shadow] focus-visible:ring-2 focus-visible:ring-[#FAF6EC] sm:px-2.5 sm:py-1.5 ${active ? 'scale-110 border-[#FAF6EC] bg-[#C6A15B] text-[#241F19]' : table.status === 'reserved' ? 'cursor-not-allowed border-[#FAF6EC]/35 bg-[#7C2438]/92 text-white opacity-90' : tooSmall ? 'cursor-not-allowed border-white/25 bg-[#241F19]/75 text-white opacity-65' : 'border-[#FAF6EC]/50 bg-[#C4703F]/94 text-white hover:z-20 [@media(hover:hover)_and_(pointer:fine)]:hover:scale-110'}`}
             >
               <span className="flex items-center justify-center gap-1 text-[0.58rem] font-extrabold leading-none sm:text-[0.68rem]">{active ? <Check className="size-2.5 sm:size-3" /> : table.status === 'reserved' ? <LockKeyhole className="size-2.5 sm:size-3" /> : null}{table.id}</span>
               <span className="mt-0.5 flex items-center justify-center gap-0.5 text-[0.52rem] font-semibold leading-none sm:text-[0.62rem]"><Armchair className="size-2.5 sm:size-3" />{table.seats}<span className="hidden sm:inline"> · {status}</span></span>

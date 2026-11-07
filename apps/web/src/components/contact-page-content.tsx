@@ -35,7 +35,7 @@ export function ContactPageContent() {
   return (
     <main id="contenu-principal" className="overflow-hidden bg-[#FAF6EC] text-[#241F19]">
       <section className="relative isolate min-h-[600px] overflow-hidden bg-[#102B4D] text-[#FAF6EC]">
-        <AppImage src="/images/reservations/private-event.png" alt={tr('Une table préparée pour recevoir les invités chez Savoraille')} fill priority sizes="100vw" className="object-cover object-center" />
+        <AppImage src="/images/reservations/private-event.jpg" alt={tr('Une table préparée pour recevoir les invités chez Savoraille')} fill priority sizes="100vw" className="object-cover object-center" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,25,45,.94)_0%,rgba(7,25,45,.74)_52%,rgba(7,25,45,.25)_100%)] rtl:bg-[linear-gradient(270deg,rgba(7,25,45,.94)_0%,rgba(7,25,45,.74)_52%,rgba(7,25,45,.25)_100%)]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#07192D]/70 via-transparent to-transparent" />
         <div className="relative mx-auto flex min-h-[600px] max-w-[1200px] items-end px-6 pb-16 pt-28 sm:pb-20 sm:pt-32 lg:px-8">
@@ -44,7 +44,7 @@ export function ContactPageContent() {
             <p className="font-script mt-7 text-3xl text-[#C6A15B] sm:text-4xl">{tr('Écrire')}</p>
             <h1 className="font-display mt-3 max-w-4xl text-5xl leading-[0.9] font-semibold text-balance sm:text-7xl lg:text-[5.2rem]">{tr('Un message pour la maison.')}</h1>
             <p className="mt-7 max-w-2xl text-base leading-8 text-[#FAF6EC]/76 sm:text-lg">{tr('Réservation, groupe, ou une question sur un plat. Le message reste sur cet appareil.')}</p>
-            <LocalizedLink href="#ecrire" className="mt-9 inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19] outline-none transition-colors hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Écrivez-nous')}<ArrowDown className="size-4" /></LocalizedLink>
+            <LocalizedLink href="#ecrire" className="mt-9 inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19]  transition-colors hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Écrivez-nous')}<ArrowDown className="size-4" /></LocalizedLink>
           </div>
         </div>
       </section>
@@ -60,7 +60,7 @@ export function ContactPageContent() {
 
             <div className="mt-8 space-y-3">
               {contactCards.map(({ icon: Icon, label, value, action, href }) => (
-                <a key={label} href={href} className="group flex items-center gap-4 rounded-2xl border border-[#1E3A5F]/10 bg-white/65 p-4 outline-none transition-colors hover:border-[#C6A15B]/60 hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+                <a key={label} href={href} className="group flex items-center gap-4 rounded-2xl border border-[#1E3A5F]/10 bg-white/65 p-4  transition-colors hover:border-[#C6A15B]/60 hover:bg-white focus-visible:ring-2 focus-visible:ring-[#7C2438]">
                   <span className="grid size-11 shrink-0 place-items-center rounded-full border border-[#C6A15B]/45 text-[#7C2438]"><Icon className="size-4.5" strokeWidth={1.7} /></span>
                   <span className="min-w-0 flex-1"><span className="block text-[0.65rem] font-bold tracking-[0.12em] text-[#C4703F] uppercase">{tr(label)}</span><span className="mt-0.5 block text-sm font-bold text-[#1E3A5F] sm:truncate">{tr(value)}</span><span className="mt-0.5 block text-xs text-[#241F19]/45">{tr(action)}</span></span>
                   <ArrowUpRight className="size-4 shrink-0 text-[#C6A15B] rtl:-scale-x-100" />
@@ -76,7 +76,7 @@ export function ContactPageContent() {
                 <p className="font-script mt-6 text-3xl text-[#7C2438]">{tr('Merci pour votre message.')}</p>
                 <h3 className="font-display mt-3 text-4xl font-semibold text-[#1E3A5F]">{tr('Noté ici.')}</h3>
                 <p className="mt-4 max-w-md text-sm leading-7 text-[#241F19]/58">{tr('Votre message est noté ici. Il n’est pas envoyé.')}</p>
-                <button type="button" onClick={() => { setSent(false); setFormError(''); }} className="mt-7 rounded-lg border border-[#1E3A5F]/14 bg-[#FAF6EC] px-5 py-3.5 text-sm font-bold text-[#1E3A5F] outline-none hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Écrire un autre message')}</button>
+                <button type="button" onClick={() => { setSent(false); setFormError(''); }} className="mt-7 rounded-lg border border-[#1E3A5F]/14 bg-[#FAF6EC] px-5 py-3.5 text-sm font-bold text-[#1E3A5F]  hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#7C2438]">{tr('Écrire un autre message')}</button>
               </div>
             ) : (
               <form ref={formRef} onSubmit={handleSubmit} noValidate>
@@ -92,15 +92,15 @@ export function ContactPageContent() {
                 ) : null}
 
                 <div className="mt-6 grid min-w-0 gap-5 sm:grid-cols-2">
-                  <label className="block min-w-0 text-sm font-bold text-[#1E3A5F]">{tr('Prénom et nom')} *<input required name="name" autoComplete="name" aria-invalid={formError ? true : undefined} placeholder={tr('Votre nom')} className="mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-[#FAF6EC]/45 px-4 text-sm text-[#241F19] outline-none transition-all placeholder:text-[#241F19]/35 hover:border-[#C6A15B]/60 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/30" /></label>
-                  <label className="block min-w-0 text-sm font-bold text-[#1E3A5F]">{tr('E-mail')} *<input required type="email" name="email" autoComplete="email" aria-invalid={formError ? true : undefined} placeholder="vous@exemple.fr" className="mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-[#FAF6EC]/45 px-4 text-sm text-[#241F19] outline-none transition-all placeholder:text-[#241F19]/35 hover:border-[#C6A15B]/60 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/30" /></label>
+                  <label className="block min-w-0 text-sm font-bold text-[#1E3A5F]">{tr('Prénom et nom')} *<input required name="name" autoComplete="name" aria-invalid={formError ? true : undefined} placeholder={tr('Votre nom')} className="mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-[#FAF6EC]/45 px-4 text-sm text-[#241F19]  transition-[background-color,border-color,color,box-shadow] placeholder:text-[#241F19]/35 hover:border-[#C6A15B]/60 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/30" /></label>
+                  <label className="block min-w-0 text-sm font-bold text-[#1E3A5F]">{tr('E-mail')} *<input required type="email" name="email" autoComplete="email" aria-invalid={formError ? true : undefined} placeholder="vous@exemple.fr" className="mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-[#FAF6EC]/45 px-4 text-sm text-[#241F19]  transition-[background-color,border-color,color,box-shadow] placeholder:text-[#241F19]/35 hover:border-[#C6A15B]/60 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/30" /></label>
                 </div>
 
-                <label className="mt-5 block min-w-0 text-sm font-bold text-[#1E3A5F]">{tr('Votre message')} *<textarea required name="message" rows={6} aria-invalid={formError ? true : undefined} placeholder={tr('Réservation, groupe, allergie, question sur un plat.')} className="mt-2 w-full min-w-0 max-w-full resize-y rounded-xl border border-[#1E3A5F]/14 bg-[#FAF6EC]/45 px-4 py-3 text-sm leading-6 text-[#241F19] outline-none transition-colors placeholder:text-[#241F19]/35 hover:border-[#C6A15B]/60 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/30" /></label>
+                <label className="mt-5 block min-w-0 text-sm font-bold text-[#1E3A5F]">{tr('Votre message')} *<textarea required name="message" rows={6} aria-invalid={formError ? true : undefined} placeholder={tr('Réservation, groupe, allergie, question sur un plat.')} className="mt-2 w-full min-w-0 max-w-full resize-y rounded-xl border border-[#1E3A5F]/14 bg-[#FAF6EC]/45 px-4 py-3 text-sm leading-6 text-[#241F19]  transition-colors placeholder:text-[#241F19]/35 hover:border-[#C6A15B]/60 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/30" /></label>
 
                 <div className="mt-6 flex flex-col gap-4 border-t border-[#1E3A5F]/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
                   <p className="max-w-sm text-[0.7rem] leading-5 text-[#241F19]/45">{tr('Le message reste sur cet appareil.')}</p>
-                  <button type="submit" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-6 py-4 text-sm font-bold text-[#FAF6EC] outline-none transition-colors hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Envoyer le message')}<Send className="size-4 rtl:-scale-x-100" /></button>
+                  <button type="submit" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-6 py-4 text-sm font-bold text-[#FAF6EC]  transition-colors hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#7C2438]">{tr('Envoyer le message')}<Send className="size-4 rtl:-scale-x-100" /></button>
                 </div>
               </form>
             )}
@@ -111,7 +111,7 @@ export function ContactPageContent() {
       <section id="adresse" className="bg-[#102B4D] px-6 py-16 text-[#FAF6EC] sm:py-24 lg:px-8" aria-labelledby="address-title">
         <div className="mx-auto grid max-w-[1200px] overflow-hidden rounded-3xl border border-[#C6A15B]/25 bg-[#0B2746] shadow-[0_24px_65px_rgba(3,16,31,0.3)] lg:grid-cols-[1.05fr_0.95fr]">
           <div className="relative min-h-[420px] lg:min-h-[560px]">
-            <AppImage src="/images/savoraille-dining-room-3d.png" alt={tr('La salle du restaurant Savoraille')} fill sizes="(max-width: 1024px) 100vw, 52vw" className="object-cover" />
+            <AppImage src="/images/reservations/business.jpg" alt={tr('La salle du restaurant Savoraille')} fill sizes="(max-width: 1024px) 100vw, 52vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#07192D]/65 via-transparent to-transparent" />
             <span className="absolute bottom-5 start-5 inline-flex items-center gap-2 rounded-full border border-[#FAF6EC]/25 bg-[#102B4D]/72 px-4 py-2 text-xs font-bold backdrop-blur-md"><MapPin className="size-4 text-[#C6A15B]" />{tr('Votre restaurant Savoraille')}</span>
           </div>
@@ -131,8 +131,8 @@ export function ContactPageContent() {
               <li className="flex gap-4"><Clock3 className="mt-0.5 size-5 shrink-0 text-[#C6A15B]" aria-hidden="true" /><div><p className="text-xs font-bold tracking-[0.13em] text-[#C6A15B] uppercase">{tr('Horaires')}</p><p className="mt-1 text-sm leading-6 text-[#FAF6EC]/70">{tr('Mar–Dim · 12 h–23 h')}</p></div></li>
             </ul>
             <div className="mt-8 flex flex-wrap gap-3">
-              <LocalizedLink href="/reservation" className="inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Réserver une table')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></LocalizedLink>
-              <button type="button" onClick={() => openPicker()} className="inline-flex items-center gap-2 rounded-lg border border-[#FAF6EC]/28 px-5 py-3.5 text-sm font-bold text-[#FAF6EC] outline-none hover:bg-[#FAF6EC]/8 focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Trouver le restaurant le plus proche')}<MapPin className="size-4" /></button>
+              <LocalizedLink href="/reservation" className="inline-flex items-center gap-2 rounded-lg bg-[#C6A15B] px-5 py-3.5 text-sm font-bold text-[#241F19]  hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#FAF6EC]">{tr('Réserver une table')}<ArrowUpRight className="size-4 rtl:-scale-x-100" /></LocalizedLink>
+              <button type="button" onClick={() => openPicker()} className="inline-flex items-center gap-2 rounded-lg border border-[#FAF6EC]/28 px-5 py-3.5 text-sm font-bold text-[#FAF6EC]  hover:bg-[#FAF6EC]/8 focus-visible:ring-2 focus-visible:ring-[#7C2438]">{tr('Trouver le restaurant le plus proche')}<MapPin className="size-4" /></button>
             </div>
           </div>
         </div>

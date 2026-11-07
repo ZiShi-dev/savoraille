@@ -39,13 +39,13 @@ export const metadata: Metadata = {
     siteName: 'Savoraille',
     title: 'Savoraille — La merveille des saveurs',
     description: 'Site vitrine restaurant moderne, conçu par VORZIX.',
-    images: [{ url: withBasePath('/images/savoraille-dining-room-3d.png'), width: 1200, height: 630, alt: 'Salle du restaurant Savoraille' }],
+    images: [{ url: withBasePath('/images/savoraille-dining-room.jpg'), width: 2000, height: 1333, alt: 'Salle du restaurant Savoraille' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Savoraille — La merveille des saveurs',
     description: 'Site vitrine restaurant moderne, conçu par VORZIX.',
-    images: [withBasePath('/images/savoraille-dining-room-3d.png')],
+    images: [withBasePath('/images/savoraille-dining-room.jpg')],
   },
   robots: siteConfig.portfolioMode ? { index: false, follow: false } : { index: true, follow: true },
 };

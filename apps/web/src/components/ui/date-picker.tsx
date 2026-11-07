@@ -32,7 +32,7 @@ export function DatePicker({ value, onChange, label, locale, min }: { value: str
       return `${format(date, 'PPPP', { locale: dateLocale })}${details.length ? `, ${details.join(', ')}` : ''}`;
     },
   };
-  const navigationButtonClass = 'grid size-9 place-items-center rounded-lg border border-[#1E3A5F]/12 text-[#1E3A5F] outline-none transition-colors hover:bg-[#1E3A5F] hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:pointer-events-none disabled:opacity-30';
+  const navigationButtonClass = 'grid size-9 place-items-center rounded-lg border border-[#1E3A5F]/12 text-[#1E3A5F]  transition-colors hover:bg-[#1E3A5F] hover:text-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#7C2438] disabled:pointer-events-none disabled:opacity-30';
 
   return (
     <Popover.Root open={open} onOpenChange={(nextOpen) => {
@@ -40,13 +40,13 @@ export function DatePicker({ value, onChange, label, locale, min }: { value: str
       if (nextOpen) setMonth(selected ?? minimum ?? new Date());
     }}>
       <Popover.Trigger asChild>
-        <button type="button" aria-label={label} className="mt-2 flex h-12 w-full min-w-0 items-center justify-between gap-3 rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-all hover:border-[#C6A15B]/65 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35">
+        <button type="button" aria-label={label} className="mt-2 flex h-12 w-full min-w-0 items-center justify-between gap-3 rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19]  transition-[background-color,border-color,color,box-shadow] hover:border-[#C6A15B]/65 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35">
           <span className={`min-w-0 truncate text-start ${selected ? '' : 'text-[#241F19]/38'}`}>{selected ? format(selected, 'PPP', { locale: dateLocale }) : label}</span>
           <CalendarDays className="size-4 shrink-0 text-[#C6A15B]" />
         </button>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content sideOffset={7} align={rtl ? 'end' : 'start'} collisionPadding={12} className="z-[160] rounded-2xl border border-[#C6A15B]/35 bg-[#FFFDFC] p-3 text-[#241F19] shadow-[0_20px_55px_rgba(30,58,95,0.24)] outline-none" dir={rtl ? 'rtl' : 'ltr'}>
+        <Popover.Content sideOffset={7} align={rtl ? 'end' : 'start'} collisionPadding={12} className="z-[160] rounded-2xl border border-[#C6A15B]/35 bg-[#FFFDFC] p-3 text-[#241F19] shadow-[0_20px_55px_rgba(30,58,95,0.24)] " dir={rtl ? 'rtl' : 'ltr'}>
           <DayPicker
             mode="single"
             selected={selected}
@@ -80,7 +80,7 @@ export function DatePicker({ value, onChange, label, locale, min }: { value: str
               weekday: 'w-10 py-2 text-center text-[0.68rem] font-bold text-[#C4703F]',
               week: 'mt-1 flex w-full',
               day: 'relative size-10 p-0 text-center text-sm',
-              day_button: 'grid size-10 place-items-center rounded-lg outline-none transition-colors hover:bg-[#C6A15B]/18 focus-visible:ring-2 focus-visible:ring-[#C6A15B]',
+              day_button: 'grid size-10 place-items-center rounded-lg  transition-colors hover:bg-[#C6A15B]/18 focus-visible:ring-2 focus-visible:ring-[#7C2438]',
               selected: '[&>button]:bg-[#1E3A5F] [&>button]:font-bold [&>button]:text-[#FAF6EC] [&>button]:hover:bg-[#1E3A5F]',
               today: '[&>button]:border [&>button]:border-[#C6A15B] [&>button]:font-bold',
               outside: 'text-[#241F19]/28',

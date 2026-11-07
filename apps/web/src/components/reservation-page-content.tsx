@@ -20,10 +20,10 @@ type ReservationReason = 'dinner' | 'romantic' | 'business' | 'private';
 type ReservationStep = 'reason' | 'form' | 'done';
 
 const reasons = [
-  { id: 'dinner' as const, icon: UtensilsCrossed, title: 'Un déjeuner ou un dîner', description: 'La carte, à table.', image: '/images/reservations/dinner.png' },
-  { id: 'romantic' as const, icon: Heart, title: 'Un moment à deux', description: 'Une table à l’écart.', image: '/images/reservations/romantic.png' },
-  { id: 'business' as const, icon: BriefcaseBusiness, title: 'Un repas professionnel', description: 'Salle calme, service à l’heure.', image: '/images/reservations/business.png' },
-  { id: 'private' as const, icon: Users, title: 'Un événement privé', description: 'Un groupe, une salle à part.', image: '/images/reservations/private-event.png' },
+  { id: 'dinner' as const, icon: UtensilsCrossed, title: 'Un déjeuner ou un dîner', description: 'La carte, à table.', image: '/images/reservations/dinner.jpg' },
+  { id: 'romantic' as const, icon: Heart, title: 'Un moment à deux', description: 'Une table à l’écart.', image: '/images/reservations/romantic.jpg' },
+  { id: 'business' as const, icon: BriefcaseBusiness, title: 'Un repas professionnel', description: 'Salle calme, service à l’heure.', image: '/images/reservations/business.jpg' },
+  { id: 'private' as const, icon: Users, title: 'Un événement privé', description: 'Un groupe, une salle à part.', image: '/images/reservations/private-event.jpg' },
 ];
 
 const schema = z.object({
@@ -53,7 +53,7 @@ export function ReservationPageContent() {
   const flowRef = useRef<HTMLDivElement>(null);
   const today = localDateValue();
   const chosenReason = reasons.find((item) => item.id === reason);
-  const fieldClass = 'mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19] outline-none transition-colors placeholder:text-[#241F19]/38 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35';
+  const fieldClass = 'mt-2 h-12 w-full min-w-0 max-w-full rounded-lg border border-[#1E3A5F]/14 bg-white px-4 text-sm text-[#241F19]  transition-colors placeholder:text-[#241F19]/38 focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35';
   const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm<ReservationValues>({
     resolver: zodResolver(schema),
     defaultValues: { date: today, time: '20:00', guests: '2', name: '', phone: '', email: '', notes: '' },
@@ -97,7 +97,7 @@ export function ReservationPageContent() {
               <p className="text-[0.65rem] font-bold tracking-[0.14em] text-[#C4703F] uppercase">{step === 'reason' ? `${tr('Étape')} 1 / 2` : step === 'form' ? `${tr('Étape')} 2 / 2` : tr('Demande préparée')}</p>
               <p className="font-display mt-1 text-2xl font-semibold text-[#1E3A5F]">{tr(step === 'reason' ? 'L’occasion.' : step === 'form' ? 'Vos coordonnées.' : 'C’est noté ici.')}</p>
             </div>
-            {step === 'form' ? <button type="button" onClick={() => setStep('reason')} className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#1E3A5F]/12 px-3 py-2.5 text-xs font-bold text-[#1E3A5F] outline-none hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour')}</button> : null}
+            {step === 'form' ? <button type="button" onClick={() => setStep('reason')} className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#1E3A5F]/12 px-3 py-2.5 text-xs font-bold text-[#1E3A5F]  hover:bg-[#FAF6EC] focus-visible:ring-2 focus-visible:ring-[#7C2438]"><ArrowLeft className="size-4 rtl:-scale-x-100" />{tr('Retour')}</button> : null}
           </div>
 
             {step === 'reason' ? (
@@ -106,7 +106,7 @@ export function ReservationPageContent() {
                 <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   {reasons.map((item) => {
                     const Icon = item.icon;
-                    return <button key={item.id} type="button" onClick={() => chooseReason(item.id)} className="group flex min-h-[22rem] flex-col overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white text-start shadow-[0_8px_24px_rgba(30,58,95,0.08)] outline-none transition-all hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#C6A15B]">
+                    return <button key={item.id} type="button" onClick={() => chooseReason(item.id)} className="group flex min-h-[22rem] flex-col overflow-hidden rounded-2xl border border-[#1E3A5F]/12 bg-white text-start shadow-[0_8px_24px_rgba(30,58,95,0.08)]  transition-[background-color,border-color,color,box-shadow] hover:border-[#C6A15B] focus-visible:ring-2 focus-visible:ring-[#7C2438]">
                       <span className="relative block aspect-[16/10] w-full overflow-hidden bg-[#102B4D]">
                         <AppImage src={item.image} alt={tr(item.title)} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
                         <span className="absolute inset-0 bg-gradient-to-t from-[#071C33]/58 via-transparent to-transparent" />
@@ -147,7 +147,7 @@ export function ReservationPageContent() {
                     <label className="min-w-0 text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><UserRound className="size-4 text-[#C6A15B]" />{tr('Votre nom')}</span><input {...register('name')} autoComplete="name" placeholder={tr('Nom et prénom')} className={fieldClass} />{error('name')}</label>
                     <label className="min-w-0 text-sm font-bold text-[#1E3A5F]"><span className="flex items-center gap-2"><Phone className="size-4 text-[#C6A15B]" />{tr('Téléphone')}</span><input {...register('phone')} type="tel" autoComplete="tel" placeholder="+33 6 00 00 00 00" className={fieldClass} />{error('phone')}</label>
                     <label className="min-w-0 text-sm font-bold text-[#1E3A5F] sm:col-span-2">{tr('Adresse e-mail')}<input {...register('email')} type="email" autoComplete="email" placeholder="vous@exemple.fr" className={fieldClass} />{error('email')}</label>
-                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F] sm:col-span-2">{tr('Votre demande')}<textarea {...register('notes')} rows={4} placeholder={tr('Allergies, gâteau, emplacement souhaité ou autre attention…')} className="mt-2 w-full min-w-0 max-w-full resize-none rounded-lg border border-[#1E3A5F]/14 bg-white px-4 py-3 text-sm outline-none focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35" /></label>
+                    <label className="min-w-0 text-sm font-bold text-[#1E3A5F] sm:col-span-2">{tr('Votre demande')}<textarea {...register('notes')} rows={4} placeholder={tr('Allergies, gâteau, emplacement souhaité ou autre attention…')} className="mt-2 w-full min-w-0 max-w-full resize-none rounded-lg border border-[#1E3A5F]/14 bg-white px-4 py-3 text-sm  focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/35" /></label>
                   </div>
                 </div>
 
@@ -160,7 +160,7 @@ export function ReservationPageContent() {
                     <div className="flex items-center justify-between gap-3"><dt className="text-[#FAF6EC]/55">{tr('Convives')}</dt><dd className="font-bold">{values.guests}</dd></div>
                   </dl>
                   <div className="gold-divider gold-divider-dark mt-6" />
-                  <button type="submit" disabled={!selectedRestaurant} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-5 py-4 text-sm font-bold text-white outline-none hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#C6A15B] disabled:cursor-not-allowed disabled:opacity-45">{tr('Envoyer ma demande')}<ArrowRight className="size-4 rtl:-scale-x-100" /></button>
+                  <button type="submit" disabled={!selectedRestaurant} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#7C2438] px-5 py-4 text-sm font-bold text-white  hover:bg-[#681d2f] focus-visible:ring-2 focus-visible:ring-[#7C2438] disabled:cursor-not-allowed disabled:opacity-45">{tr('Envoyer ma demande')}<ArrowRight className="size-4 rtl:-scale-x-100" /></button>
                   <p className="mt-3 text-center text-[0.68rem] leading-5 text-[#FAF6EC]/45">{tr('La demande reste sur cet appareil.')}</p>
                 </aside>
               </form>
@@ -171,7 +171,7 @@ export function ReservationPageContent() {
                 <h2 className="font-display mt-6 text-4xl font-semibold text-[#1E3A5F] sm:text-5xl">{tr('C’est noté ici.')}</h2>
                 <p className="mt-3 max-w-lg text-sm leading-7 text-[#241F19]/60">{tr('Rien n’est envoyé au restaurant.')}</p>
                 <p className="mt-5 rounded-full bg-[#1E3A5F]/7 px-4 py-2 text-xs font-bold tracking-[0.12em] text-[#1E3A5F]">{tr('Référence')} · {reference}</p>
-                <button type="button" onClick={restart} className="mt-7 rounded-lg bg-[#1E3A5F] px-6 py-4 text-sm font-bold text-[#FAF6EC] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]">{tr('Faire une autre demande')}</button>
+                <button type="button" onClick={restart} className="mt-7 rounded-lg bg-[#1E3A5F] px-6 py-4 text-sm font-bold text-[#FAF6EC]  focus-visible:ring-2 focus-visible:ring-[#7C2438]">{tr('Faire une autre demande')}</button>
               </GsapStepPanel>
             )}
         </div>

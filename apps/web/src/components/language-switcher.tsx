@@ -51,8 +51,8 @@ export function LanguageSwitcher({ variant = 'light', compact = false }: { varia
 
   return (
     <Select.Root value={locale} onValueChange={(value) => handleLocaleChange(value as Locale)} onOpenChange={handleOpenChange} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
-      <Select.Trigger className={`group inline-flex shrink-0 items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${
-        compact ? 'size-10 justify-center gap-0 px-0' : 'h-10 gap-1.5 px-2.5'
+      <Select.Trigger className={`group inline-flex shrink-0 items-center rounded-full  transition-colors focus-visible:ring-2 focus-visible:ring-[#7C2438] ${
+        compact ? 'size-11 justify-center gap-0 px-0' : 'h-11 gap-1.5 px-2.5'
       } ${
         isDark
           ? 'text-[#FAF6EC]/85 hover:bg-white/10'
@@ -71,11 +71,11 @@ export function LanguageSwitcher({ variant = 'light', compact = false }: { varia
       </Select.Trigger>
 
       <Select.Portal>
-        <Select.Content position="popper" sideOffset={8} align="end" className="z-[90] min-w-52 overflow-hidden rounded-xl border border-[#C6A15B]/35 bg-[#FAF6EC]/98 p-1.5 text-[#1E3A5F] shadow-[0_18px_50px_rgba(30,58,95,0.22)] backdrop-blur-xl">
+        <Select.Content position="popper" sideOffset={8} align="end" className="savoraille-popover z-[90] min-w-52 overflow-hidden rounded-xl border border-[#C6A15B]/35 bg-[#FAF6EC]/98 p-1.5 text-[#1E3A5F] shadow-[0_18px_50px_rgba(30,58,95,0.22)] backdrop-blur-xl">
           <div className="px-3 pb-2 pt-1.5 text-[0.62rem] font-bold tracking-[0.15em] text-[#7C2438] uppercase">Langue · Language · اللغة</div>
           <Select.Viewport>
             {languages.map((language) => (
-              <Select.Item key={language.code} value={language.code} className="relative flex cursor-pointer select-none items-center gap-3 rounded-lg px-2.5 py-2.5 pe-9 outline-none transition-colors data-[highlighted]:bg-[#1E3A5F] data-[highlighted]:text-[#FAF6EC] data-[state=checked]:bg-[#C6A15B]/18">
+              <Select.Item key={language.code} value={language.code} className="relative flex cursor-pointer select-none items-center gap-3 rounded-lg px-2.5 py-2.5 pe-9  transition-colors data-[highlighted]:bg-[#1E3A5F] data-[highlighted]:text-[#FAF6EC] data-[state=checked]:bg-[#C6A15B]/18">
                 <span className="grid size-8 shrink-0 place-items-center rounded-full border border-[#C6A15B]/45 bg-white/70 text-[0.62rem] font-bold text-[#7C2438]">{language.short}</span>
                 <Select.ItemText>
                   <span className="block text-sm font-bold">{language.native}</span>

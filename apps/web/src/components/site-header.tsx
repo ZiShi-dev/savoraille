@@ -101,20 +101,17 @@ export function SiteHeader() {
   }, [barePath]);
 
   const linkTone = isTransparent
-    ? 'text-[#FAF6EC]/72 hover:text-[#FAF6EC]'
-    : 'text-[#1E3A5F]/62 hover:text-[#1E3A5F]';
+    ? 'text-[#E4DDD0] hover:text-[#FAF6EC]'
+    : 'text-[#1E3A5F] hover:text-[#102B4D]';
   const activeTone = isTransparent ? 'text-[#C6A15B]' : 'text-[#1E3A5F]';
   const iconButtonTone = isTransparent
     ? 'text-[#FAF6EC]/85 hover:bg-white/10'
     : 'text-[#1E3A5F] hover:bg-[#1E3A5F]/6';
-  const reserveTone = isTransparent
-    ? 'border border-[#FAF6EC]/35 bg-transparent text-[#FAF6EC] hover:border-[#C6A15B] hover:bg-[#C6A15B]/12'
-    : 'border border-transparent bg-[#7C2438] text-[#FAF6EC] shadow-[0_10px_28px_rgba(124,36,56,0.22)] hover:bg-[#691d2f]';
 
   return (
     <header
       dir={isRtl ? 'rtl' : 'ltr'}
-      className={`fixed inset-x-0 z-50 transition-[background-color,box-shadow,border-color,top] duration-300 ${siteConfig.portfolioMode ? 'top-8' : 'top-0'} ${
+      className={`${isTransparent ? 'tone-dark' : ''} fixed inset-x-0 z-50 transition-[background-color,box-shadow,border-color,top] duration-300 ${siteConfig.portfolioMode ? 'top-8' : 'top-0'} ${
         blendsWithPage
           ? 'border-b border-transparent bg-transparent'
           : 'border-b border-[#C6A15B]/28 bg-[#FAF6EC]/95 shadow-[0_8px_30px_rgba(30,58,95,0.08)] backdrop-blur-xl'
@@ -123,14 +120,11 @@ export function SiteHeader() {
       <div className="mx-auto grid h-[4.5rem] max-w-[1280px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 sm:gap-3 sm:px-5 lg:px-8">
         <LocalizedLink
           href="/#accueil"
-          className="group flex min-w-0 items-center gap-2.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:gap-3"
+          className="group flex min-w-0 items-center gap-2.5 rounded-lg sm:gap-3"
           aria-label={`Savoraille · ${tr('Accueil')}`}
         >
-          <BrandSeal inverse={isTransparent} className="size-10 shrink-0 sm:size-11 lg:size-12" />
-          <span className="hidden min-w-0 md:block">
-            <span className={`font-display block text-lg leading-none font-semibold sm:text-xl ${isTransparent ? 'text-[#FAF6EC]' : 'text-[#1E3A5F]'}`}>Savoraille</span>
-            <span className={`font-script mt-0.5 block text-[0.7rem] leading-none sm:text-xs ${isTransparent ? 'text-[#C6A15B]' : 'text-[#7C2438]'}`}>{tr('La merveille des saveurs')}</span>
-          </span>
+          <BrandSeal inverse={isTransparent} className="size-11 shrink-0 lg:size-12" />
+          <span className={`font-display hidden truncate text-lg leading-none font-semibold lg:block ${isTransparent ? 'text-[#FAF6EC]' : 'text-[#1E3A5F]'}`}>Savoraille</span>
         </LocalizedLink>
 
         <nav className="hidden min-w-0 justify-self-center xl:block" aria-label={tr('Navigation principale')}>
@@ -142,7 +136,7 @@ export function SiteHeader() {
                   <LocalizedLink
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
-                    className={`relative block whitespace-nowrap py-2 text-[0.62rem] font-bold tracking-[0.16em] uppercase transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:text-[0.68rem] sm:tracking-[0.18em] ${active ? activeTone : linkTone}`}
+                    className={`relative block py-2 text-sm font-bold tracking-[0.14em] whitespace-nowrap uppercase transition-colors ${active ? activeTone : linkTone}`}
                   >
                     {tr(item.label)}
                     <span
@@ -168,7 +162,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={signOut}
-                className={`grid size-9 place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${iconButtonTone}`}
+                className={`grid size-9 place-items-center rounded-full  transition-colors focus-visible:ring-2 focus-visible:ring-[#7C2438] ${iconButtonTone}`}
                 aria-label={tr('Se déconnecter')}
                 title={tr('Se déconnecter')}
               >
@@ -180,14 +174,14 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => openAuth('signin')}
-                className={`rounded-full px-3 py-2 text-xs font-bold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${isTransparent ? 'text-[#FAF6EC]/85 hover:bg-white/10' : 'text-[#1E3A5F]/75 hover:bg-[#1E3A5F]/6'}`}
+                className={`rounded-full px-3 py-2 text-xs font-bold  transition-colors focus-visible:ring-2 focus-visible:ring-[#7C2438] ${isTransparent ? 'text-[#FAF6EC]/85 hover:bg-white/10' : 'text-[#1E3A5F]/75 hover:bg-[#1E3A5F]/6'}`}
               >
                 {tr('Se connecter')}
               </button>
               <button
                 type="button"
                 onClick={() => openAuth('signup')}
-                className={`rounded-full px-3.5 py-2 text-xs font-bold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${isTransparent ? 'bg-[#FAF6EC] text-[#1E3A5F] hover:bg-white' : 'bg-[#1E3A5F] text-[#FAF6EC] hover:bg-[#102B4D]'}`}
+                className={`rounded-full px-3.5 py-2 text-xs font-bold  transition-colors focus-visible:ring-2 focus-visible:ring-[#7C2438] ${isTransparent ? 'bg-[#FAF6EC] text-[#1E3A5F] hover:bg-white' : 'bg-[#1E3A5F] text-[#FAF6EC] hover:bg-[#102B4D]'}`}
               >
                 {tr('S’inscrire')}
               </button>
@@ -198,7 +192,7 @@ export function SiteHeader() {
             <button
               type="button"
               onClick={() => openAuth('signin')}
-              className={`grid size-10 place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] 2xl:hidden ${iconButtonTone}`}
+              className={`grid size-11 place-items-center rounded-full transition-colors 2xl:hidden ${iconButtonTone}`}
               aria-label={tr('Espace client')}
               title={tr('Espace client')}
             >
@@ -208,7 +202,7 @@ export function SiteHeader() {
             <button
               type="button"
               onClick={signOut}
-              className={`grid size-10 place-items-center rounded-full text-sm font-bold outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] 2xl:hidden ${isTransparent ? 'bg-[#C6A15B] text-[#241F19]' : 'bg-[#1E3A5F] text-[#C6A15B]'}`}
+              className={`grid size-11 place-items-center rounded-full text-sm font-bold 2xl:hidden ${isTransparent ? 'bg-[#C6A15B] text-[#241F19]' : 'bg-[#1E3A5F] text-[#FAF6EC]'}`}
               aria-label={tr('Se déconnecter')}
               title={tr('Se déconnecter')}
             >
@@ -218,7 +212,7 @@ export function SiteHeader() {
 
           <LocalizedLink
             href="/commandes"
-            className={`relative grid size-10 place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${iconButtonTone}`}
+            className={`relative grid size-11 place-items-center rounded-full transition-colors ${iconButtonTone}`}
             aria-label={tr('Ma commande')}
             title={tr('Ma commande')}
           >
@@ -236,17 +230,17 @@ export function SiteHeader() {
 
           <LocalizedLink
             href="/reservation"
-            className={`hidden items-center gap-2 rounded-full px-3 py-2.5 text-xs font-bold tracking-[0.08em] uppercase transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] focus-visible:ring-offset-2 lg:inline-flex lg:px-4 ${reserveTone} ${isTransparent ? 'focus-visible:ring-offset-[#1E3A5F]' : 'focus-visible:ring-offset-[#FAF6EC]'}`}
+            className="btn btn-primary hidden lg:inline-flex"
           >
             <CalendarDays aria-hidden="true" className="size-4" />
-            <span className="hidden xl:inline">{tr('Réserver')}</span>
+            <span>{tr('Réserver')}</span>
           </LocalizedLink>
 
           <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
             <Dialog.Trigger asChild>
               <button
                 type="button"
-                className={`grid size-10 place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] xl:hidden ${iconButtonTone}`}
+                className={`grid size-11 place-items-center rounded-full transition-colors xl:hidden ${iconButtonTone}`}
                 aria-label={tr('Ouvrir le menu')}
               >
                 <Menu aria-hidden="true" className="size-5" />
@@ -267,7 +261,7 @@ export function SiteHeader() {
                     <aside
                       ref={mobileAsideRef}
                       dir={isRtl ? 'rtl' : 'ltr'}
-                      className="fixed inset-y-0 end-0 z-[70] flex w-full max-w-[min(100vw,22rem)] flex-col bg-[#FAF6EC] shadow-[-12px_0_40px_rgba(30,58,95,0.18)] outline-none xl:hidden"
+                      className="fixed inset-y-0 end-0 z-[70] flex w-full max-w-[min(100vw,22rem)] flex-col bg-[#FAF6EC] shadow-[-12px_0_40px_rgba(30,58,95,0.18)]  xl:hidden"
                     >
                       <div className="flex items-center justify-between border-b border-[#1E3A5F]/10 px-5 py-4">
                         <Dialog.Title className="flex items-center gap-3">
@@ -280,7 +274,7 @@ export function SiteHeader() {
                         <Dialog.Close asChild>
                           <button
                             type="button"
-                            className="grid size-10 place-items-center rounded-full text-[#1E3A5F] outline-none transition-colors hover:bg-[#1E3A5F]/6 focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
+                            className="grid size-10 place-items-center rounded-full text-[#1E3A5F]  transition-colors hover:bg-[#1E3A5F]/6 focus-visible:ring-2 focus-visible:ring-[#7C2438]"
                             aria-label={tr('Fermer le menu')}
                           >
                             <X aria-hidden="true" className="size-5" />
@@ -298,7 +292,7 @@ export function SiteHeader() {
                                   <LocalizedLink
                                     href={item.href}
                                     aria-current={active ? 'page' : undefined}
-                                    className={`block rounded-xl px-4 py-3.5 font-display text-2xl font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${
+                                    className={`block rounded-xl px-4 py-3.5 font-display text-2xl font-semibold  transition-colors focus-visible:ring-2 focus-visible:ring-[#7C2438] ${
                                       active ? 'bg-[#1E3A5F] text-[#FAF6EC]' : 'text-[#1E3A5F] hover:bg-[#1E3A5F]/6'
                                     }`}
                                   >
@@ -323,7 +317,7 @@ export function SiteHeader() {
                               <button
                                 type="button"
                                 onClick={() => { signOut(); setMobileOpen(false); }}
-                                className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#1E3A5F]/12 px-3 py-2 text-xs font-bold text-[#1E3A5F] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
+                                className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#1E3A5F]/12 px-3 py-2 text-xs font-bold text-[#1E3A5F]  hover:bg-white focus-visible:ring-2 focus-visible:ring-[#7C2438]"
                               >
                                 <LogOut aria-hidden="true" className="size-4" />
                                 {tr('Se déconnecter')}
@@ -334,7 +328,7 @@ export function SiteHeader() {
                               <button
                                 type="button"
                                 onClick={() => openMobileAuth('signin')}
-                                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1E3A5F]/12 px-3 py-2.5 text-xs font-bold text-[#1E3A5F] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
+                                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1E3A5F]/12 px-3 py-2.5 text-xs font-bold text-[#1E3A5F]  hover:bg-white focus-visible:ring-2 focus-visible:ring-[#7C2438]"
                               >
                                 <LogIn aria-hidden="true" className="size-4" />
                                 {tr('Se connecter')}
@@ -342,7 +336,7 @@ export function SiteHeader() {
                               <button
                                 type="button"
                                 onClick={() => openMobileAuth('signup')}
-                                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1E3A5F] px-3 py-2.5 text-xs font-bold text-[#FAF6EC] outline-none hover:bg-[#102B4D] focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
+                                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1E3A5F] px-3 py-2.5 text-xs font-bold text-[#FAF6EC]  hover:bg-[#102B4D] focus-visible:ring-2 focus-visible:ring-[#7C2438]"
                               >
                                 <UserPlus aria-hidden="true" className="size-4" />
                                 {tr('S’inscrire')}
@@ -354,7 +348,7 @@ export function SiteHeader() {
                         <Dialog.Close asChild>
                           <LocalizedLink
                             href="/reservation"
-                            className="flex items-center justify-center gap-2 rounded-full bg-[#7C2438] px-4 py-3.5 text-sm font-bold text-[#FAF6EC] outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
+                            className="flex items-center justify-center gap-2 rounded-full bg-[#7C2438] px-4 py-3.5 text-sm font-bold text-[#FAF6EC]  focus-visible:ring-2 focus-visible:ring-[#7C2438]"
                           >
                             <CalendarDays aria-hidden="true" className="size-4" />
                             {tr('Réserver une table')}
@@ -363,7 +357,7 @@ export function SiteHeader() {
                         <Dialog.Close asChild>
                           <LocalizedLink
                             href="/commandes"
-                            className="flex items-center justify-center gap-2 rounded-full border border-[#1E3A5F]/12 px-4 py-3.5 text-sm font-bold text-[#1E3A5F] outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#C6A15B]"
+                            className="flex items-center justify-center gap-2 rounded-full border border-[#1E3A5F]/12 px-4 py-3.5 text-sm font-bold text-[#1E3A5F]  hover:bg-white focus-visible:ring-2 focus-visible:ring-[#7C2438]"
                           >
                             <ShoppingBag aria-hidden="true" className="size-4" />
                             {tr('Ma commande')}

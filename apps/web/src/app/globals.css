@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+  --site-header-offset: 4.5rem;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --c-sevres: #1e3a5f;
   --c-ivoire: #faf6ec;
   --c-bordeaux: #7c2438;
@@ -119,6 +121,7 @@ body[data-mobile-menu-open] .restaurant-locator-fab {
 
 body.portfolio-demo {
   --portfolio-banner-height: 2rem;
+  --site-header-offset: calc(4.5rem + 2rem);
 }
 
 html:has(body.portfolio-demo) {
@@ -152,8 +155,13 @@ a {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
-button { user-select: none; }
-button:active { transform: scale(0.98); }
+button,
+.btn {
+  user-select: none;
+  transition: transform 160ms var(--ease-out), background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+button:active,
+.btn:active { transform: scale(0.97); }
 a { text-decoration: none; }
 
 ::selection {
@@ -161,47 +169,83 @@ a { text-decoration: none; }
   color: var(--c-ivoire);
 }
 
-@keyframes savoraille-overlay-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.savoraille-dialog-overlay,
+.savoraille-dialog-surface {
+  opacity: 1;
+  transition: opacity 250ms var(--ease-out), transform 250ms var(--ease-out);
 }
 
-@keyframes savoraille-overlay-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
+.savoraille-dialog-surface { transform: translateY(0); }
 
-@keyframes savoraille-dialog-in {
-  from { opacity: 0; transform: translateY(24px) scale(0.985); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes savoraille-dialog-out {
-  from { opacity: 1; transform: translateY(0) scale(1); }
-  to { opacity: 0; transform: translateY(16px) scale(0.99); }
-}
-
-.savoraille-dialog-overlay[data-state='open'] {
-  animation: savoraille-overlay-in 260ms ease-out;
-}
-
-.savoraille-dialog-overlay[data-state='closed'] {
-  animation: savoraille-overlay-out 190ms ease-out forwards;
-}
-
+.savoraille-dialog-overlay[data-state='open'],
 .savoraille-dialog-surface[data-state='open'] {
-  animation: savoraille-dialog-in 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  @starting-style {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
+.savoraille-dialog-overlay[data-state='closed'],
 .savoraille-dialog-surface[data-state='closed'] {
-  animation: savoraille-dialog-out 190ms ease-out forwards;
+  opacity: 0;
+  transform: translateY(8px);
+  transition-duration: 160ms;
+}
+
+.savoraille-popover {
+  transform-origin: var(--radix-select-content-transform-origin);
+  opacity: 1;
+  transition: opacity 160ms var(--ease-out);
+}
+
+.savoraille-popover[data-state='open'] {
+  @starting-style { opacity: 0; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-photo] { transition: transform 200ms var(--ease-out); }
+  [data-dish]:hover [data-photo],
+  [data-sibling]:hover [data-photo] { transform: scale(1.03); }
+}
+
+:focus-visible {
+  outline: 2px solid #7c2438;
+  outline-offset: 3px;
+}
+
+.tone-dark :focus-visible,
+.tone-dark:focus-visible {
+  outline-color: #faf6ec;
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding-inline: 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .btn-primary { background: #7c2438; color: #faf6ec; }
+  .btn-primary:hover { background: #681d2f; }
+  .btn-secondary { background: transparent; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .btn-secondary:hover { background: rgb(250 246 236 / 10%); }
+  .btn-inverse { background: #faf6ec; color: #7c2438; }
+  .btn-inverse:hover { background: #fff; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    transition-property: opacity, color, background-color, border-color, box-shadow !important;
   }
 }

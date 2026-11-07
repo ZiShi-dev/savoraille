@@ -106,7 +106,7 @@ export function restaurantJsonLd(locale: Locale = 'fr') {
     name: siteConfig.name,
     description: descriptions[locale],
     url: `${url}${localizedPath(locale, '/')}`,
-    image: `${url}${withBasePath('/images/savoraille-dining-room-3d.png')}`,
+    image: `${url}${withBasePath('/images/savoraille-dining-room.jpg')}`,
     servesCuisine: 'French',
     priceRange: '€€',
     email: 'bonjour@savoraille.fr',

@@ -1,7 +1,6 @@
 'use client';
 
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRef, useState } from 'react';
 
 import { AppImage } from '@/components/app-image';
@@ -9,7 +8,7 @@ import { useI18n } from '@/components/i18n-provider';
 import { LocalizedLink } from '@/components/localized-link';
 import { ensureGsapPlugins } from '@/lib/gsap-register';
 import { menuSections } from '@/lib/menu-data';
-import { attachMenuPanelMotion, fadePanelOut, scheduleScrollRefresh } from '@/lib/site-motion';
+import { attachMenuPanelMotion, fadePanelOut } from '@/lib/site-motion';
 import { siteConfig } from '@/lib/site-config';
 
 ensureGsapPlugins();
@@ -25,11 +24,8 @@ export function RestaurantMenu() {
     const panel = panelRef.current;
     if (!panel) return;
     const detachPointer = attachMenuPanelMotion(panel);
-    const refreshCleanup = scheduleScrollRefresh();
     return () => {
       detachPointer?.();
-      refreshCleanup();
-      ScrollTrigger.refresh();
     };
   }, { scope: rootRef, dependencies: [activeId], revertOnUpdate: true });
 
@@ -70,7 +66,7 @@ export function RestaurantMenu() {
                   type="button"
                   aria-pressed={selected}
                   onClick={() => choose(item.id)}
-                  className={`min-h-11 shrink-0 snap-start rounded-full border px-4 text-sm font-bold outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] ${selected ? 'border-[#1E3A5F] bg-[#1E3A5F] text-[#FAF6EC]' : 'border-[#1E3A5F]/15 bg-white text-[#1E3A5F]'}`}
+                  className={`min-h-11 shrink-0 snap-start rounded-full border px-4 text-sm font-bold  focus-visible:ring-2 focus-visible:ring-[#7C2438] ${selected ? 'border-[#1E3A5F] bg-[#1E3A5F] text-[#FAF6EC]' : 'border-[#1E3A5F]/15 bg-white text-[#1E3A5F]'}`}
                 >
                   {tr(item.shortLabel)}
                 </button>
@@ -85,7 +81,7 @@ export function RestaurantMenu() {
           <h3 className="font-display mt-1 text-3xl font-semibold text-[#1E3A5F] sm:text-5xl">{tr(section.label)}</h3>
 
           <article data-featured data-dish className="mt-8 overflow-hidden rounded-3xl bg-[#1E3A5F] text-[#FAF6EC] shadow-[0_18px_50px_rgba(30,58,95,0.16)]">
-            <LocalizedLink href={`/commander/${featured.id}`} className="grid outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] lg:grid-cols-[1.35fr_0.65fr]">
+            <LocalizedLink href={`/commander/${featured.id}`} className="grid  focus-visible:ring-2 focus-visible:ring-[#7C2438] lg:grid-cols-[1.35fr_0.65fr]">
               <div className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:aspect-auto lg:min-h-[34rem]">
                 <AppImage data-photo data-featured-photo src={featured.image} alt="" fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover will-change-transform" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#102B4D]/70 via-transparent to-[#102B4D]/15 lg:bg-gradient-to-r" />
@@ -103,7 +99,7 @@ export function RestaurantMenu() {
           <ul className="mt-4 sm:mt-8">
             {rest.map((item) => (
               <li key={item.id} data-dish className="border-b border-[#1E3A5F]/10">
-                <LocalizedLink href={`/commander/${item.id}`} className="grid gap-5 py-7 outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B] sm:py-9 md:grid-cols-[18rem_1fr] md:items-center md:gap-10">
+                <LocalizedLink href={`/commander/${item.id}`} className="grid gap-5 py-7  focus-visible:ring-2 focus-visible:ring-[#7C2438] sm:py-9 md:grid-cols-[18rem_1fr] md:items-center md:gap-10">
                   <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-[#1E3A5F]">
                     <AppImage data-photo src={item.image} alt="" fill sizes="(min-width: 768px) 18rem, 100vw" className="object-cover" />
                   </div>
